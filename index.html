@@ -247,7 +247,7 @@
             </div>
             <div class="form-group">
                 <label>Qty</label>
-                <input type="number" id="drugQty" value="1" min="1" style="width:65px;">
+                <input type="number" id="drugQty" value="0" min="0" style="width:65px;">
             </div>
             <div class="form-group">
                 <label>&nbsp;</label>
@@ -504,6 +504,7 @@ function addDrug() {
     const qty = parseInt(document.getElementById('drugQty').value) || 1;
 
     if (!brandVal) { alert('Please select a drug and brand.'); return; }
+    if (qty < 1) { alert('Please enter quantity (minimum 1).'); return; }
 
     const drug = JSON.parse(brandVal);
     addedDrugs.push({ ...drug, qty });
@@ -511,7 +512,7 @@ function addDrug() {
     // Reset selectors
     document.getElementById('genericSelect').value = '';
     document.getElementById('brandSelect').innerHTML = '<option value="">-- Select Brand --</option>';
-    document.getElementById('drugQty').value = 1;
+    document.getElementById('drugQty').value = 0;
 
     renderDrugTable();
     updateSummary();
@@ -669,7 +670,7 @@ function resetForm() {
     document.getElementById('patientSex').value = '';
     document.getElementById('genericSelect').value = '';
     document.getElementById('brandSelect').innerHTML = '<option value="">-- Select Brand --</option>';
-    document.getElementById('drugQty').value = 1;
+    document.getElementById('drugQty').value = 0;
     addedDrugs = [];
     renderDrugTable();
     updateSummary();
