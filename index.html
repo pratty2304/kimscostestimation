@@ -110,20 +110,22 @@
 
         /* Responsive — Mobile */
         @media (max-width: 600px) {
+            html, body { overflow-x: hidden; max-width: 100vw; }
+
             .app-header { padding: 12px 14px; gap: 10px; }
             .app-header img { height: 36px; }
             .app-header h1 { font-size: 1.05rem; }
             .app-header .subtitle { font-size: 0.75rem; }
 
-            .container { margin: 12px auto; padding: 0 10px; }
+            .container { margin: 12px auto; padding: 0 10px; max-width: 100%; box-sizing: border-box; }
 
-            .card { padding: 16px 14px; margin-bottom: 14px; border-radius: 8px; }
-            .card h2 { font-size: 0.95rem; margin-bottom: 12px; }
+            .card { padding: 14px 12px; margin-bottom: 14px; border-radius: 8px; max-width: 100%; box-sizing: border-box; overflow: hidden; }
+            .card h2 { font-size: 0.9rem; margin-bottom: 10px; }
 
-            .form-grid { grid-template-columns: 1fr; gap: 10px; }
+            .form-grid { grid-template-columns: 1fr; gap: 8px; }
 
-            .form-group label { font-size: 0.72rem; }
-            .form-group input, .form-group select, .form-group textarea { padding: 9px 10px; font-size: 0.9rem; }
+            .form-group label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2px; }
+            .form-group input, .form-group select, .form-group textarea { padding: 8px 10px; font-size: 16px; box-sizing: border-box; max-width: 100%; }
 
             /* Drug type tabs — 3 per row on mobile */
             .drug-type-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
@@ -155,14 +157,16 @@
             #doseResults { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
             #doseResults > div { max-width: 100%; box-sizing: border-box; padding: 10px !important; }
             #doseResults table { min-width: 0; width: 100%; table-layout: fixed; }
-            #doseResults table th, #doseResults table td { padding: 6px 4px; font-size: 0.72rem; word-break: break-word; vertical-align: top; }
+            #doseResults table th, #doseResults table td { padding: 5px 3px; font-size: 0.7rem; word-break: break-word; vertical-align: top; }
             #doseResults table th:nth-child(1) { width: 18%; }
-            #doseResults table th:nth-child(2) { width: 28%; }
-            #doseResults table th:nth-child(3) { width: 36%; }
+            #doseResults table th:nth-child(2) { width: 27%; }
+            #doseResults table th:nth-child(3) { width: 37%; }
             #doseResults table th:nth-child(4) { width: 18%; }
-            #doseResults span { white-space: normal !important; font-size: 0.68rem !important; padding: 2px 4px !important; }
-            #regimenSelect { font-size: 0.82rem; }
-            .card { max-width: 100%; overflow: hidden; box-sizing: border-box; }
+            #doseResults span { white-space: normal !important; font-size: 0.65rem !important; padding: 1px 3px !important; margin: 1px !important; }
+
+            /* All inputs/selects constrained */
+            input, select, textarea { max-width: 100%; box-sizing: border-box; }
+            * { box-sizing: border-box; }
 
             /* Buttons */
             .btn { padding: 9px 14px; font-size: 0.85rem; }
