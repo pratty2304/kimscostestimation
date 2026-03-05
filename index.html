@@ -110,20 +110,22 @@
 
         /* Responsive — Mobile */
         @media (max-width: 600px) {
+            html, body { overflow-x: hidden; max-width: 100vw; }
+
             .app-header { padding: 12px 14px; gap: 10px; }
             .app-header img { height: 36px; }
             .app-header h1 { font-size: 1.05rem; }
             .app-header .subtitle { font-size: 0.75rem; }
 
-            .container { margin: 12px auto; padding: 0 10px; }
+            .container { margin: 12px auto; padding: 0 10px; max-width: 100%; box-sizing: border-box; }
 
-            .card { padding: 16px 14px; margin-bottom: 14px; border-radius: 8px; }
-            .card h2 { font-size: 0.95rem; margin-bottom: 12px; }
+            .card { padding: 14px 12px; margin-bottom: 14px; border-radius: 8px; max-width: 100%; box-sizing: border-box; overflow: hidden; }
+            .card h2 { font-size: 0.9rem; margin-bottom: 10px; }
 
-            .form-grid { grid-template-columns: 1fr; gap: 10px; }
+            .form-grid { grid-template-columns: 1fr; gap: 8px; }
 
-            .form-group label { font-size: 0.72rem; }
-            .form-group input, .form-group select, .form-group textarea { padding: 9px 10px; font-size: 0.9rem; }
+            .form-group label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2px; }
+            .form-group input, .form-group select, .form-group textarea { padding: 8px 10px; font-size: 16px; box-sizing: border-box; max-width: 100%; }
 
             /* Drug type tabs — 3 per row on mobile */
             .drug-type-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
@@ -150,6 +152,21 @@
             /* Action buttons */
             .action-bar { flex-direction: column; gap: 10px; margin: 16px 0; }
             .action-bar .btn { padding: 14px 20px; font-size: 0.95rem; width: 100%; }
+
+            /* Dose calculator — mobile friendly */
+            #doseResults { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+            #doseResults > div { max-width: 100%; box-sizing: border-box; padding: 10px !important; }
+            #doseResults table { min-width: 0; width: 100%; table-layout: fixed; }
+            #doseResults table th, #doseResults table td { padding: 5px 3px; font-size: 0.7rem; word-break: break-word; vertical-align: top; }
+            #doseResults table th:nth-child(1) { width: 18%; }
+            #doseResults table th:nth-child(2) { width: 27%; }
+            #doseResults table th:nth-child(3) { width: 37%; }
+            #doseResults table th:nth-child(4) { width: 18%; }
+            #doseResults span { white-space: normal !important; font-size: 0.65rem !important; padding: 1px 3px !important; margin: 1px !important; }
+
+            /* All inputs/selects constrained */
+            input, select, textarea { max-width: 100%; box-sizing: border-box; }
+            * { box-sizing: border-box; }
 
             /* Buttons */
             .btn { padding: 9px 14px; font-size: 0.85rem; }
@@ -218,6 +235,40 @@
                 <input type="text" id="regimen" placeholder="e.g., FOLFOX, AC-T, etc.">
             </div>
         </div>
+    </div>
+
+    <!-- Dose Calculator -->
+    <div class="card">
+        <h2>Dose Calculator</h2>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Height (cm)</label>
+                <input type="number" id="heightCm" placeholder="e.g., 165" oninput="updateBSA()">
+            </div>
+            <div class="form-group">
+                <label>Weight (kg)</label>
+                <input type="number" id="weightKg" placeholder="e.g., 70" oninput="updateBSA()">
+            </div>
+            <div class="form-group">
+                <label>BSA (m²)</label>
+                <input type="text" id="bsaValue" readonly style="background:#e8f0fe; font-weight:700; color:#1a5276;">
+            </div>
+            <div class="form-group" id="creatinineGroup">
+                <label>Serum Creatinine (mg/dL)</label>
+                <input type="number" id="serumCreatinine" step="0.1" placeholder="For carboplatin regimens">
+            </div>
+            <div class="form-group">
+                <label>Regimen</label>
+                <select id="regimenSelect" onchange="onRegimenChange()">
+                    <option value="">-- Select Regimen --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary" onclick="calculateRegimen()">Calculate Doses</button>
+            </div>
+        </div>
+        <div id="doseResults" style="margin-top:16px;"></div>
     </div>
 
     <!-- Drug Selection -->
@@ -361,7 +412,8 @@
 
     <!-- Action Buttons -->
     <div class="action-bar no-print">
-        <button class="btn btn-success" onclick="generatePrint()">Print Estimation Sheet</button>
+        <button class="btn btn-success" onclick="generatePrint('patient')">Print for Patient</button>
+        <button class="btn btn-success" onclick="generatePrint('doctor')" style="background:#1a5276;">Print for Doctor</button>
         <button class="btn btn-primary" onclick="resetForm()">New Estimate</button>
     </div>
 
@@ -375,62 +427,253 @@
 // ==================== DRUG DATABASE ====================
 const drugDatabase = [
     // Chemotherapy
-    { brand: "AKYNZEO 300MG CAP", generic: "NETUPITANT+PALONOSETRON", mrp: 6000.00, type: "supportive" },
-    { brand: "CAPEGARD 500MG TAB", generic: "CAPECITABINE", mrp: 85.40, type: "chemotherapy" },
-    { brand: "CARBOTERO 150MG", generic: "CARBOPLATIN", mrp: 1009.20, type: "chemotherapy" },
-    { brand: "CARBOTERO 450MG INJ", generic: "CARBOPLATIN", mrp: 2946.97, type: "chemotherapy" },
-    { brand: "CISTERO 10MG", generic: "CISPLATIN", mrp: 85.00, type: "chemotherapy" },
-    { brand: "CISTERO 50MG", generic: "CISPLATIN", mrp: 427.00, type: "chemotherapy" },
-    { brand: "CYCLOXAN 1GM INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 108.00, type: "chemotherapy" },
-    { brand: "CYCLOXAN 200MG INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 36.00, type: "chemotherapy" },
-    { brand: "CYCLOXAN 500MG INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 77.00, type: "chemotherapy" },
-    { brand: "CYTAX 300MG INJECTION", generic: "PACLITAXEL", mrp: 12064.64, type: "chemotherapy" },
-    { brand: "DOCETERO RTU 120MG INJ", generic: "DOCETAXEL", mrp: 13195.00, type: "chemotherapy" },
-    { brand: "DOCETERO RTU 80MG INJ", generic: "DOCETAXEL", mrp: 10943.85, type: "chemotherapy" },
-    { brand: "FOSAPORT IV 150MG INJ", generic: "FOSAPREPITANT", mrp: 3073.44, type: "supportive" },
-    { brand: "FOSUP 150MG INJ", generic: "FOSAPREPITANT", mrp: 2716.00, type: "supportive" },
-    { brand: "GLOBUCEL 10GM 100ML IV INJ", generic: "IVIG", mrp: 20517.57, type: "supportive" },
-    { brand: "GLOBUCEL 5GM 100ML IV INJ", generic: "IVIG", mrp: 11056.60, type: "supportive" },
-    { brand: "GROS 100MG INJ", generic: "PACLITAXEL", mrp: 4021.54, type: "chemotherapy" },
-    { brand: "GROS 260MG INJ", generic: "PACLITAXEL", mrp: 10454.57, type: "chemotherapy" },
-    { brand: "GROS 30MG INJ", generic: "PACLITAXEL", mrp: 1206.41, type: "chemotherapy" },
-    { brand: "IMMUNOREL 10GM 100ML INJ", generic: "IVIG", mrp: 21685.00, type: "supportive" },
-    { brand: "FOIRI 100MG", generic: "IRINOTECAN", mrp: 4740.00, type: "chemotherapy" },
-    { brand: "FOIRI 40MG", generic: "IRINOTECAN", mrp: 1933.00, type: "chemotherapy" },
-    { brand: "INJ ZYTAX 80MG", generic: "DOCETAXEL", mrp: 13889.00, type: "chemotherapy" },
-    { brand: "LEUCORIN 50MG INJ", generic: "LEUCOVORIN CALCIUM", mrp: 358.60, type: "chemotherapy" },
-    { brand: "LEULIDE 11.25MG INJ", generic: "LEUPROLIDE", mrp: 9928.13, type: "hormonal" },
-    { brand: "MESNA 200MG INJ", generic: "MESNA", mrp: 33.00, type: "supportive" },
-    { brand: "NAB PACLITERO 100MG INJ", generic: "NAB-PACLITAXEL", mrp: 4743.75, type: "chemotherapy" },
-    { brand: "NEUKINE 300MCG INJ (PFS)", generic: "GCSF", mrp: 577.47, type: "supportive" },
-    { brand: "NEUKINE 300MCG INJ (VIAL)", generic: "GCSF", mrp: 582.25, type: "supportive" },
-    { brand: "NYKRON 300MG TAB (COMBI PACK)", generic: "NETUPITANT+PALONOSETRON", mrp: 2650.00, type: "supportive" },
-    { brand: "ONCOFLUOR 500MG INJ", generic: "FLUOROURACIL (5-FU)", mrp: 28.50, type: "chemotherapy" },
-    { brand: "OXALTERO 100MG INJ", generic: "OXALIPLATIN", mrp: 4608.75, type: "chemotherapy" },
-    { brand: "OXALTERO 50MG INJ", generic: "OXALIPLATIN", mrp: 2385.00, type: "chemotherapy" },
-    { brand: "PALNOX 5ML INJ", generic: "PALONOSETRON", mrp: 165.00, type: "supportive" },
-    { brand: "PEG RELIGRAST 6MG INJ", generic: "PEG-GCSF", mrp: 4847.81, type: "supportive" },
-    { brand: "THALIX 100MG TAB", generic: "THALIDOMIDE", mrp: 65.10, type: "chemotherapy" },
-    { brand: "THALIX 50MG TAB", generic: "THALIDOMIDE", mrp: 33.27, type: "chemotherapy" },
-    { brand: "ZOLTERO 4MG INJ", generic: "ZOLEDRONIC ACID", mrp: 2554.60, type: "supportive" },
-    { brand: "ZUBIDOX 10MG", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 308.36, type: "chemotherapy" },
-    { brand: "ZUBIDOX 50MG", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 1543.16, type: "chemotherapy" },
-    { brand: "ZYRUBIN 50MG INJ", generic: "EPIRUBICIN", mrp: 1375.00, type: "chemotherapy" },
-    { brand: "APRECAP", generic: "APREPITANT", mrp: 1314.00, type: "supportive" },
-    { brand: "KRYXANA 200MG TAB", generic: "RIBOCICLIB", mrp: 24355.00, type: "targeted" },
+    { brand: "AKYNZEO 300MG CAP", generic: "NETUPITANT+PALONOSETRON", mrp: 6000.00, type: "supportive", contentMg: 300, form: "capsule" },
+    { brand: "CAPEGARD 500MG TAB", generic: "CAPECITABINE", mrp: 85.40, type: "chemotherapy", contentMg: 500, form: "tablet", unitsPerPack: 10 },
+    { brand: "CARBOTERO 150MG", generic: "CARBOPLATIN", mrp: 1009.20, type: "chemotherapy", contentMg: 150 },
+    { brand: "CARBOTERO 450MG INJ", generic: "CARBOPLATIN", mrp: 2946.97, type: "chemotherapy", contentMg: 450 },
+    { brand: "CISTERO 10MG", generic: "CISPLATIN", mrp: 85.00, type: "chemotherapy", contentMg: 10 },
+    { brand: "CISTERO 50MG", generic: "CISPLATIN", mrp: 427.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "HOLOXAN 1GM INJ", generic: "IFOSFAMIDE", mrp: 250.05, type: "chemotherapy", contentMg: 1000 },
+    { brand: "IFEX-M 2GM INJ", generic: "IFOSFAMIDE", mrp: 894.58, type: "chemotherapy", contentMg: 2000 },
+    { brand: "CYCLOXAN 1GM INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 108.00, type: "chemotherapy", contentMg: 1000 },
+    { brand: "CYCLOXAN 200MG INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 36.00, type: "chemotherapy", contentMg: 200 },
+    { brand: "CYCLOXAN 500MG INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 77.00, type: "chemotherapy", contentMg: 500 },
+    { brand: "CYTAX 300MG INJECTION", generic: "PACLITAXEL", mrp: 12064.64, type: "chemotherapy", contentMg: 300 },
+    { brand: "DOCETERO RTU 120MG INJ", generic: "DOCETAXEL", mrp: 13195.00, type: "chemotherapy", contentMg: 120 },
+    { brand: "DOCETERO RTU 80MG INJ", generic: "DOCETAXEL", mrp: 10943.85, type: "chemotherapy", contentMg: 80 },
+    { brand: "FOSAPORT IV 150MG INJ", generic: "FOSAPREPITANT", mrp: 3073.44, type: "supportive", contentMg: 150 },
+    { brand: "FOSUP 150MG INJ", generic: "FOSAPREPITANT", mrp: 2716.00, type: "supportive", contentMg: 150 },
+    { brand: "GLOBUCEL 10GM 100ML IV INJ", generic: "IVIG", mrp: 20517.57, type: "supportive", contentMg: 10000 },
+    { brand: "GLOBUCEL 5GM 100ML IV INJ", generic: "IVIG", mrp: 11056.60, type: "supportive", contentMg: 5000 },
+    { brand: "GROS 100MG INJ", generic: "PACLITAXEL", mrp: 4021.54, type: "chemotherapy", contentMg: 100 },
+    { brand: "GROS 260MG INJ", generic: "PACLITAXEL", mrp: 10454.57, type: "chemotherapy", contentMg: 260 },
+    { brand: "GROS 30MG INJ", generic: "PACLITAXEL", mrp: 1206.41, type: "chemotherapy", contentMg: 30 },
+    { brand: "IMMUNOREL 10GM 100ML INJ", generic: "IVIG", mrp: 21685.00, type: "supportive", contentMg: 10000 },
+    { brand: "FOIRI 100MG", generic: "IRINOTECAN", mrp: 4740.00, type: "chemotherapy", contentMg: 100 },
+    { brand: "FOIRI 40MG", generic: "IRINOTECAN", mrp: 1933.00, type: "chemotherapy", contentMg: 40 },
+    { brand: "INJ ZYTAX 80MG", generic: "DOCETAXEL", mrp: 13889.00, type: "chemotherapy", contentMg: 80 },
+    { brand: "LEUCORIN 50MG INJ", generic: "LEUCOVORIN CALCIUM", mrp: 358.60, type: "chemotherapy", contentMg: 50 },
+    { brand: "LEULIDE 11.25MG INJ", generic: "LEUPROLIDE", mrp: 9928.13, type: "hormonal", contentMg: 11.25 },
+    { brand: "MESNA 200MG INJ", generic: "MESNA", mrp: 33.00, type: "supportive", contentMg: 200 },
+    { brand: "NAB PACLITERO 100MG INJ", generic: "NAB-PACLITAXEL", mrp: 4743.75, type: "chemotherapy", contentMg: 100 },
+    { brand: "NEUKINE 300MCG INJ (PFS)", generic: "GCSF", mrp: 577.47, type: "supportive", contentMg: 0.3 },
+    { brand: "NEUKINE 300MCG INJ (VIAL)", generic: "GCSF", mrp: 582.25, type: "supportive", contentMg: 0.3 },
+    { brand: "NYKRON 300MG TAB (COMBI PACK)", generic: "NETUPITANT+PALONOSETRON", mrp: 2650.00, type: "supportive", contentMg: 300, form: "tablet" },
+    { brand: "ONCOFLUOR 500MG INJ", generic: "FLUOROURACIL (5-FU)", mrp: 28.50, type: "chemotherapy", contentMg: 500 },
+    { brand: "OXALTERO 100MG INJ", generic: "OXALIPLATIN", mrp: 4608.75, type: "chemotherapy", contentMg: 100 },
+    { brand: "OXALTERO 50MG INJ", generic: "OXALIPLATIN", mrp: 2385.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "PALNOX 5ML INJ", generic: "PALONOSETRON", mrp: 165.00, type: "supportive", contentMg: 0.25 },
+    { brand: "PEG RELIGRAST 6MG INJ", generic: "PEG-GCSF", mrp: 4847.81, type: "supportive", contentMg: 6 },
+    { brand: "PEMTERO 500MG INJ", generic: "PEMETREXED", mrp: 8500.00, type: "chemotherapy", contentMg: 500 },
+    { brand: "PEMTERO 100MG INJ", generic: "PEMETREXED", mrp: 2500.00, type: "chemotherapy", contentMg: 100 },
+    { brand: "THALIX 100MG CAP", generic: "THALIDOMIDE", mrp: 65.10, type: "chemotherapy", contentMg: 100, form: "capsule", unitsPerPack: 10 },
+    { brand: "THALIX 50MG CAP", generic: "THALIDOMIDE", mrp: 33.27, type: "chemotherapy", contentMg: 50, form: "capsule", unitsPerPack: 10 },
+    { brand: "ZOLTERO 4MG INJ", generic: "ZOLEDRONIC ACID", mrp: 2554.60, type: "supportive", contentMg: 4 },
+    { brand: "ZUBIDOX 10MG", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 308.36, type: "chemotherapy", contentMg: 10 },
+    { brand: "ZUBIDOX 50MG", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 1543.16, type: "chemotherapy", contentMg: 50 },
+    { brand: "ZYRUBIN 50MG INJ", generic: "EPIRUBICIN", mrp: 1375.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "APRECAP KIT", generic: "APREPITANT", mrp: 1314.00, type: "supportive", contentMg: 125, form: "kit" },
+    { brand: "KRYXANA 200MG TAB", generic: "RIBOCICLIB", mrp: 24355.00, type: "targeted", contentMg: 200, form: "tablet" },
 
     // Immunotherapy
-    { brand: "KEYTRUDA 100MG", generic: "PEMBROLIZUMAB", mrp: 216500.00, type: "immunotherapy" },
-    { brand: "TECENTRIQ 1200MG", generic: "ATEZOLIZUMAB", mrp: 338877.00, type: "immunotherapy" },
+    { brand: "KEYTRUDA 100MG", generic: "PEMBROLIZUMAB", mrp: 216500.00, type: "immunotherapy", contentMg: 100 },
+    { brand: "TECENTRIQ 1200MG", generic: "ATEZOLIZUMAB", mrp: 338877.00, type: "immunotherapy", contentMg: 1200 },
 
     // Targeted Therapy
-    { brand: "AVASTIN 100MG INJ", generic: "BEVACIZUMAB", mrp: 33863.00, type: "targeted" },
-    { brand: "AVASTIN 400MG 16ML INJ", generic: "BEVACIZUMAB", mrp: 123506.00, type: "targeted" },
-    { brand: "BEVATAS 100MG INJ", generic: "BEVACIZUMAB", mrp: 14867.50, type: "targeted" },
-    { brand: "BEVATAS 300MG INJ", generic: "BEVACIZUMAB", mrp: 18000.00, type: "targeted" },
-    { brand: "MABTAS 500MG INJ", generic: "RITUXIMAB", mrp: 39994.96, type: "targeted" },
-    { brand: "VIVITRA 150MG INJ", generic: "TRASTUZUMAB", mrp: 22447.00, type: "targeted" },
-    { brand: "VIVITRA 440MG INJ", generic: "TRASTUZUMAB", mrp: 38207.06, type: "targeted" },
+    { brand: "AVASTIN 100MG INJ", generic: "BEVACIZUMAB", mrp: 33863.00, type: "targeted", contentMg: 100 },
+    { brand: "AVASTIN 400MG 16ML INJ", generic: "BEVACIZUMAB", mrp: 123506.00, type: "targeted", contentMg: 400 },
+    { brand: "BEVATAS 100MG INJ", generic: "BEVACIZUMAB", mrp: 14867.50, type: "targeted", contentMg: 100 },
+    { brand: "BEVATAS 300MG INJ", generic: "BEVACIZUMAB", mrp: 18000.00, type: "targeted", contentMg: 300 },
+    { brand: "MABTAS 500MG INJ", generic: "RITUXIMAB", mrp: 39994.96, type: "targeted", contentMg: 500 },
+    { brand: "VIVITRA 150MG INJ", generic: "TRASTUZUMAB", mrp: 22447.00, type: "targeted", contentMg: 150 },
+    { brand: "VIVITRA 440MG INJ", generic: "TRASTUZUMAB", mrp: 38207.06, type: "targeted", contentMg: 440 },
+    { brand: "PERTUZA 420MG INJ", generic: "PERTUZUMAB", mrp: 56000.00, type: "targeted", contentMg: 420 },
+];
+
+// ==================== REGIMEN DATABASE ====================
+// Dose types: mg_per_m2, auc (Calvert), mg_per_kg, flat_mg, oral_bd_14d (capecitabine)
+// timesPerCycle: how many times per cycle (default 1, e.g., weekly paclitaxel in Q3W = 3)
+const regimenDatabase = [
+    {
+        name: "ABCP (Atezolizumab + Bevacizumab + Carboplatin + Paclitaxel)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "ATEZOLIZUMAB", dose: 1200, doseType: "flat_mg" },
+            { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "AC",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 60, doseType: "mg_per_m2" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 600, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "AC + Pembrolizumab (KEYNOTE-522)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 60, doseType: "mg_per_m2" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 600, doseType: "mg_per_m2" },
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg" },
+        ]
+    },
+    {
+        name: "AP (Adriamycin + Cisplatin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 60, doseType: "mg_per_m2" },
+            { generic: "CISPLATIN", dose: 60, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "CAPOX",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "OXALIPLATIN", dose: 130, doseType: "mg_per_m2" },
+            { generic: "CAPECITABINE", dose: 1000, doseType: "oral_bd_14d", note: "1000 mg/m² BD D1-14" },
+        ]
+    },
+    {
+        name: "Carboplatin + Paclitaxel (3-weekly)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "Carboplatin + Paclitaxel (weekly)",
+        cycle: "Weekly",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 2, doseType: "auc", note: "AUC 2" },
+            { generic: "PACLITAXEL", dose: 80, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "Carboplatin + Paclitaxel + Bevacizumab (Ovarian)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+            { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg", note: "15 mg/kg" },
+        ]
+    },
+    {
+        name: "Carboplatin + Paclitaxel + Pembrolizumab (KEYNOTE-522)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg" },
+        ]
+    },
+    {
+        name: "Carboplatin single agent (weekly)",
+        cycle: "Weekly",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 2, doseType: "auc", note: "AUC 2" },
+        ]
+    },
+    {
+        name: "Cisplatin single agent (weekly)",
+        cycle: "Weekly",
+        drugs: [
+            { generic: "CISPLATIN", dose: 40, doseType: "mg_per_m2", note: "40 mg/m² weekly concurrent" },
+        ]
+    },
+    {
+        name: "FLOT",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "DOCETAXEL", dose: 50, doseType: "mg_per_m2" },
+            { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 200, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2600, doseType: "mg_per_m2", note: "2600 mg/m² CI 24h" },
+        ]
+    },
+    {
+        name: "FOLFIRI",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "IRINOTECAN", dose: 180, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
+        ]
+    },
+    {
+        name: "IA (Ifosfamide + Adriamycin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "IFOSFAMIDE", dose: 2000, doseType: "mg_per_m2", timesPerCycle: 3, note: "2000 mg/m²/day D1-3 (with Mesna)" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", timesPerCycle: 3, note: "25 mg/m²/day D1-3" },
+        ]
+    },
+    {
+        name: "mFOLFOX6",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
+        ]
+    },
+    {
+        name: "Pemetrexed + Carboplatin",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+        ]
+    },
+    {
+        name: "TC (Docetaxel + Cyclophosphamide)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 600, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "TCH (Docetaxel + Carboplatin + Trastuzumab)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2" },
+            { generic: "CARBOPLATIN", dose: 6, doseType: "auc", note: "AUC 6" },
+            { generic: "TRASTUZUMAB", dose: 6, doseType: "mg_per_kg", note: "6 mg/kg (loading: 8 mg/kg C1)" },
+        ]
+    },
+    {
+        name: "TCHP (Docetaxel + Carboplatin + Trastuzumab + Pertuzumab)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2" },
+            { generic: "CARBOPLATIN", dose: 6, doseType: "auc", note: "AUC 6" },
+            { generic: "TRASTUZUMAB", dose: 6, doseType: "mg_per_kg", note: "6 mg/kg (loading: 8 mg/kg C1)" },
+            { generic: "PERTUZUMAB", dose: 420, doseType: "flat_mg", note: "420 mg (loading: 840 mg C1)" },
+        ]
+    },
+    {
+        name: "TPF (Docetaxel + Cisplatin + 5-FU)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2" },
+            { generic: "CISPLATIN", dose: 75, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 3750, doseType: "mg_per_m2", note: "750 mg/m²/day CI D1-5" },
+        ]
+    },
 ];
 
 // Fixed charges
@@ -440,10 +683,338 @@ const drugDatabase = [
 let addedDrugs = [];
 let currentDrugType = 'chemotherapy';
 
+// ==================== DOSE CALCULATOR ====================
+function updateBSA() {
+    const h = parseFloat(document.getElementById('heightCm').value);
+    const w = parseFloat(document.getElementById('weightKg').value);
+    const bsaField = document.getElementById('bsaValue');
+    if (h > 0 && w > 0) {
+        const bsa = Math.sqrt((h * w) / 3600);
+        bsaField.value = bsa.toFixed(2) + ' m²';
+    } else {
+        bsaField.value = '';
+    }
+}
+
+function calculateGFR(age, weight, creatinine, isFemale) {
+    let gfr = ((140 - age) * weight) / (72 * creatinine);
+    if (isFemale) gfr *= 0.85;
+    return Math.min(gfr, 125); // Cap at 125 for carboplatin
+}
+
+function calcCarboplatinDose(auc, gfr) {
+    return auc * (gfr + 25); // Calvert formula
+}
+
+// Smart vial optimizer: finds best combination balancing cost and practicality
+// Prefers fewer vials when cost difference is within 5%
+function optimizeVials(requiredDose, availableVials) {
+    // Group by contentMg, pick cheapest brand per size
+    const sizeMap = {};
+    availableVials.forEach(v => {
+        if (!sizeMap[v.contentMg] || v.mrp < sizeMap[v.contentMg].mrp) {
+            sizeMap[v.contentMg] = { ...v };
+        }
+    });
+    const vials = Object.values(sizeMap).sort((a, b) => b.contentMg - a.contentMg);
+
+    if (vials.length === 0) return [];
+    if (vials.length === 1) {
+        return [{ ...vials[0], qty: Math.ceil(requiredDose / vials[0].contentMg) }];
+    }
+
+    // Collect ALL valid combinations
+    const allCombos = [];
+
+    if (vials.length === 2) {
+        const maxA = Math.ceil(requiredDose / vials[0].contentMg) + 1;
+        for (let a = 0; a <= maxA; a++) {
+            const remaining = requiredDose - a * vials[0].contentMg;
+            const b = remaining > 0 ? Math.ceil(remaining / vials[1].contentMg) : 0;
+            const cost = a * vials[0].mrp + b * vials[1].mrp;
+            allCombos.push({
+                combo: [{ ...vials[0], qty: a }, { ...vials[1], qty: b }],
+                cost,
+                totalVials: a + b
+            });
+        }
+    } else if (vials.length === 3) {
+        const maxA = Math.ceil(requiredDose / vials[0].contentMg) + 1;
+        for (let a = 0; a <= maxA; a++) {
+            const remA = requiredDose - a * vials[0].contentMg;
+            if (remA <= 0) {
+                allCombos.push({
+                    combo: [{ ...vials[0], qty: a }, { ...vials[1], qty: 0 }, { ...vials[2], qty: 0 }],
+                    cost: a * vials[0].mrp,
+                    totalVials: a
+                });
+                continue;
+            }
+            const maxB = Math.ceil(remA / vials[1].contentMg) + 1;
+            for (let b = 0; b <= maxB; b++) {
+                const remB = remA - b * vials[1].contentMg;
+                const c = remB > 0 ? Math.ceil(remB / vials[2].contentMg) : 0;
+                const cost = a * vials[0].mrp + b * vials[1].mrp + c * vials[2].mrp;
+                allCombos.push({
+                    combo: [{ ...vials[0], qty: a }, { ...vials[1], qty: b }, { ...vials[2], qty: c }],
+                    cost,
+                    totalVials: a + b + c
+                });
+            }
+        }
+    } else {
+        // 4+ sizes: greedy fallback
+        let remaining = requiredDose;
+        const combo = vials.map(v => {
+            const qty = Math.floor(remaining / v.contentMg);
+            remaining -= qty * v.contentMg;
+            return { ...v, qty };
+        });
+        if (remaining > 0) combo[combo.length - 1].qty += 1;
+        return combo.filter(v => v.qty > 0);
+    }
+
+    // Find cheapest cost
+    const minCost = Math.min(...allCombos.map(c => c.cost));
+    // Filter to combos within 5% of cheapest
+    const threshold = minCost * 1.05;
+    const practical = allCombos.filter(c => c.cost <= threshold);
+    // Among those, pick fewest vials; if tied, pick cheapest
+    practical.sort((a, b) => a.totalVials - b.totalVials || a.cost - b.cost);
+
+    return practical[0].combo.filter(v => v.qty > 0);
+}
+
+function onRegimenChange() {
+    const idx = document.getElementById('regimenSelect').value;
+    if (idx === '') return;
+    const regimen = regimenDatabase[idx];
+    const creatField = document.getElementById('creatinineGroup');
+    if (regimen.needsCreatinine) {
+        creatField.style.background = '#fff8e1';
+        creatField.style.borderRadius = '6px';
+        creatField.style.padding = '8px';
+    } else {
+        creatField.style.background = '';
+        creatField.style.padding = '';
+    }
+}
+
+function calculateRegimen() {
+    const heightCm = parseFloat(document.getElementById('heightCm').value);
+    const weightKg = parseFloat(document.getElementById('weightKg').value);
+    const regimenIdx = document.getElementById('regimenSelect').value;
+    const resultsDiv = document.getElementById('doseResults');
+
+    if (!heightCm || !weightKg) { alert('Please enter height and weight.'); return; }
+    if (regimenIdx === '') { alert('Please select a regimen.'); return; }
+
+    const regimen = regimenDatabase[regimenIdx];
+    const bsa = Math.sqrt((heightCm * weightKg) / 3600);
+    const age = parseFloat(document.getElementById('patientAge').value);
+    const sex = document.getElementById('patientSex').value;
+    const creatinine = parseFloat(document.getElementById('serumCreatinine').value);
+
+    if (regimen.needsCreatinine && (!age || !creatinine || !sex)) {
+        alert('This regimen contains Carboplatin. Please fill Age, Sex, and Serum Creatinine.');
+        return;
+    }
+
+    const gfr = (regimen.needsCreatinine && age && creatinine && sex) ?
+        calculateGFR(age, weightKg, creatinine, sex === 'Female') : null;
+
+    // Calculate dose for each drug
+    const calculations = regimen.drugs.map(drug => {
+        let dosePerAdmin = 0;
+        let doseLabel = '';
+        const times = drug.timesPerCycle || 1;
+
+        switch (drug.doseType) {
+            case 'mg_per_m2':
+                dosePerAdmin = drug.dose * bsa;
+                doseLabel = `${drug.dose} mg/m² × ${bsa.toFixed(2)} = ${dosePerAdmin.toFixed(1)} mg`;
+                if (times > 1) doseLabel += ` (×${times}/cycle)`;
+                break;
+            case 'auc':
+                dosePerAdmin = calcCarboplatinDose(drug.dose, gfr);
+                doseLabel = `AUC ${drug.dose} × (GFR ${gfr.toFixed(0)} + 25) = ${dosePerAdmin.toFixed(1)} mg`;
+                break;
+            case 'mg_per_kg':
+                dosePerAdmin = drug.dose * weightKg;
+                doseLabel = `${drug.dose} mg/kg × ${weightKg} kg = ${dosePerAdmin.toFixed(1)} mg`;
+                break;
+            case 'flat_mg':
+                dosePerAdmin = drug.dose;
+                doseLabel = `${drug.dose} mg (flat dose)`;
+                break;
+            case 'oral_bd_14d': {
+                const singleDose = Math.round((drug.dose * bsa) / 500) * 500;
+                dosePerAdmin = singleDose * 2 * 14;
+                doseLabel = `${drug.dose} mg/m² BD × 14d = ${singleDose} mg BD (${dosePerAdmin} mg total)`;
+                break;
+            }
+        }
+
+        // Find available brands for this generic
+        const brands = drugDatabase.filter(d => d.generic === drug.generic);
+
+        // Optimize vials per single administration
+        const optimalPerAdmin = optimizeVials(dosePerAdmin, brands);
+
+        // For timesPerCycle > 1, multiply quantities (each admin needs separate vials)
+        const optimalPerCycle = optimalPerAdmin.map(v => ({
+            ...v,
+            qtyPerAdmin: v.qty,
+            qty: v.qty * times,
+            totalCost: v.qty * times * v.mrp
+        }));
+
+        const totalMgPerAdmin = optimalPerAdmin.reduce((s, v) => s + v.qty * v.contentMg, 0);
+        const totalCost = optimalPerCycle.reduce((s, v) => s + v.totalCost, 0);
+
+        // Build vial description string
+        const vialDesc = optimalPerAdmin.map(v => `${v.qty} × ${v.brand}`).join(' + ');
+        const cycleVialDesc = times > 1 ?
+            optimalPerCycle.map(v => `${v.qty} × ${v.brand}`).join(' + ') + ` (${times} admin/cycle)` :
+            optimalPerCycle.map(v => `${v.qty} × ${v.brand}`).join(' + ');
+
+        return {
+            generic: drug.generic,
+            dosePerAdmin,
+            doseLabel,
+            note: drug.note || '',
+            times,
+            vials: optimalPerCycle,
+            vialDesc: cycleVialDesc,
+            totalMgPerAdmin,
+            totalCost
+        };
+    });
+
+    // Render results
+    const totalCost = calculations.reduce((sum, c) => sum + c.totalCost, 0);
+
+    let html = `
+        <div style="background:#f0f8ff; border:2px solid #2980b9; border-radius:8px; padding:16px; margin-top:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                <div>
+                    <strong style="color:#1a5276; font-size:1rem;">${regimen.name}</strong>
+                    <span style="color:#666; font-size:0.85rem; margin-left:8px;">${regimen.cycle}</span>
+                </div>
+                <div style="font-size:0.82rem; color:#555;">BSA: <b>${bsa.toFixed(2)} m²</b>${gfr ? ` | GFR: <b>${gfr.toFixed(0)} mL/min</b>` : ''}</div>
+            </div>
+            <div style="overflow-x:auto;">
+            <table class="drug-table" style="display:table; margin-top:0;">
+                <thead>
+                    <tr>
+                        <th>Drug</th>
+                        <th>Calculated Dose</th>
+                        <th>Optimal Indent (Per Cycle)</th>
+                        <th style="text-align:right">Cost</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+    calculations.forEach((calc, i) => {
+        const vialHtml = calc.vials.map(v => {
+            const unit = getUnitLabel(v, v.qty);
+            let packInfo = '';
+            if (v.unitsPerPack) {
+                const packs = Math.ceil(v.qty / v.unitsPerPack);
+                const packLabel = (v.form === 'capsule') ? (packs === 1 ? 'strip' : 'strips') : (packs === 1 ? 'pack' : 'packs');
+                packInfo = ` → <b>${packs}</b> ${packLabel} (${v.unitsPerPack}/${packLabel.replace(/s$/, '')})`;
+            }
+            return `<span style="display:inline-block; background:#e8f0fe; padding:2px 8px; border-radius:4px; margin:2px; font-size:0.82rem; white-space:nowrap;">
+                <b>${v.qty}</b> ${unit} × ${v.brand}${packInfo} — Rs. ${formatNum(v.mrp)}/unit
+            </span>`;
+        }).join('');
+
+        html += `
+            <tr>
+                <td><strong>${calc.generic}</strong>${calc.note ? `<br><span style="font-size:0.75rem; color:#888;">${calc.note}</span>` : ''}</td>
+                <td style="font-size:0.85rem;">${calc.doseLabel}<br><span style="font-size:0.75rem; color:#27ae60;">Covering: ${calc.totalMgPerAdmin} mg</span></td>
+                <td>${vialHtml}</td>
+                <td style="text-align:right; font-weight:600;">Rs. ${formatNum(calc.totalCost)}</td>
+            </tr>`;
+    });
+
+    html += `
+                </tbody>
+                <tfoot>
+                    <tr style="font-weight:700; background:#e8f0fe;">
+                        <td colspan="3">Total Drug Cost (Per Cycle)</td>
+                        <td style="text-align:right;">Rs. ${formatNum(totalCost)}</td>
+                    </tr>
+                </tfoot>
+            </table>
+            </div>
+            <div style="text-align:center; margin-top:14px;">
+                <button class="btn btn-success" onclick="addCalcDrugsToEstimate()" style="padding:12px 28px;">Add All to Estimate</button>
+            </div>
+        </div>`;
+
+    resultsDiv.innerHTML = html;
+    window._calcResults = calculations;
+    document.getElementById('regimen').value = regimen.name;
+}
+
+function addCalcDrugsToEstimate() {
+    if (!window._calcResults) return;
+
+    window._calcResults.forEach(calc => {
+        // Add each vial size as a separate line item
+        calc.vials.forEach(v => {
+            addedDrugs.push({
+                brand: v.brand,
+                generic: v.generic,
+                mrp: v.mrp,
+                type: v.type,
+                contentMg: v.contentMg,
+                qty: v.qty
+            });
+        });
+    });
+
+    renderDrugTable();
+    updateSummary();
+
+    document.getElementById('drugTable').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 // ==================== INITIALIZATION ====================
 function init() {
     populateGenericDropdown();
+    populateRegimenDropdown();
     updateSummary();
+
+    // Auto-select regimen in dose calculator when typing in patient details regimen field
+    document.getElementById('regimen').addEventListener('input', function() {
+        const typed = this.value.trim().toLowerCase();
+        if (!typed || typed.length < 2) { document.getElementById('regimenSelect').value = ''; return; }
+        // Split typed text into words and check if ALL words appear in regimen name
+        const words = typed.split(/[\s+,\-]+/).filter(w => w.length >= 2);
+        if (words.length === 0) { document.getElementById('regimenSelect').value = ''; return; }
+        const match = regimenDatabase.findIndex(r => {
+            const name = r.name.toLowerCase();
+            return words.every(w => name.includes(w));
+        });
+        if (match !== -1) {
+            document.getElementById('regimenSelect').value = match;
+            onRegimenChange();
+        } else {
+            document.getElementById('regimenSelect').value = '';
+        }
+    });
+}
+
+function populateRegimenDropdown() {
+    const select = document.getElementById('regimenSelect');
+    regimenDatabase.forEach((r, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `${r.name} (${r.cycle})`;
+        select.appendChild(opt);
+    });
 }
 
 function populateGenericDropdown() {
@@ -580,7 +1151,7 @@ function updateSummary() {
 }
 
 // ==================== PRINT ====================
-function generatePrint() {
+function generatePrint(mode) {
     const name = document.getElementById('patientName').value || '_______________';
     const age = document.getElementById('patientAge').value || '____';
     const sex = document.getElementById('patientSex').value || '____';
@@ -600,27 +1171,73 @@ function generatePrint() {
 
     const today = new Date().toLocaleDateString('en-IN');
 
-    const html = `
-        <div>
-            <div style="text-align:center; margin-bottom:10px;">
-                <img src="kims-macs-logo.jpg" alt="KIMS MACS Logo" style="height:50px; margin-bottom:4px;">
-                <h2 style="color:#1a5276; font-size:0.95rem; margin-top:4px; letter-spacing:1px;">CHEMOTHERAPY COST ESTIMATION SHEET</h2>
-            </div>
+    const procedureLabel = document.getElementById('procedureType').selectedOptions[0]?.text || '--';
 
+    // Common header + patient details
+    const headerHtml = `
+        <div style="text-align:center; margin-bottom:10px;">
+            <img src="kims-macs-logo.jpg" alt="KIMS MACS Logo" style="height:50px; margin-bottom:4px;">
+            <h2 style="color:#1a5276; font-size:0.95rem; margin-top:4px; letter-spacing:1px;">CHEMOTHERAPY COST ESTIMATION SHEET</h2>
+        </div>
+        <table class="est-table">
+            <tr><td style="width:25%"><b>Patient Name</b></td><td colspan="3">${name}</td></tr>
+            <tr><td><b>Age / Sex</b></td><td>${age} / ${sex}</td><td><b>UMR No</b></td><td>${umr}</td></tr>
+            <tr><td><b>Phone</b></td><td>${phone}</td><td><b>Date</b></td><td>${today}</td></tr>
+            <tr><td><b>Diagnosis</b></td><td colspan="3">${diag}</td></tr>
+            <tr><td><b>Regimen</b></td><td colspan="3">${reg}</td></tr>
+            <tr><td><b>Consultant</b></td><td colspan="3">${doc}</td></tr>
+        </table>`;
+
+    let html = '';
+
+    if (mode === 'doctor') {
+        // Doctor print — detailed drug list + hospital charges breakdown
+        const drugRows = addedDrugs.map(d => `
+            <tr>
+                <td>${d.brand}</td>
+                <td>${d.generic}</td>
+                <td style="text-align:center">${d.qty}</td>
+                <td style="text-align:right">Rs. ${formatNum(d.mrp)}</td>
+                <td style="text-align:right">Rs. ${formatNum(d.mrp * d.qty)}</td>
+            </tr>`).join('');
+
+        html = `
+        <div>
+            ${headerHtml}
+
+            <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Drug Details</p>
             <table class="est-table">
-                <tr><td style="width:25%"><b>Patient Name</b></td><td colspan="3">${name}</td></tr>
-                <tr><td><b>Age / Sex</b></td><td>${age} / ${sex}</td><td><b>UMR No</b></td><td>${umr}</td></tr>
-                <tr><td><b>Phone</b></td><td>${phone}</td><td><b>Date</b></td><td>${today}</td></tr>
-                <tr><td><b>Diagnosis</b></td><td colspan="3">${diag}</td></tr>
-                <tr><td><b>Regimen</b></td><td colspan="3">${reg}</td></tr>
-                <tr><td><b>Consultant</b></td><td colspan="3">${doc}</td></tr>
+                <tr><th>Brand</th><th>Generic</th><th style="text-align:center">Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Total</th></tr>
+                ${drugRows}
+                <tr style="font-weight:700; background:#e8f0fe;"><td colspan="4">Total Drug Cost</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td></tr>
             </table>
+
+            <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Hospital Charges</p>
+            <table class="est-table">
+                <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
+                <tr><td>Procedure Charges (${procedureLabel})</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
+                <tr><td>Consumables</td><td style="text-align:right">Rs. ${formatNum(consumables)}</td></tr>
+                <tr><td>Consultation Charges</td><td style="text-align:right">Rs. ${formatNum(consultation)}</td></tr>
+                <tr><td>Ward Charges</td><td style="text-align:right">Rs. ${formatNum(wardCharges)}</td></tr>
+                <tr style="font-weight:700; background:#e8f0fe;"><td>Total Hospital Charges</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges + procedure)}</td></tr>
+            </table>
+
+            <table class="est-table" style="margin-top:14px;">
+                <tr style="font-weight:700; background:#1a5276; color:white; font-size:0.95rem;"><td>TOTAL ESTIMATED COST</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
+            </table>
+        </div>`;
+    } else {
+        // Patient print — summary view with notes + signatures
+        html = `
+        <div>
+            ${headerHtml}
 
             <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Procedure Cost (Per Cycle)</p>
             <table class="est-table">
                 <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
                 <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td></tr>
-                <tr><td>Hospital Charges</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges + procedure)}</td></tr>
+                <tr><td>Procedure Charges</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
+                <tr><td>Hospital Charges (Consumables, Ward Charges, Consultation Charges)</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td></tr>
                 <tr style="font-weight:700; background:#e8f0fe;"><td>TOTAL</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
             </table>
 
@@ -645,20 +1262,20 @@ function generatePrint() {
             <p style="font-weight:600;">Patient / Attendant Acknowledgement</p>
             <p style="margin-top:2px;">I understand the above is an estimated cost and actual expenses may vary.</p>
 
-            <div style="display:flex; justify-content:space-between; margin-top:16px;">
+            <div style="display:flex; justify-content:space-between; margin-top:56px;">
                 <div>
                     <p>Name & Signature:</p>
-                    <br><br>
+                    <br>
                     <p>Date:</p>
                 </div>
                 <div>
                     <p>Name & Signature of Executive:</p>
-                    <br><br>
+                    <br>
                     <p>Date & Time:</p>
                 </div>
             </div>
-        </div>
-    `;
+        </div>`;
+    }
 
     document.getElementById('estSheet').innerHTML = html;
     document.getElementById('printArea').style.display = 'block';
@@ -673,6 +1290,12 @@ function resetForm() {
     document.getElementById('genericSelect').value = '';
     document.getElementById('brandSelect').innerHTML = '<option value="">-- Select Brand --</option>';
     document.getElementById('drugQty').value = 0;
+    document.getElementById('regimenSelect').value = '';
+    document.getElementById('bsaValue').value = '';
+    document.getElementById('doseResults').innerHTML = '';
+    document.getElementById('creatinineGroup').style.background = '';
+    document.getElementById('creatinineGroup').style.padding = '';
+    window._calcResults = null;
     addedDrugs = [];
     renderDrugTable();
     updateSummary();
@@ -681,6 +1304,14 @@ function resetForm() {
 // ==================== HELPERS ====================
 function formatNum(n) {
     return n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function getUnitLabel(drug, qty) {
+    const form = drug.form || 'vial';
+    if (form === 'kit') return qty === 1 ? 'kit' : 'kits';
+    if (form === 'tablet') return qty === 1 ? 'tab' : 'tabs';
+    if (form === 'capsule') return qty === 1 ? 'cap' : 'caps';
+    return qty === 1 ? 'vial' : 'vials';
 }
 
 // Initialize on load
