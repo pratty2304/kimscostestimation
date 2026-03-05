@@ -151,8 +151,18 @@
             .action-bar { flex-direction: column; gap: 10px; margin: 16px 0; }
             .action-bar .btn { padding: 14px 20px; font-size: 0.95rem; width: 100%; }
 
-            /* Dose calculator results — scroll horizontally */
-            #doseResults { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            /* Dose calculator — mobile friendly */
+            #doseResults { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+            #doseResults > div { max-width: 100%; box-sizing: border-box; padding: 10px !important; }
+            #doseResults table { min-width: 0; width: 100%; table-layout: fixed; }
+            #doseResults table th, #doseResults table td { padding: 6px 4px; font-size: 0.72rem; word-break: break-word; vertical-align: top; }
+            #doseResults table th:nth-child(1) { width: 18%; }
+            #doseResults table th:nth-child(2) { width: 28%; }
+            #doseResults table th:nth-child(3) { width: 36%; }
+            #doseResults table th:nth-child(4) { width: 18%; }
+            #doseResults span { white-space: normal !important; font-size: 0.68rem !important; padding: 2px 4px !important; }
+            #regimenSelect { font-size: 0.82rem; }
+            .card { max-width: 100%; overflow: hidden; box-sizing: border-box; }
 
             /* Buttons */
             .btn { padding: 9px 14px; font-size: 0.85rem; }
@@ -419,6 +429,8 @@ const drugDatabase = [
     { brand: "CARBOTERO 450MG INJ", generic: "CARBOPLATIN", mrp: 2946.97, type: "chemotherapy", contentMg: 450 },
     { brand: "CISTERO 10MG", generic: "CISPLATIN", mrp: 85.00, type: "chemotherapy", contentMg: 10 },
     { brand: "CISTERO 50MG", generic: "CISPLATIN", mrp: 427.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "HOLOXAN 1GM INJ", generic: "IFOSFAMIDE", mrp: 250.05, type: "chemotherapy", contentMg: 1000 },
+    { brand: "IFEX-M 2GM INJ", generic: "IFOSFAMIDE", mrp: 894.58, type: "chemotherapy", contentMg: 2000 },
     { brand: "CYCLOXAN 1GM INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 108.00, type: "chemotherapy", contentMg: 1000 },
     { brand: "CYCLOXAN 200MG INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 36.00, type: "chemotherapy", contentMg: 200 },
     { brand: "CYCLOXAN 500MG INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 77.00, type: "chemotherapy", contentMg: 500 },
@@ -507,6 +519,14 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "AP (Adriamycin + Cisplatin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 60, doseType: "mg_per_m2" },
+            { generic: "CISPLATIN", dose: 60, doseType: "mg_per_m2" },
+        ]
+    },
+    {
         name: "CAPOX",
         cycle: "Q3W",
         drugs: [
@@ -553,6 +573,21 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Carboplatin single agent (weekly)",
+        cycle: "Weekly",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 2, doseType: "auc", note: "AUC 2" },
+        ]
+    },
+    {
+        name: "Cisplatin single agent (weekly)",
+        cycle: "Weekly",
+        drugs: [
+            { generic: "CISPLATIN", dose: 40, doseType: "mg_per_m2", note: "40 mg/m² weekly concurrent" },
+        ]
+    },
+    {
         name: "FLOT",
         cycle: "Q2W",
         drugs: [
@@ -569,6 +604,14 @@ const regimenDatabase = [
             { generic: "IRINOTECAN", dose: 180, doseType: "mg_per_m2" },
             { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
             { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
+        ]
+    },
+    {
+        name: "IA (Ifosfamide + Adriamycin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "IFOSFAMIDE", dose: 2000, doseType: "mg_per_m2", timesPerCycle: 3, note: "2000 mg/m²/day D1-3 (with Mesna)" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", timesPerCycle: 3, note: "25 mg/m²/day D1-3" },
         ]
     },
     {
@@ -616,6 +659,15 @@ const regimenDatabase = [
             { generic: "CARBOPLATIN", dose: 6, doseType: "auc", note: "AUC 6" },
             { generic: "TRASTUZUMAB", dose: 6, doseType: "mg_per_kg", note: "6 mg/kg (loading: 8 mg/kg C1)" },
             { generic: "PERTUZUMAB", dose: 420, doseType: "flat_mg", note: "420 mg (loading: 840 mg C1)" },
+        ]
+    },
+    {
+        name: "TPF (Docetaxel + Cisplatin + 5-FU)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2" },
+            { generic: "CISPLATIN", dose: 75, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 3750, doseType: "mg_per_m2", note: "750 mg/m²/day CI D1-5" },
         ]
     },
 ];
