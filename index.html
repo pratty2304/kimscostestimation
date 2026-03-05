@@ -361,7 +361,8 @@
 
     <!-- Action Buttons -->
     <div class="action-bar no-print">
-        <button class="btn btn-success" onclick="generatePrint()">Print Estimation Sheet</button>
+        <button class="btn btn-success" onclick="generatePrint('patient')">Print for Patient</button>
+        <button class="btn btn-success" onclick="generatePrint('doctor')" style="background:#1a5276;">Print for Doctor</button>
         <button class="btn btn-primary" onclick="resetForm()">New Estimate</button>
     </div>
 
@@ -580,7 +581,7 @@ function updateSummary() {
 }
 
 // ==================== PRINT ====================
-function generatePrint() {
+function generatePrint(mode) {
     const name = document.getElementById('patientName').value || '_______________';
     const age = document.getElementById('patientAge').value || '____';
     const sex = document.getElementById('patientSex').value || '____';
@@ -600,21 +601,66 @@ function generatePrint() {
 
     const today = new Date().toLocaleDateString('en-IN');
 
-    const html = `
-        <div>
-            <div style="text-align:center; margin-bottom:10px;">
-                <img src="kims-macs-logo.jpg" alt="KIMS MACS Logo" style="height:50px; margin-bottom:4px;">
-                <h2 style="color:#1a5276; font-size:0.95rem; margin-top:4px; letter-spacing:1px;">CHEMOTHERAPY COST ESTIMATION SHEET</h2>
-            </div>
+    const procedureLabel = document.getElementById('procedureType').selectedOptions[0]?.text || '--';
 
+    // Common header + patient details
+    const headerHtml = `
+        <div style="text-align:center; margin-bottom:10px;">
+            <img src="kims-macs-logo.jpg" alt="KIMS MACS Logo" style="height:50px; margin-bottom:4px;">
+            <h2 style="color:#1a5276; font-size:0.95rem; margin-top:4px; letter-spacing:1px;">CHEMOTHERAPY COST ESTIMATION SHEET</h2>
+        </div>
+        <table class="est-table">
+            <tr><td style="width:25%"><b>Patient Name</b></td><td colspan="3">${name}</td></tr>
+            <tr><td><b>Age / Sex</b></td><td>${age} / ${sex}</td><td><b>UMR No</b></td><td>${umr}</td></tr>
+            <tr><td><b>Phone</b></td><td>${phone}</td><td><b>Date</b></td><td>${today}</td></tr>
+            <tr><td><b>Diagnosis</b></td><td colspan="3">${diag}</td></tr>
+            <tr><td><b>Regimen</b></td><td colspan="3">${reg}</td></tr>
+            <tr><td><b>Consultant</b></td><td colspan="3">${doc}</td></tr>
+        </table>`;
+
+    let html = '';
+
+    if (mode === 'doctor') {
+        // Doctor print — detailed drug list + hospital charges breakdown
+        const drugRows = addedDrugs.map(d => `
+            <tr>
+                <td>${d.brand}</td>
+                <td>${d.generic}</td>
+                <td style="text-align:center">${d.qty}</td>
+                <td style="text-align:right">Rs. ${formatNum(d.mrp)}</td>
+                <td style="text-align:right">Rs. ${formatNum(d.mrp * d.qty)}</td>
+            </tr>`).join('');
+
+        html = `
+        <div>
+            ${headerHtml}
+
+            <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Drug Details</p>
             <table class="est-table">
-                <tr><td style="width:25%"><b>Patient Name</b></td><td colspan="3">${name}</td></tr>
-                <tr><td><b>Age / Sex</b></td><td>${age} / ${sex}</td><td><b>UMR No</b></td><td>${umr}</td></tr>
-                <tr><td><b>Phone</b></td><td>${phone}</td><td><b>Date</b></td><td>${today}</td></tr>
-                <tr><td><b>Diagnosis</b></td><td colspan="3">${diag}</td></tr>
-                <tr><td><b>Regimen</b></td><td colspan="3">${reg}</td></tr>
-                <tr><td><b>Consultant</b></td><td colspan="3">${doc}</td></tr>
+                <tr><th>Brand</th><th>Generic</th><th style="text-align:center">Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Total</th></tr>
+                ${drugRows}
+                <tr style="font-weight:700; background:#e8f0fe;"><td colspan="4">Total Drug Cost</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td></tr>
             </table>
+
+            <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Hospital Charges</p>
+            <table class="est-table">
+                <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
+                <tr><td>Procedure Charges (${procedureLabel})</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
+                <tr><td>Consumables</td><td style="text-align:right">Rs. ${formatNum(consumables)}</td></tr>
+                <tr><td>Consultation Charges</td><td style="text-align:right">Rs. ${formatNum(consultation)}</td></tr>
+                <tr><td>Ward Charges</td><td style="text-align:right">Rs. ${formatNum(wardCharges)}</td></tr>
+                <tr style="font-weight:700; background:#e8f0fe;"><td>Total Hospital Charges</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges + procedure)}</td></tr>
+            </table>
+
+            <table class="est-table" style="margin-top:14px;">
+                <tr style="font-weight:700; background:#1a5276; color:white; font-size:0.95rem;"><td>TOTAL ESTIMATED COST</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
+            </table>
+        </div>`;
+    } else {
+        // Patient print — summary view with notes + signatures
+        html = `
+        <div>
+            ${headerHtml}
 
             <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Procedure Cost (Per Cycle)</p>
             <table class="est-table">
@@ -658,8 +704,8 @@ function generatePrint() {
                     <p>Date & Time:</p>
                 </div>
             </div>
-        </div>
-    `;
+        </div>`;
+    }
 
     document.getElementById('estSheet').innerHTML = html;
     document.getElementById('printArea').style.display = 'block';
