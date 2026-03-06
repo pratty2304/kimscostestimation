@@ -580,7 +580,7 @@ const regimenDatabase = [
         ]
     },
     {
-        name: "Carboplatin single agent (weekly)",
+        name: "Carboplatin single agent (weekly, with concurrent RT)",
         cycle: "Weekly",
         needsCreatinine: true,
         drugs: [
@@ -588,7 +588,7 @@ const regimenDatabase = [
         ]
     },
     {
-        name: "Cisplatin single agent (weekly)",
+        name: "Cisplatin single agent (weekly, with concurrent RT)",
         cycle: "Weekly",
         drugs: [
             { generic: "CISPLATIN", dose: 40, doseType: "mg_per_m2", note: "40 mg/m² weekly concurrent" },
@@ -614,6 +614,26 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "FOLFIRI + Bevacizumab",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "IRINOTECAN", dose: 180, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
+            { generic: "BEVACIZUMAB", dose: 5, doseType: "mg_per_kg" },
+        ]
+    },
+    {
+        name: "FOLFIRINOX",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
+            { generic: "IRINOTECAN", dose: 180, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
+        ]
+    },
+    {
         name: "IA (Ifosfamide + Adriamycin)",
         cycle: "Q3W",
         drugs: [
@@ -628,6 +648,16 @@ const regimenDatabase = [
             { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
             { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
             { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
+        ]
+    },
+    {
+        name: "mFOLFOX6 + Bevacizumab",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
+            { generic: "BEVACIZUMAB", dose: 5, doseType: "mg_per_kg" },
         ]
     },
     {
@@ -1015,7 +1045,9 @@ function populateRegimenDropdown() {
     regimenDatabase.forEach((r, i) => {
         const opt = document.createElement('option');
         opt.value = i;
-        opt.textContent = `${r.name} (${r.cycle})`;
+        const nameLC = r.name.toLowerCase();
+        const showCycle = !nameLC.includes('weekly') && !nameLC.includes('q2w') && !nameLC.includes('q3w');
+        opt.textContent = showCycle ? `${r.name} (${r.cycle})` : r.name;
         select.appendChild(opt);
     });
 }
