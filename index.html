@@ -446,6 +446,9 @@ const drugDatabase = [
     { brand: "DOCETERO RTU 80MG INJ", generic: "DOCETAXEL", mrp: 10943.85, type: "chemotherapy", contentMg: 80 },
     { brand: "FOSAPORT IV 150MG INJ", generic: "FOSAPREPITANT", mrp: 3073.44, type: "supportive", contentMg: 150 },
     { brand: "FOSUP 150MG INJ", generic: "FOSAPREPITANT", mrp: 2716.00, type: "supportive", contentMg: 150 },
+    { brand: "CITAFINE 200MG INJ", generic: "GEMCITABINE", mrp: 1481.10, type: "chemotherapy", contentMg: 200 },
+    { brand: "CITAFINE 1GM INJ", generic: "GEMCITABINE", mrp: 5974.34, type: "chemotherapy", contentMg: 1000 },
+    { brand: "CITAFINE 1.4GM INJ", generic: "GEMCITABINE", mrp: 12384.00, type: "chemotherapy", contentMg: 1400 },
     { brand: "GLOBUCEL 10GM 100ML IV INJ", generic: "IVIG", mrp: 20517.57, type: "supportive", contentMg: 10000 },
     { brand: "GLOBUCEL 5GM 100ML IV INJ", generic: "IVIG", mrp: 11056.60, type: "supportive", contentMg: 5000 },
     { brand: "GROS 100MG INJ", generic: "PACLITAXEL", mrp: 4021.54, type: "chemotherapy", contentMg: 100 },
@@ -658,11 +661,54 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Gemcitabine + Carboplatin",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Cisplatin",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CISPLATIN", dose: 70, doseType: "mg_per_m2", note: "70 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Cisplatin + Pembrolizumab",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CISPLATIN", dose: 70, doseType: "mg_per_m2", note: "70 mg/m² D1" },
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Capecitabine (GemCap)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CAPECITABINE", dose: 830, doseType: "oral_bd_14d", note: "830 mg/m² BD D1-14" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Nab-Paclitaxel",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "NAB-PACLITAXEL", dose: 125, doseType: "mg_per_m2", timesPerCycle: 2, note: "125 mg/m² D1, D8" },
+        ]
+    },
+    {
         name: "IA (Ifosfamide + Adriamycin)",
         cycle: "Q3W",
         drugs: [
-            { generic: "IFOSFAMIDE", dose: 2000, doseType: "mg_per_m2", timesPerCycle: 3, note: "2000 mg/m²/day D1-3 (with Mesna)" },
+            { generic: "IFOSFAMIDE", dose: 2000, doseType: "mg_per_m2", timesPerCycle: 3, note: "2000 mg/m²/day D1-3" },
             { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", timesPerCycle: 3, note: "25 mg/m²/day D1-3" },
+            { generic: "MESNA", dose: 1200, doseType: "mg_per_m2", timesPerCycle: 3, note: "60% of Ifosfamide dose/day, D1-3" },
         ]
     },
     {
@@ -682,6 +728,23 @@ const regimenDatabase = [
             { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
             { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
             { generic: "BEVACIZUMAB", dose: 5, doseType: "mg_per_kg" },
+        ]
+    },
+    {
+        name: "Nab-Paclitaxel + Carboplatin + Bevacizumab",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "NAB-PACLITAXEL", dose: 100, doseType: "mg_per_m2", timesPerCycle: 3, note: "100 mg/m² D1, D8, D15" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1" },
+            { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg", note: "15 mg/kg D1" },
+        ]
+    },
+    {
+        name: "Nab-Paclitaxel single agent (weekly)",
+        cycle: "Weekly",
+        drugs: [
+            { generic: "NAB-PACLITAXEL", dose: 100, doseType: "mg_per_m2" },
         ]
     },
     {
@@ -736,6 +799,26 @@ const regimenDatabase = [
             { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2" },
             { generic: "CISPLATIN", dose: 75, doseType: "mg_per_m2" },
             { generic: "FLUOROURACIL (5-FU)", dose: 3750, doseType: "mg_per_m2", note: "750 mg/m²/day CI D1-5" },
+        ]
+    },
+    {
+        name: "TIP — Penile cancer (Paclitaxel + Ifosfamide + Cisplatin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2", note: "175 mg/m² D1" },
+            { generic: "IFOSFAMIDE", dose: 1200, doseType: "mg_per_m2", timesPerCycle: 3, note: "1200 mg/m²/day D1-3" },
+            { generic: "CISPLATIN", dose: 25, doseType: "mg_per_m2", timesPerCycle: 3, note: "25 mg/m²/day D1-3" },
+            { generic: "MESNA", dose: 1200, doseType: "mg_per_m2", timesPerCycle: 3, note: "Equal to Ifosfamide dose/day, D1-3" },
+        ]
+    },
+    {
+        name: "TIP — Testicular cancer salvage (Paclitaxel + Ifosfamide + Cisplatin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "PACLITAXEL", dose: 250, doseType: "mg_per_m2", note: "250 mg/m² D1 (24h CI)" },
+            { generic: "IFOSFAMIDE", dose: 1500, doseType: "mg_per_m2", timesPerCycle: 4, note: "1500 mg/m²/day D2-5" },
+            { generic: "CISPLATIN", dose: 25, doseType: "mg_per_m2", timesPerCycle: 4, note: "25 mg/m²/day D2-5" },
+            { generic: "MESNA", dose: 1500, doseType: "mg_per_m2", timesPerCycle: 4, note: "Equal to Ifosfamide dose/day, D2-5" },
         ]
     },
 ];
