@@ -595,6 +595,30 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "CROSS (Carboplatin + Paclitaxel, concurrent RT)",
+        cycle: "Weekly",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 2, doseType: "auc", note: "AUC 2 weekly × 5" },
+            { generic: "PACLITAXEL", dose: 50, doseType: "mg_per_m2", note: "50 mg/m² weekly × 5" },
+        ]
+    },
+    {
+        name: "Docetaxel single agent",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "EC (Epirubicin + Cyclophosphamide)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "EPIRUBICIN", dose: 90, doseType: "mg_per_m2" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 600, doseType: "mg_per_m2" },
+        ]
+    },
+    {
         name: "FLOT",
         cycle: "Q2W",
         drugs: [
@@ -658,6 +682,13 @@ const regimenDatabase = [
             { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
             { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
             { generic: "BEVACIZUMAB", dose: 5, doseType: "mg_per_kg" },
+        ]
+    },
+    {
+        name: "Paclitaxel single agent (weekly)",
+        cycle: "Weekly",
+        drugs: [
+            { generic: "PACLITAXEL", dose: 80, doseType: "mg_per_m2" },
         ]
     },
     {
