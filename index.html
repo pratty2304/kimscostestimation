@@ -545,6 +545,13 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Capecitabine single agent (with concurrent RT)",
+        cycle: "Daily",
+        drugs: [
+            { generic: "CAPECITABINE", dose: 825, doseType: "oral_bd_14d", note: "825 mg/m² BD on RT days" },
+        ]
+    },
+    {
         name: "Carboplatin + Paclitaxel (3-weekly)",
         cycle: "Q3W",
         needsCreatinine: true,
@@ -703,12 +710,34 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Gemcitabine single agent",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+        ]
+    },
+    {
         name: "IA (Ifosfamide + Adriamycin)",
         cycle: "Q3W",
         drugs: [
             { generic: "IFOSFAMIDE", dose: 2000, doseType: "mg_per_m2", timesPerCycle: 3, note: "2000 mg/m²/day D1-3" },
             { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", timesPerCycle: 3, note: "25 mg/m²/day D1-3" },
             { generic: "MESNA", dose: 1200, doseType: "mg_per_m2", timesPerCycle: 3, note: "60% of Ifosfamide dose/day, D1-3" },
+        ]
+    },
+    {
+        name: "Irinotecan single agent",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "IRINOTECAN", dose: 350, doseType: "mg_per_m2", note: "350 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Irinotecan + Bevacizumab",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "IRINOTECAN", dose: 180, doseType: "mg_per_m2" },
+            { generic: "BEVACIZUMAB", dose: 5, doseType: "mg_per_kg" },
         ]
     },
     {
