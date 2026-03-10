@@ -889,60 +889,67 @@ function calcCarboplatinDose(auc, gfr) {
     return auc * (gfr + 25); // Calvert formula
 }
 
-// Smart vial optimizer: finds best combination balancing cost and practicality
-// Prefers fewer vials when cost difference is within 5%
-function optimizeVials(requiredDose, availableVials) {
-    // Group by contentMg, pick cheapest brand per size
+// Extract brand family: prefix before first digit, e.g. "OXALTERO 50MG INJ" → "OXALTERO"
+function getBrandFamily(brandName) {
+    return (brandName.match(/^([A-Za-z\s]+?)(?=\s*[\d(])/)?.[1] || brandName).trim();
+}
+
+// Core optimizer for a single brand family's vials
+function _optimizeFamily(requiredDose, floor, familyVials) {
+    // Pick cheapest entry per vial size within this family
     const sizeMap = {};
-    availableVials.forEach(v => {
+    familyVials.forEach(v => {
         if (!sizeMap[v.contentMg] || v.mrp < sizeMap[v.contentMg].mrp) {
             sizeMap[v.contentMg] = { ...v };
         }
     });
     const vials = Object.values(sizeMap).sort((a, b) => b.contentMg - a.contentMg);
 
-    if (vials.length === 0) return [];
+    if (vials.length === 0) return null;
     if (vials.length === 1) {
-        return [{ ...vials[0], qty: Math.ceil(requiredDose / vials[0].contentMg) }];
+        const qFloor = Math.floor(requiredDose / vials[0].contentMg);
+        const qCeil = Math.ceil(requiredDose / vials[0].contentMg);
+        const qty = (qFloor * vials[0].contentMg >= floor) ? qFloor : qCeil;
+        return [{ ...vials[0], qty }];
     }
 
-    // Collect ALL valid combinations
+    // Collect ALL valid combinations (covering >= floor)
     const allCombos = [];
+    const tryAdd = (combo, cost, totalVials, coversMg) => {
+        if (coversMg >= floor) allCombos.push({ combo, cost, totalVials });
+    };
 
     if (vials.length === 2) {
         const maxA = Math.ceil(requiredDose / vials[0].contentMg) + 1;
         for (let a = 0; a <= maxA; a++) {
-            const remaining = requiredDose - a * vials[0].contentMg;
-            const b = remaining > 0 ? Math.ceil(remaining / vials[1].contentMg) : 0;
-            const cost = a * vials[0].mrp + b * vials[1].mrp;
-            allCombos.push({
-                combo: [{ ...vials[0], qty: a }, { ...vials[1], qty: b }],
-                cost,
-                totalVials: a + b
-            });
+            const covA = a * vials[0].contentMg;
+            const remaining = requiredDose - covA;
+            const bCeil = remaining > 0 ? Math.ceil(remaining / vials[1].contentMg) : 0;
+            const bFloor = remaining > 0 ? Math.floor(remaining / vials[1].contentMg) : 0;
+            for (const b of [...new Set([bFloor, bCeil])]) {
+                if (b < 0) continue;
+                const total = covA + b * vials[1].contentMg;
+                tryAdd([{ ...vials[0], qty: a }, { ...vials[1], qty: b }],
+                    a * vials[0].mrp + b * vials[1].mrp, a + b, total);
+            }
         }
     } else if (vials.length === 3) {
         const maxA = Math.ceil(requiredDose / vials[0].contentMg) + 1;
         for (let a = 0; a <= maxA; a++) {
-            const remA = requiredDose - a * vials[0].contentMg;
-            if (remA <= 0) {
-                allCombos.push({
-                    combo: [{ ...vials[0], qty: a }, { ...vials[1], qty: 0 }, { ...vials[2], qty: 0 }],
-                    cost: a * vials[0].mrp,
-                    totalVials: a
-                });
-                continue;
-            }
-            const maxB = Math.ceil(remA / vials[1].contentMg) + 1;
+            const covA = a * vials[0].contentMg;
+            const remA = requiredDose - covA;
+            const maxB = remA > 0 ? Math.ceil(remA / vials[1].contentMg) + 1 : 0;
             for (let b = 0; b <= maxB; b++) {
-                const remB = remA - b * vials[1].contentMg;
-                const c = remB > 0 ? Math.ceil(remB / vials[2].contentMg) : 0;
-                const cost = a * vials[0].mrp + b * vials[1].mrp + c * vials[2].mrp;
-                allCombos.push({
-                    combo: [{ ...vials[0], qty: a }, { ...vials[1], qty: b }, { ...vials[2], qty: c }],
-                    cost,
-                    totalVials: a + b + c
-                });
+                const covAB = covA + b * vials[1].contentMg;
+                const remAB = requiredDose - covAB;
+                const cCeil = remAB > 0 ? Math.ceil(remAB / vials[2].contentMg) : 0;
+                const cFloor = remAB > 0 ? Math.floor(remAB / vials[2].contentMg) : 0;
+                for (const c of [...new Set([cFloor, cCeil])]) {
+                    if (c < 0) continue;
+                    const total = covAB + c * vials[2].contentMg;
+                    tryAdd([{ ...vials[0], qty: a }, { ...vials[1], qty: b }, { ...vials[2], qty: c }],
+                        a * vials[0].mrp + b * vials[1].mrp + c * vials[2].mrp, a + b + c, total);
+                }
             }
         }
     } else {
@@ -953,19 +960,41 @@ function optimizeVials(requiredDose, availableVials) {
             remaining -= qty * v.contentMg;
             return { ...v, qty };
         });
-        if (remaining > 0) combo[combo.length - 1].qty += 1;
+        const currentTotal = combo.reduce((s, v) => s + v.qty * v.contentMg, 0);
+        if (currentTotal < floor) combo[combo.length - 1].qty += 1;
         return combo.filter(v => v.qty > 0);
     }
 
-    // Find cheapest cost
+    if (allCombos.length === 0) return null;
+
     const minCost = Math.min(...allCombos.map(c => c.cost));
-    // Filter to combos within 5% of cheapest
     const threshold = minCost * 1.05;
     const practical = allCombos.filter(c => c.cost <= threshold);
-    // Among those, pick fewest vials; if tied, pick cheapest
     practical.sort((a, b) => a.totalVials - b.totalVials || a.cost - b.cost);
-
     return practical[0].combo.filter(v => v.qty > 0);
+}
+
+// Smart vial optimizer: never mixes brands, optimizes per brand family, picks cheapest family
+// tolerance (0–1): injectable chemo drugs allow rounding down up to 10% of required dose
+function optimizeVials(requiredDose, availableVials, tolerance = 0) {
+    const floor = requiredDose * (1 - tolerance);
+
+    // Group vials by brand family — never mix different brands
+    const familyMap = {};
+    availableVials.forEach(v => {
+        const fam = getBrandFamily(v.brand);
+        (familyMap[fam] = familyMap[fam] || []).push(v);
+    });
+
+    // Optimize within each family, pick cheapest result
+    let best = null, bestCost = Infinity;
+    for (const familyVials of Object.values(familyMap)) {
+        const result = _optimizeFamily(requiredDose, floor, familyVials);
+        if (!result) continue;
+        const cost = result.reduce((s, v) => s + v.qty * v.mrp, 0);
+        if (cost < bestCost) { bestCost = cost; best = result; }
+    }
+    return best || [];
 }
 
 function onRegimenChange() {
@@ -1041,8 +1070,13 @@ function calculateRegimen() {
         // Find available brands for this generic
         const brands = drugDatabase.filter(d => d.generic === drug.generic);
 
+        // 10% round-down tolerance for injectable chemo only (not tablets/capsules/immunotherapy/targeted/supportive)
+        const isInjChemo = brands.length > 0 && brands[0].type === 'chemotherapy'
+            && !['tablet', 'capsule'].includes(brands[0].form || 'vial');
+        const tolerance = isInjChemo ? 0.10 : 0;
+
         // Optimize vials per single administration
-        const optimalPerAdmin = optimizeVials(dosePerAdmin, brands);
+        const optimalPerAdmin = optimizeVials(dosePerAdmin, brands, tolerance);
 
         // For timesPerCycle > 1, multiply quantities (each admin needs separate vials)
         const optimalPerCycle = optimalPerAdmin.map(v => ({
@@ -1115,7 +1149,10 @@ function calculateRegimen() {
         html += `
             <tr>
                 <td><strong>${calc.generic}</strong>${calc.note ? `<br><span style="font-size:0.75rem; color:#888;">${calc.note}</span>` : ''}</td>
-                <td style="font-size:0.85rem;">${calc.doseLabel}<br><span style="font-size:0.75rem; color:#27ae60;">Covering: ${calc.totalMgPerAdmin} mg</span></td>
+                <td style="font-size:0.85rem;">${calc.doseLabel}<br>${calc.totalMgPerAdmin < calc.dosePerAdmin - 0.01
+                    ? `<span style="font-size:0.75rem; color:#e67e22;">&#9888; Giving: ${calc.totalMgPerAdmin} mg <b>(rounded from ${calc.dosePerAdmin.toFixed(1)} mg)</b></span>`
+                    : `<span style="font-size:0.75rem; color:#27ae60;">Covering: ${calc.totalMgPerAdmin} mg</span>`
+                }</td>
                 <td>${vialHtml}</td>
                 <td style="text-align:right; font-weight:600;">Rs. ${formatNum(calc.totalCost)}</td>
             </tr>`;

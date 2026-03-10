@@ -30,7 +30,9 @@ kims-macs-logo.jpg  # KIMS MACS logo (used in header + print sheet)
 - **Formulas**: BSA = √(ht × wt / 3600), GFR = ((140-age) × wt) / (72 × Cr) × 0.85 if female, Carboplatin = AUC × (GFR + 25)
 - **Dose types**: `mg_per_m2`, `auc` (Calvert), `mg_per_kg`, `flat_mg`, `oral_bd_14d` (capecitabine)
 - `timesPerCycle` for multi-day or weekly drugs within a cycle (e.g., paclitaxel weekly ×3 in Q3W, ifosfamide D1-3)
-- **Smart vial optimizer** (`optimizeVials`): tries all vial size combinations, finds cheapest, then within 5% of cheapest prefers fewer vials for practicality
+- **Smart vial optimizer** (`optimizeVials`): never mixes brands — optimizes within each brand family separately (via `_optimizeFamily`), picks cheapest family result; within a family tries all combinations, finds cheapest, then within 5% of cheapest prefers fewer vials for practicality
+- **Brand family**: extracted via `getBrandFamily()` — prefix before first digit in brand name (e.g. `"OXALTERO 50MG INJ"` → `"OXALTERO"`). Same brand, different vial sizes = same family and can be combined. Different brands = never mixed.
+- **Dose rounding tolerance**: injectable chemotherapy vials (`type === 'chemotherapy'`, form not tablet/capsule) allow rounding down up to **10%** of the calculated dose if a cheaper vial combination covers ≥ 90% of the dose. When rounding occurs, the results table shows `⚠ Giving: Xmg (rounded from Ymg)` in amber. Immunotherapy, targeted, hormonal, supportive, and oral drugs use `tolerance = 0` (no rounding).
 - **Drug forms**: vials, tablets, capsules, kits — `getUnitLabel()` helper returns appropriate labels (tabs/caps/kits/vials)
 - Pack display: for drugs with `unitsPerPack`, shows number of packs/strips needed
 - Typing in the patient details Regimen field auto-selects matching regimen in the calculator (all words must match, min 2 chars each)
