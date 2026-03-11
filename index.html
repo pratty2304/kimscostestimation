@@ -491,6 +491,8 @@ const drugDatabase = [
     { brand: "BEVATAS 100MG INJ", generic: "BEVACIZUMAB", mrp: 14867.50, type: "targeted", contentMg: 100 },
     { brand: "BEVATAS 300MG INJ", generic: "BEVACIZUMAB", mrp: 18000.00, type: "targeted", contentMg: 300 },
     { brand: "MABTAS 500MG INJ", generic: "RITUXIMAB", mrp: 39994.96, type: "targeted", contentMg: 500 },
+    { brand: "ELEFTHA 150MG INJ", generic: "TRASTUZUMAB", mrp: 6491.72, type: "targeted", contentMg: 150 },
+    { brand: "ELEFTHA 440MG INJ", generic: "TRASTUZUMAB", mrp: 19402.00, type: "targeted", contentMg: 440 },
     { brand: "VIVITRA 150MG INJ", generic: "TRASTUZUMAB", mrp: 22447.00, type: "targeted", contentMg: 150 },
     { brand: "VIVITRA 440MG INJ", generic: "TRASTUZUMAB", mrp: 38207.06, type: "targeted", contentMg: 440 },
     { brand: "PERTUZA 420MG INJ", generic: "PERTUZUMAB", mrp: 56000.00, type: "targeted", contentMg: 420 },
@@ -774,6 +776,14 @@ const regimenDatabase = [
         cycle: "Weekly",
         drugs: [
             { generic: "NAB-PACLITAXEL", dose: 100, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "Paclitaxel + Trastuzumab (APT trial, weekly)",
+        cycle: "Weekly",
+        drugs: [
+            { generic: "PACLITAXEL", dose: 80, doseType: "mg_per_m2", note: "80 mg/m² weekly × 12" },
+            { generic: "TRASTUZUMAB", dose: 2, doseType: "mg_per_kg", note: "2 mg/kg weekly (loading: 4 mg/kg week 1)" },
         ]
     },
     {

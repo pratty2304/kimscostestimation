@@ -41,7 +41,7 @@ kims-macs-logo.jpg  # KIMS MACS logo (used in header + print sheet)
 ## Regimens
 Regimens stored in `regimenDatabase` array, **sorted alphabetically**. New regimens must be inserted in alphabetical order.
 
-Current regimens: ABCP, AC, AC+Pembrolizumab (KEYNOTE-522), AP, CAPOX, Carboplatin+Paclitaxel (3-weekly), Carboplatin+Paclitaxel (weekly), Carboplatin+Paclitaxel+Bevacizumab (Ovarian), Carboplatin+Paclitaxel+Pembrolizumab (KEYNOTE-522), Carboplatin single agent (weekly), Cisplatin single agent (weekly), FLOT, FOLFIRI, IA, mFOLFOX6, Pemetrexed+Carboplatin, TC, TCH, TCHP, TPF
+Current regimens: ABCP, AC, AC+Pembrolizumab (KEYNOTE-522), AP, CAPOX, Carboplatin+Paclitaxel (3-weekly), Carboplatin+Paclitaxel (weekly), Carboplatin+Paclitaxel+Bevacizumab (Ovarian), Carboplatin+Paclitaxel+Pembrolizumab (KEYNOTE-522), Carboplatin single agent (weekly), Cisplatin single agent (weekly), FLOT, FOLFIRI, IA, mFOLFOX6, Paclitaxel+Trastuzumab (APT trial weekly), Pemetrexed+Carboplatin, TC, TCH, TCHP, TPF
 
 ## Consultants
 - Dr Suresh Babu MC
