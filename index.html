@@ -485,6 +485,8 @@ const drugDatabase = [
     // Immunotherapy
     { brand: "KEYTRUDA 100MG", generic: "PEMBROLIZUMAB", mrp: 216500.00, type: "immunotherapy", contentMg: 100 },
     { brand: "TECENTRIQ 1200MG", generic: "ATEZOLIZUMAB", mrp: 338877.00, type: "immunotherapy", contentMg: 1200 },
+    { brand: "TISHTHA 40MG INJ", generic: "NIVOLUMAB", mrp: 13950.00, type: "immunotherapy", contentMg: 40 },
+    { brand: "TISHTHA 100MG INJ", generic: "NIVOLUMAB", mrp: 28950.00, type: "immunotherapy", contentMg: 100 },
 
     // Targeted Therapy
     { brand: "AVASTIN 100MG INJ", generic: "BEVACIZUMAB", mrp: 33863.00, type: "targeted", contentMg: 100 },
@@ -665,9 +667,19 @@ const regimenDatabase = [
         cycle: "Q2W",
         drugs: [
             { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
-            { generic: "IRINOTECAN", dose: 180, doseType: "mg_per_m2" },
+            { generic: "IRINOTECAN", dose: 150, doseType: "mg_per_m2" },
             { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
-            { generic: "FLUOROURACIL (5-FU)", dose: 2800, doseType: "mg_per_m2", note: "400 bolus + 2400 CI 46h" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2400, doseType: "mg_per_m2", note: "2400 CI 46h" },
+        ]
+    },
+    {
+        name: "FOLFOXIRI",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
+            { generic: "IRINOTECAN", dose: 165, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 200, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 3200, doseType: "mg_per_m2", note: "3200 CI 48h" },
         ]
     },
     {
@@ -740,6 +752,27 @@ const regimenDatabase = [
         cycle: "Q2W",
         drugs: [
             { generic: "IRINOTECAN", dose: 180, doseType: "mg_per_m2" },
+            { generic: "BEVACIZUMAB", dose: 5, doseType: "mg_per_kg" },
+        ]
+    },
+    {
+        name: "mFOLFIRINOX",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
+            { generic: "IRINOTECAN", dose: 150, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2400, doseType: "mg_per_m2", note: "2400 CI 46h (no bolus)" },
+        ]
+    },
+    {
+        name: "mFOLFIRINOX + Bevacizumab",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
+            { generic: "IRINOTECAN", dose: 150, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2400, doseType: "mg_per_m2", note: "2400 CI 46h (no bolus)" },
             { generic: "BEVACIZUMAB", dose: 5, doseType: "mg_per_kg" },
         ]
     },
