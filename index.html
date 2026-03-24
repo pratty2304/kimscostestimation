@@ -487,6 +487,7 @@ const drugDatabase = [
     { brand: "TECENTRIQ 1200MG", generic: "ATEZOLIZUMAB", mrp: 338877.00, type: "immunotherapy", contentMg: 1200 },
     { brand: "TISHTHA 40MG INJ", generic: "NIVOLUMAB", mrp: 13950.00, type: "immunotherapy", contentMg: 40 },
     { brand: "TISHTHA 100MG INJ", generic: "NIVOLUMAB", mrp: 28950.00, type: "immunotherapy", contentMg: 100 },
+    { brand: "IMFINZI 500MG INJ", generic: "DURVALUMAB", mrp: 170608.00, type: "immunotherapy", contentMg: 500 },
 
     // Targeted Therapy
     { brand: "AVASTIN 100MG INJ", generic: "BEVACIZUMAB", mrp: 33863.00, type: "targeted", contentMg: 100 },
@@ -646,6 +647,17 @@ const regimenDatabase = [
             { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
             { generic: "LEUCOVORIN CALCIUM", dose: 200, doseType: "mg_per_m2" },
             { generic: "FLUOROURACIL (5-FU)", dose: 2600, doseType: "mg_per_m2", note: "2600 mg/m² CI 24h" },
+        ]
+    },
+    {
+        name: "FLOT + Durvalumab (MATTERHORN)",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "DOCETAXEL", dose: 50, doseType: "mg_per_m2" },
+            { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 200, doseType: "mg_per_m2" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 2600, doseType: "mg_per_m2", note: "2600 mg/m² CI 24h" },
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500mg Q4W (give every 2nd FLOT cycle)" },
         ]
     },
     {
