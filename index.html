@@ -460,7 +460,10 @@ const drugDatabase = [
     { brand: "FOIRI 40MG", generic: "IRINOTECAN", mrp: 1933.00, type: "chemotherapy", contentMg: 40 },
     { brand: "INJ ZYTAX 80MG", generic: "DOCETAXEL", mrp: 13889.00, type: "chemotherapy", contentMg: 80 },
     { brand: "LEUCORIN 50MG INJ", generic: "LEUCOVORIN CALCIUM", mrp: 358.60, type: "chemotherapy", contentMg: 50 },
-    { brand: "LEULIDE 11.25MG INJ", generic: "LEUPROLIDE", mrp: 9928.13, type: "hormonal", contentMg: 11.25 },
+    { brand: "LEULIDE DEPOT 11.25MG INJ", generic: "LEUPROLIDE", mrp: 9928.13, type: "hormonal", contentMg: 11.25 },
+    { brand: "LEULIDE DEPOT 22.5MG INJ", generic: "LEUPROLIDE", mrp: 17934.00, type: "hormonal", contentMg: 22.5 },
+    { brand: "LUPRIDE DEPOT 11.25MG INJ", generic: "LEUPROLIDE", mrp: 9758.65, type: "hormonal", contentMg: 11.25 },
+    { brand: "LUPRIDE DEPOT 22.5MG INJ", generic: "LEUPROLIDE", mrp: 15995.63, type: "hormonal", contentMg: 22.5 },
     { brand: "MESNA 200MG INJ", generic: "MESNA", mrp: 33.00, type: "supportive", contentMg: 200 },
     { brand: "NAB PACLITERO 100MG INJ", generic: "NAB-PACLITAXEL", mrp: 4743.75, type: "chemotherapy", contentMg: 100 },
     { brand: "NEUKINE 300MCG INJ (PFS)", generic: "GCSF", mrp: 577.47, type: "supportive", contentMg: 0.3 },
@@ -492,7 +495,7 @@ const drugDatabase = [
     // Targeted Therapy
     { brand: "LUPITUS 100MG INJ", generic: "CETUXIMAB", mrp: 9990.00, type: "targeted", contentMg: 100 },
     { brand: "AVASTIN 100MG INJ", generic: "BEVACIZUMAB", mrp: 33863.00, type: "targeted", contentMg: 100 },
-    { brand: "AVASTIN 400MG 16ML INJ", generic: "BEVACIZUMAB", mrp: 123506.00, type: "targeted", contentMg: 400 },
+    { brand: "AVASTIN 400MG INJ", generic: "BEVACIZUMAB", mrp: 123506.00, type: "targeted", contentMg: 400 },
     { brand: "BEVATAS 100MG INJ", generic: "BEVACIZUMAB", mrp: 14867.50, type: "targeted", contentMg: 100 },
     { brand: "BEVATAS 300MG INJ", generic: "BEVACIZUMAB", mrp: 18000.00, type: "targeted", contentMg: 300 },
     { brand: "MABTAS 500MG INJ", generic: "RITUXIMAB", mrp: 39994.96, type: "targeted", contentMg: 500 },
@@ -512,6 +515,25 @@ const drugDatabase = [
 // Dose types: mg_per_m2, auc (Calvert), mg_per_kg, flat_mg, oral_bd_14d (capecitabine)
 // timesPerCycle: how many times per cycle (default 1, e.g., weekly paclitaxel in Q3W = 3)
 const regimenDatabase = [
+    {
+        name: "5-FU + Carboplatin + Cetuximab (EXTREME regimen)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 4, note: "1000 mg/m²/day CI D1-4" },
+            { generic: "CETUXIMAB", dose: 250, doseType: "mg_per_m2", timesPerCycle: 3, note: "250 mg/m² weekly D1, D8, D15 (400 mg/m² loading D1 cycle 1)" },
+        ]
+    },
+    {
+        name: "5-FU + Cisplatin + Cetuximab (EXTREME regimen)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "CISPLATIN", dose: 100, doseType: "mg_per_m2", note: "100 mg/m² D1" },
+            { generic: "FLUOROURACIL (5-FU)", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 4, note: "1000 mg/m²/day CI D1-4" },
+            { generic: "CETUXIMAB", dose: 250, doseType: "mg_per_m2", timesPerCycle: 3, note: "250 mg/m² weekly D1, D8, D15 (400 mg/m² loading D1 cycle 1)" },
+        ]
+    },
     {
         name: "ABCP (Atezolizumab + Bevacizumab + Carboplatin + Paclitaxel)",
         cycle: "Q3W",
