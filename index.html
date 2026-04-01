@@ -363,6 +363,14 @@
                 </select>
             </div>
             <div class="form-group">
+                <label>Ward Charges</label>
+                <select id="wardCharge" onchange="updateSummary()">
+                    <option value="" selected>-- Select --</option>
+                    <option value="2500">Day Care (Rs. 2,500)</option>
+                    <option value="0">Private (TBD)</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Consultation Charges</label>
                 <select id="consultationCharge" onchange="updateSummary()">
                     <option value="" selected>-- Select --</option>
@@ -372,12 +380,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Ward Charges</label>
-                <select id="wardCharge" onchange="updateSummary()">
-                    <option value="" selected>-- Select --</option>
-                    <option value="2500">Day Care (Rs. 2,500)</option>
-                    <option value="0">Private (TBD)</option>
-                </select>
+                <label>Number of Days</label>
+                <input type="number" id="numberOfDays" min="1" value="1" oninput="updateSummary()" style="width:80px;">
             </div>
         </div>
     </div>
@@ -391,19 +395,19 @@
                 <td id="summaryDrugs">Rs. 0.00</td>
             </tr>
             <tr>
-                <td>Consumables</td>
+                <td id="labelConsumables">Consumables</td>
                 <td id="summaryConsumables">Rs. 0.00</td>
             </tr>
             <tr>
-                <td>Consultation Charges</td>
+                <td id="labelConsultation">Consultation Charges</td>
                 <td id="summaryConsultation">Rs. 0.00</td>
             </tr>
             <tr>
-                <td>Ward Charges</td>
+                <td id="labelWard">Ward Charges</td>
                 <td id="summaryWard">Rs. 0.00</td>
             </tr>
             <tr>
-                <td>Procedure Charges</td>
+                <td id="labelProcedure">Procedure Charges</td>
                 <td id="summaryProcedure">Rs. 0.00</td>
             </tr>
             <tr class="total-row">
@@ -482,6 +486,12 @@ const drugDatabase = [
     { brand: "ZUBIDOX 10MG", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 308.36, type: "chemotherapy", contentMg: 10 },
     { brand: "ZUBIDOX 50MG", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 1543.16, type: "chemotherapy", contentMg: 50 },
     { brand: "ZYRUBIN 50MG INJ", generic: "EPIRUBICIN", mrp: 1375.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "WYSOLONE 10MG TAB", generic: "PREDNISOLONE", mrp: 1.33, type: "chemotherapy", contentMg: 10, form: "tablet", unitsPerPack: 15 },
+    { brand: "BLEOCEL 15MG INJ", generic: "BLEOMYCIN", mrp: 723.50, type: "chemotherapy", contentMg: 15 },
+    { brand: "DABAZ 200MG INJ", generic: "DACARBAZINE", mrp: 427.55, type: "chemotherapy", contentMg: 200 },
+    { brand: "DABAZ 500MG INJ", generic: "DACARBAZINE", mrp: 581.07, type: "chemotherapy", contentMg: 500 },
+    { brand: "UNIBLASTIN 10MG INJ", generic: "VINBLASTINE", mrp: 267.00, type: "chemotherapy", contentMg: 10 },
+    { brand: "VINLON 1MG INJ", generic: "VINCRISTINE", mrp: 60.00, type: "chemotherapy", contentMg: 1 },
     { brand: "APRECAP KIT", generic: "APREPITANT", mrp: 1314.00, type: "supportive", contentMg: 125, form: "kit" },
     { brand: "KRYXANA 200MG TAB", generic: "RIBOCICLIB", mrp: 24355.00, type: "targeted", contentMg: 200, form: "tablet" },
 
@@ -543,6 +553,16 @@ const regimenDatabase = [
             { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg" },
             { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
             { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "ABVD",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", timesPerCycle: 2, note: "25 mg/m² D1, D15" },
+            { generic: "BLEOMYCIN", dose: 10, doseType: "mg_per_m2", timesPerCycle: 2, note: "10 units/m² D1, D15" },
+            { generic: "VINBLASTINE", dose: 6, doseType: "mg_per_m2", timesPerCycle: 2, note: "6 mg/m² D1, D15" },
+            { generic: "DACARBAZINE", dose: 375, doseType: "mg_per_m2", timesPerCycle: 2, note: "375 mg/m² D1, D15" },
         ]
     },
     {
@@ -912,6 +932,17 @@ const regimenDatabase = [
         drugs: [
             { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2" },
             { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+        ]
+    },
+    {
+        name: "R-CHOP",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 750, doseType: "mg_per_m2", note: "750 mg/m² D1" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 50, doseType: "mg_per_m2", note: "50 mg/m² D1" },
+            { generic: "VINCRISTINE", dose: 1.4, doseType: "mg_per_m2", note: "1.4 mg/m² D1 (max 2mg)" },
+            { generic: "PREDNISOLONE", dose: 100, doseType: "flat_mg", note: "100 mg PO D1-5" },
         ]
     },
     {
@@ -1472,12 +1503,23 @@ function renderDrugTable() {
 // ==================== SUMMARY ====================
 function updateSummary() {
     const drugTotal = addedDrugs.reduce((sum, d) => sum + (d.mrp * d.qty), 0);
-    const procedure = parseFloat(document.getElementById('procedureType').value);
-    const consultation = parseFloat(document.getElementById('consultationCharge')?.value) || 0;
-    const consumables = parseFloat(document.getElementById('consumablesCharge')?.value) || 0;
-    const wardCharges = parseFloat(document.getElementById('wardCharge')?.value) || 0;
+    const days = Math.max(1, parseInt(document.getElementById('numberOfDays')?.value) || 1);
+    const procedurePerDay = parseFloat(document.getElementById('procedureType').value);
+    const consultationPerDay = parseFloat(document.getElementById('consultationCharge')?.value) || 0;
+    const consumablesPerDay = parseFloat(document.getElementById('consumablesCharge')?.value) || 0;
+    const wardPerDay = parseFloat(document.getElementById('wardCharge')?.value) || 0;
+    const procedure = procedurePerDay * days;
+    const consultation = consultationPerDay * days;
+    const consumables = consumablesPerDay * days;
+    const wardCharges = wardPerDay * days;
     const hospitalCharges = consultation + wardCharges + procedure;
     const total = drugTotal + consumables + hospitalCharges;
+
+    const dayLabel = days > 1 ? ` (×${days} days)` : '';
+    document.getElementById('labelConsumables').textContent = `Consumables${dayLabel}`;
+    document.getElementById('labelConsultation').textContent = `Consultation Charges${dayLabel}`;
+    document.getElementById('labelWard').textContent = `Ward Charges${dayLabel}`;
+    document.getElementById('labelProcedure').textContent = `Procedure Charges${dayLabel}`;
 
     document.getElementById('summaryDrugs').textContent = `Rs. ${formatNum(drugTotal)}`;
     document.getElementById('summaryConsumables').textContent = `Rs. ${formatNum(consumables)}`;
@@ -1499,14 +1541,20 @@ function generatePrint(mode) {
     const doc = document.getElementById('consultant').value || '_______________';
 
     const drugTotal = addedDrugs.reduce((sum, d) => sum + (d.mrp * d.qty), 0);
-    const procedure = parseFloat(document.getElementById('procedureType').value);
-    const consultation = parseFloat(document.getElementById('consultationCharge')?.value) || 0;
-    const consumables = parseFloat(document.getElementById('consumablesCharge')?.value) || 0;
-    const wardCharges = parseFloat(document.getElementById('wardCharge')?.value) || 0;
+    const days = Math.max(1, parseInt(document.getElementById('numberOfDays')?.value) || 1);
+    const procedurePerDay = parseFloat(document.getElementById('procedureType').value);
+    const consultationPerDay = parseFloat(document.getElementById('consultationCharge')?.value) || 0;
+    const consumablesPerDay = parseFloat(document.getElementById('consumablesCharge')?.value) || 0;
+    const wardPerDay = parseFloat(document.getElementById('wardCharge')?.value) || 0;
+    const procedure = procedurePerDay * days;
+    const consultation = consultationPerDay * days;
+    const consumables = consumablesPerDay * days;
+    const wardCharges = wardPerDay * days;
     const hospitalCharges = consultation + wardCharges + procedure;
     const total = drugTotal + consumables + hospitalCharges;
 
     const today = new Date().toLocaleDateString('en-IN');
+    const dayLabel = days > 1 ? ` × ${days} days` : '';
 
     const procedureLabel = document.getElementById('procedureType').selectedOptions[0]?.text || '--';
 
@@ -1552,10 +1600,10 @@ function generatePrint(mode) {
             <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Hospital Charges</p>
             <table class="est-table">
                 <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
-                <tr><td>Procedure Charges (${procedureLabel})</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
-                <tr><td>Consumables</td><td style="text-align:right">Rs. ${formatNum(consumables)}</td></tr>
-                <tr><td>Consultation Charges</td><td style="text-align:right">Rs. ${formatNum(consultation)}</td></tr>
-                <tr><td>Ward Charges</td><td style="text-align:right">Rs. ${formatNum(wardCharges)}</td></tr>
+                <tr><td>Procedure Charges (${procedureLabel}${dayLabel})</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
+                <tr><td>Consumables${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables)}</td></tr>
+                <tr><td>Consultation Charges${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consultation)}</td></tr>
+                <tr><td>Ward Charges${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(wardCharges)}</td></tr>
                 <tr style="font-weight:700; background:#e8f0fe;"><td>Total Hospital Charges</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges + procedure)}</td></tr>
             </table>
 
@@ -1573,8 +1621,8 @@ function generatePrint(mode) {
             <table class="est-table">
                 <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
                 <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td></tr>
-                <tr><td>Procedure Charges</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
-                <tr><td>Hospital Charges (Consumables, Ward Charges, Consultation Charges)</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td></tr>
+                <tr><td>Procedure Charges${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
+                <tr><td>Hospital Charges (Consumables, Ward Charges, Consultation Charges)${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td></tr>
                 <tr style="font-weight:700; background:#e8f0fe;"><td>TOTAL</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
             </table>
 
