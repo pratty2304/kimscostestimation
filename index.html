@@ -501,6 +501,7 @@ const drugDatabase = [
     { brand: "TISHTHA 40MG INJ", generic: "NIVOLUMAB", mrp: 13950.00, type: "immunotherapy", contentMg: 40 },
     { brand: "TISHTHA 100MG INJ", generic: "NIVOLUMAB", mrp: 28950.00, type: "immunotherapy", contentMg: 100 },
     { brand: "IMFINZI 500MG INJ", generic: "DURVALUMAB", mrp: 171324.00, type: "immunotherapy", contentMg: 500 },
+    { brand: "TEVIMBRA 100MG", generic: "TISLELIZUMAB", mrp: 61171.88, type: "immunotherapy", contentMg: 100 },
 
     // Targeted Therapy
     { brand: "LUPITUS 100MG INJ", generic: "CETUXIMAB", mrp: 9990.00, type: "targeted", contentMg: 100 },
@@ -904,6 +905,26 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Paclitaxel (weekly) + Carboplatin + Tislelizumab (Q3W)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "PACLITAXEL", dose: 80, doseType: "mg_per_m2", timesPerCycle: 3, note: "80 mg/m² D1, D8, D15" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1" },
+            { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 Q3W" },
+        ]
+    },
+    {
+        name: "Paclitaxel + Carboplatin + Tislelizumab (Q3W)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 Q3W" },
+        ]
+    },
+    {
         name: "Paclitaxel + Trastuzumab (APT trial, weekly)",
         cycle: "Weekly",
         drugs: [
@@ -932,6 +953,16 @@ const regimenDatabase = [
         drugs: [
             { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2" },
             { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+        ]
+    },
+    {
+        name: "Pemetrexed + Carboplatin + Tislelizumab",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 Q3W" },
         ]
     },
     {
