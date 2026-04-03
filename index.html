@@ -1696,7 +1696,13 @@ function generatePrint(mode) {
     document.getElementById('estSheet').innerHTML = html;
     document.getElementById('printArea').style.display = 'block';
 
-    setTimeout(() => window.print(), 300);
+    const patientName = document.getElementById('patientName').value.trim();
+    const originalTitle = document.title;
+    if (patientName) document.title = patientName;
+    setTimeout(() => {
+        window.print();
+        document.title = originalTitle;
+    }, 300);
 }
 
 function resetForm() {
