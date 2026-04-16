@@ -77,11 +77,32 @@
 
         /* Print styles */
         @media print {
-            body { background: white; }
+            html, body {
+                width: 210mm !important;
+                min-width: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                font-size: 12px !important;
+            }
             .app-header, .card:not(.print-card), .action-bar, .no-print { display: none !important; }
-            .print-area { display: block !important; }
-            .container { max-width: 100%; margin: 0; padding: 0; }
-            @page { margin: 10mm 15mm; }
+            .print-area {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: visible !important;
+            }
+            .est-sheet {
+                width: 100% !important;
+                padding: 10px 20px !important;
+                box-sizing: border-box !important;
+            }
+            .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            @page { size: A4 portrait; margin: 10mm 15mm; }
         }
 
         .print-area { display: none; }
