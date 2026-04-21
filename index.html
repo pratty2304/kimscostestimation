@@ -78,14 +78,21 @@
         /* Print styles */
         @media print {
             html, body {
-                width: 210mm !important;
-                min-width: 210mm !important;
+                width: auto !important;
+                min-width: 0 !important;
+                max-width: none !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 background: white !important;
-                font-size: 12px !important;
+                overflow: visible !important;
             }
             .app-header, .card:not(.print-card), .action-bar, .no-print { display: none !important; }
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
             .print-area {
                 display: block !important;
                 width: 100% !important;
@@ -95,14 +102,31 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 overflow: visible !important;
+                background: white !important;
+            }
+            .card.print-card {
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                background: white !important;
             }
             .est-sheet {
                 width: 100% !important;
-                padding: 10px 20px !important;
+                max-width: 100% !important;
+                padding: 8px 10px !important;
+                margin: 0 !important;
                 box-sizing: border-box !important;
+                font-size: 11pt !important;
             }
-            .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-            @page { size: A4 portrait; margin: 10mm 15mm; }
+            .est-sheet table { width: 100% !important; }
+            /* B&W mode — applied to #printArea when user prints (not saving colour PDF) */
+            .print-area.bw-mode {
+                filter: grayscale(100%) contrast(1.1);
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            @page { size: A4 portrait; margin: 8mm 8mm; }
         }
 
         .print-area { display: none; }
@@ -115,7 +139,7 @@
         .est-header .hospital-name { font-size: 1.5rem; font-weight: 700; color: #1a5276; }
 
         .est-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-        .est-table td, .est-table th { border: 1px solid #999; padding: 5px 8px; font-size: 0.8rem; }
+        .est-table td, .est-table th { border: 1px solid #999; padding: 9px 8px; font-size: 0.8rem; }
         .est-table th { background: #e8f0fe; text-align: left; }
 
         .est-notes { font-size: 0.78rem; margin-top: 16px; }
@@ -488,6 +512,12 @@
         <button class="btn btn-success" onclick="generatePrint('doctor')" style="background:#1a5276;">Print for Doctor</button>
         <button class="btn btn-primary" onclick="resetForm()">New Estimate</button>
     </div>
+    <div class="no-print" style="text-align:center; margin:-12px 0 20px; font-size:0.85rem; color:#555;">
+        <label style="display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="checkbox" id="colorPrintToggle">
+            Keep colours (tick only if saving as PDF — untick for B&amp;W printer)
+        </label>
+    </div>
 
     <!-- Printable Estimation Sheet -->
     <div class="print-area card print-card" id="printArea">
@@ -734,6 +764,8 @@ const electronicCityDrugDatabase = [
 
     // Supportive Care
     { brand: "APRETERO 125/80MG CAP", generic: "APREPITANT", mrp: 1430.00, type: "supportive", contentMg: 125, form: "kit" },
+    { brand: "FOSAPORT IV 150MG INJ", generic: "FOSAPREPITANT", mrp: 3073.44, type: "supportive", contentMg: 150 },
+    { brand: "FOSUP 150MG INJ", generic: "FOSAPREPITANT", mrp: 2716.00, type: "supportive", contentMg: 150 },
     { brand: "ESENTRA 120MG/1.7ML INJ", generic: "DENOSUMAB", mrp: 29947.50, type: "supportive", contentMg: 120 },
     { brand: "EMGRAST 300MCG PFS INJECTION", generic: "GCSF", mrp: 1321.77, type: "supportive", contentMg: 0.3 },
     { brand: "GRASTIM 300MCG INJ (VIAL)", generic: "GCSF", mrp: 772.60, type: "supportive", contentMg: 0.3 },
@@ -2013,7 +2045,12 @@ function generatePrint(mode) {
     }
 
     document.getElementById('estSheet').innerHTML = html;
-    document.getElementById('printArea').style.display = 'block';
+    const printArea = document.getElementById('printArea');
+    printArea.style.display = 'block';
+
+    // Default to B&W (for printer). If user ticks "Keep colours", keep colour output (for PDF).
+    const keepColours = document.getElementById('colorPrintToggle')?.checked;
+    printArea.classList.toggle('bw-mode', !keepColours);
 
     const patientName = document.getElementById('patientName').value.trim();
     const originalTitle = document.title;
