@@ -532,12 +532,11 @@
 // Mahadevapura branch prices
 const mahadevapuraDrugDatabase = [
     // Chemotherapy
-    { brand: "AKYNZEO 300MG CAP", generic: "NETUPITANT+PALONOSETRON", mrp: 6000.00, type: "supportive", contentMg: 300, form: "capsule" },
     { brand: "CAPEGARD 500MG TAB", generic: "CAPECITABINE", mrp: 85.40, type: "chemotherapy", contentMg: 500, form: "tablet", unitsPerPack: 10 },
-    { brand: "CARBOTERO 150MG", generic: "CARBOPLATIN", mrp: 1009.20, type: "chemotherapy", contentMg: 150 },
-    { brand: "CARBOTERO 450MG INJ", generic: "CARBOPLATIN", mrp: 2946.97, type: "chemotherapy", contentMg: 450 },
-    { brand: "CISTERO 10MG", generic: "CISPLATIN", mrp: 85.00, type: "chemotherapy", contentMg: 10 },
-    { brand: "CISTERO 50MG", generic: "CISPLATIN", mrp: 427.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "CARBOTERO 150MG INJ", generic: "CARBOPLATIN", mrp: 946.00, type: "chemotherapy", contentMg: 150 },
+    { brand: "CARBOTERO 450MG INJ", generic: "CARBOPLATIN", mrp: 3028.00, type: "chemotherapy", contentMg: 450 },
+    { brand: "CISTERO 10MG INJ", generic: "CISPLATIN", mrp: 75.50, type: "chemotherapy", contentMg: 10 },
+    { brand: "CISTERO 50MG INJ", generic: "CISPLATIN", mrp: 377.91, type: "chemotherapy", contentMg: 50 },
     { brand: "HOLOXAN 1GM INJ", generic: "IFOSFAMIDE", mrp: 250.05, type: "chemotherapy", contentMg: 1000 },
     { brand: "IFEX-M 2GM INJ", generic: "IFOSFAMIDE", mrp: 894.58, type: "chemotherapy", contentMg: 2000 },
     { brand: "CYCLOXAN 1GM INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 108.00, type: "chemotherapy", contentMg: 1000 },
@@ -545,71 +544,39 @@ const mahadevapuraDrugDatabase = [
     { brand: "CYCLOXAN 500MG INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 77.00, type: "chemotherapy", contentMg: 500 },
     { brand: "CYTAX 300MG INJECTION", generic: "PACLITAXEL", mrp: 12064.64, type: "chemotherapy", contentMg: 300 },
     { brand: "DOCETERO RTU 120MG INJ", generic: "DOCETAXEL", mrp: 13195.00, type: "chemotherapy", contentMg: 120 },
-    { brand: "DOCETERO RTU 80MG INJ", generic: "DOCETAXEL", mrp: 10943.85, type: "chemotherapy", contentMg: 80 },
-    { brand: "FOSAPORT IV 150MG INJ", generic: "FOSAPREPITANT", mrp: 3073.44, type: "supportive", contentMg: 150 },
-    { brand: "FOSUP 150MG INJ", generic: "FOSAPREPITANT", mrp: 2716.00, type: "supportive", contentMg: 150 },
-    { brand: "CITAFINE 200MG INJ", generic: "GEMCITABINE", mrp: 1481.10, type: "chemotherapy", contentMg: 200 },
+    { brand: "DOCETERO RTU 80MG INJ", generic: "DOCETAXEL", mrp: 11038.00, type: "chemotherapy", contentMg: 80 },
+    { brand: "CITAFINE 200MG INJ", generic: "GEMCITABINE", mrp: 1388.52, type: "chemotherapy", contentMg: 200 },
     { brand: "CITAFINE 1GM INJ", generic: "GEMCITABINE", mrp: 5974.34, type: "chemotherapy", contentMg: 1000 },
-    { brand: "CITAFINE 1.4GM INJ", generic: "GEMCITABINE", mrp: 12384.00, type: "chemotherapy", contentMg: 1400 },
+    { brand: "CITAFINE 1.4GM INJ", generic: "GEMCITABINE", mrp: 13610.00, type: "chemotherapy", contentMg: 1400 },
     { brand: "GEMTERO 200MG INJ", generic: "GEMCITABINE", mrp: 1388.00, type: "chemotherapy", contentMg: 200 },
-    { brand: "GLOBUCEL 10GM 100ML IV INJ", generic: "IVIG", mrp: 20517.57, type: "supportive", contentMg: 10000 },
-    { brand: "GLOBUCEL 5GM 100ML IV INJ", generic: "IVIG", mrp: 11056.60, type: "supportive", contentMg: 5000 },
-    { brand: "GROS 100MG INJ", generic: "PACLITAXEL", mrp: 4021.54, type: "chemotherapy", contentMg: 100 },
-    { brand: "GROS 260MG INJ", generic: "PACLITAXEL", mrp: 10454.57, type: "chemotherapy", contentMg: 260 },
-    { brand: "GROS 30MG INJ", generic: "PACLITAXEL", mrp: 1206.41, type: "chemotherapy", contentMg: 30 },
-    { brand: "IMMUNOREL 10GM 100ML INJ", generic: "IVIG", mrp: 21685.00, type: "supportive", contentMg: 10000 },
-    { brand: "FOIRI 100MG", generic: "IRINOTECAN", mrp: 4740.00, type: "chemotherapy", contentMg: 100 },
-    { brand: "FOIRI 40MG", generic: "IRINOTECAN", mrp: 1933.00, type: "chemotherapy", contentMg: 40 },
-    { brand: "INJ ZYTAX 80MG", generic: "DOCETAXEL", mrp: 13889.00, type: "chemotherapy", contentMg: 80 },
+    { brand: "GROS 100MG INJ", generic: "PACLITAXEL", mrp: 3835.79, type: "chemotherapy", contentMg: 100 },
+    { brand: "GROS 260MG INJ", generic: "PACLITAXEL", mrp: 9971.70, type: "chemotherapy", contentMg: 260 },
+    { brand: "GROS 30MG INJ", generic: "PACLITAXEL", mrp: 1150.61, type: "chemotherapy", contentMg: 30 },
+    { brand: "FOIRI 100MG INJ", generic: "IRINOTECAN", mrp: 4443.70, type: "chemotherapy", contentMg: 100 },
+    { brand: "FOIRI 40MG INJ", generic: "IRINOTECAN", mrp: 1781.25, type: "chemotherapy", contentMg: 40 },
+    { brand: "ZYTAX 80MG INJ", generic: "DOCETAXEL", mrp: 11038.50, type: "chemotherapy", contentMg: 80 },
     { brand: "LEUCORIN 50MG INJ", generic: "LEUCOVORIN CALCIUM", mrp: 358.60, type: "chemotherapy", contentMg: 50 },
-    { brand: "AVIRAT 500MG TAB", generic: "ABIRATERONE ACETATE", mrp: 650.00, type: "hormonal", contentMg: 500, form: "tablet", unitsPerPack: 60 },
-    { brand: "DECAPEPTYL 0.1MG INJ", generic: "TRIPTORELIN", mrp: 398.50, type: "hormonal", contentMg: 0.1 },
-    { brand: "DEGRELAX 80MG INJECTION", generic: "DEGARELIX", mrp: 16875.00, type: "hormonal", contentMg: 80 },
-    { brand: "AVEVA 250MG/5ML INJECTION", generic: "FULVESTRANT", mrp: 6089.00, type: "hormonal", contentMg: 250 },
-    { brand: "LEULIDE DEPOT 11.25MG INJ", generic: "LEUPROLIDE", mrp: 9928.13, type: "hormonal", contentMg: 11.25 },
-    { brand: "LEULIDE DEPOT 22.5MG INJ", generic: "LEUPROLIDE", mrp: 17934.00, type: "hormonal", contentMg: 22.5 },
-    { brand: "LUPRIDE DEPOT 11.25MG INJ", generic: "LEUPROLIDE", mrp: 9758.65, type: "hormonal", contentMg: 11.25 },
-    { brand: "LUPRIDE DEPOT 22.5MG INJ", generic: "LEUPROLIDE", mrp: 15995.63, type: "hormonal", contentMg: 22.5 },
-    { brand: "GESTONE 100MG 2ML INJ", generic: "PROGESTERONE", mrp: 132.50, type: "hormonal", contentMg: 100 },
-    { brand: "MESNA 200MG INJ", generic: "MESNA", mrp: 33.00, type: "supportive", contentMg: 200 },
     { brand: "NAB PACLITERO 100MG INJ", generic: "NAB-PACLITAXEL", mrp: 4743.75, type: "chemotherapy", contentMg: 100 },
-    { brand: "NEUKINE 300MCG INJ (PFS)", generic: "GCSF", mrp: 577.47, type: "supportive", contentMg: 0.3 },
-    { brand: "NEUKINE 300MCG INJ (VIAL)", generic: "GCSF", mrp: 582.25, type: "supportive", contentMg: 0.3 },
-    { brand: "NYKRON 300MG TAB (COMBI PACK)", generic: "NETUPITANT+PALONOSETRON", mrp: 2650.00, type: "supportive", contentMg: 300, form: "tablet" },
     { brand: "ONCOFLUOR 500MG INJ", generic: "FLUOROURACIL (5-FU)", mrp: 28.50, type: "chemotherapy", contentMg: 500 },
-    { brand: "OXALTERO 100MG INJ", generic: "OXALIPLATIN", mrp: 4608.75, type: "chemotherapy", contentMg: 100 },
-    { brand: "OXALTERO 50MG INJ", generic: "OXALIPLATIN", mrp: 2385.00, type: "chemotherapy", contentMg: 50 },
-    { brand: "PALNOX 5ML INJ", generic: "PALONOSETRON", mrp: 165.00, type: "supportive", contentMg: 0.25 },
-    { brand: "PEG RELIGRAST 6MG INJ", generic: "PEG-GCSF", mrp: 4847.81, type: "supportive", contentMg: 6 },
+    { brand: "OXALTERO 100MG INJ", generic: "OXALIPLATIN", mrp: 4680.75, type: "chemotherapy", contentMg: 100 },
+    { brand: "OXALTERO 50MG INJ", generic: "OXALIPLATIN", mrp: 2385.75, type: "chemotherapy", contentMg: 50 },
     { brand: "PEMTERO 500MG INJ", generic: "PEMETREXED", mrp: 8500.00, type: "chemotherapy", contentMg: 500 },
     { brand: "PEMTERO 100MG INJ", generic: "PEMETREXED", mrp: 2500.00, type: "chemotherapy", contentMg: 100 },
     { brand: "THALIX 100MG CAP", generic: "THALIDOMIDE", mrp: 65.10, type: "chemotherapy", contentMg: 100, form: "capsule", unitsPerPack: 10 },
     { brand: "THALIX 50MG CAP", generic: "THALIDOMIDE", mrp: 33.27, type: "chemotherapy", contentMg: 50, form: "capsule", unitsPerPack: 10 },
-    { brand: "ESENTRA 120MG/1.7ML INJ", generic: "DENOSUMAB", mrp: 29947.50, type: "supportive", contentMg: 120 },
-    { brand: "EXOFERRIC 1000MG/20ML INJECTION", generic: "FERRIC CARBOXYMALTOSE", mrp: 3800.00, type: "supportive", contentMg: 1000 },
-    { brand: "EXOFERRIC 500MG/10ML INJECTION", generic: "FERRIC CARBOXYMALTOSE", mrp: 6800.00, type: "supportive", contentMg: 500 },
-    { brand: "MENOPUR 1200 IU MULTIDOSE PACK", generic: "FSH+LH (MENOPUR)", mrp: 39188.37, type: "supportive", contentMg: 1, unitsPerPack: 1 },
-    { brand: "MENOPUR 600 IU MULTIDOSE PACK", generic: "FSH+LH (MENOPUR)", mrp: 2449.19, type: "supportive", contentMg: 1, unitsPerPack: 1 },
-    { brand: "FERUNO 500MG 5ML INJ", generic: "IRON ISOMALTOSIDE", mrp: 3449.00, type: "supportive", contentMg: 500 },
-    { brand: "EXOFERRIC S 100MG/5ML INJECTION", generic: "IRON SUCROSE", mrp: 327.00, type: "supportive", contentMg: 100 },
-    { brand: "MOSTIM 1.2ML INJECTION", generic: "PLERIXAFOR", mrp: 28115.60, type: "supportive", contentMg: 24 },
-    { brand: "MOZIFOR 1.2ML INJ", generic: "PLERIXAFOR", mrp: 42900.00, type: "supportive", contentMg: 24 },
-    { brand: "RASBURNAT 1.5MG INJ", generic: "RASBURICASE", mrp: 8800.00, type: "supportive", contentMg: 1.5 },
-    { brand: "AUGPLAT 250MCG INJ", generic: "ROMIPLOSTIM", mrp: 3843.70, type: "supportive", contentMg: 0.25 },
-    { brand: "ZOLTERO 4MG INJ", generic: "ZOLEDRONIC ACID", mrp: 2554.60, type: "supportive", contentMg: 4 },
-    { brand: "ZUBIDOX 10MG", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 308.36, type: "chemotherapy", contentMg: 10 },
-    { brand: "ZUBIDOX 50MG", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 1543.16, type: "chemotherapy", contentMg: 50 },
+    { brand: "ZUBIDOX 10MG INJ", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 289.06, type: "chemotherapy", contentMg: 10 },
+    { brand: "ZUBIDOX 50MG INJ", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 1446.71, type: "chemotherapy", contentMg: 50 },
     { brand: "ZYRUBIN 50MG INJ", generic: "EPIRUBICIN", mrp: 1375.00, type: "chemotherapy", contentMg: 50 },
     { brand: "WYSOLONE 10MG TAB", generic: "PREDNISOLONE", mrp: 1.33, type: "chemotherapy", contentMg: 10, form: "tablet", unitsPerPack: 15 },
-    { brand: "ARSENAM 10MG/10ML INJ", generic: "ARSENIC TRIOXIDE", mrp: 342.00, type: "chemotherapy", contentMg: 10 },
+    { brand: "ARSENAM 10MG INJ", generic: "ARSENIC TRIOXIDE", mrp: 342.00, type: "chemotherapy", contentMg: 10 },
     { brand: "BENZZ 100MG INJ", generic: "BENDAMUSTINE", mrp: 4705.77, type: "chemotherapy", contentMg: 100 },
     { brand: "BLEOCEL 15MG INJ", generic: "BLEOMYCIN", mrp: 723.50, type: "chemotherapy", contentMg: 15 },
-    { brand: "BUSUPRO 10ML INJECTION", generic: "BUSULPHAN", mrp: 7500.00, type: "chemotherapy", contentMg: 60 },
+    { brand: "BUSUPRO 60MG INJECTION", generic: "BUSULPHAN", mrp: 7500.00, type: "chemotherapy", contentMg: 60 },
     { brand: "CARSTIM 100MG INJECTION", generic: "CARMUSTINE", mrp: 6588.00, type: "chemotherapy", contentMg: 100 },
     { brand: "CYTRAZE 1000MG INJ", generic: "CYTARABINE", mrp: 1118.00, type: "chemotherapy", contentMg: 1000 },
-    { brand: "DAUNORUBITEC 20MG INJ", generic: "DAUNORUBICIN", mrp: 312.00, type: "chemotherapy", contentMg: 20 },
-    { brand: "EPIBRIV 2ML INJECTION", generic: "ERIBULIN", mrp: 24100.00, type: "chemotherapy", contentMg: 0.88 },
-    { brand: "POSID 100MG 5ML INJ", generic: "ETOPOSIDE", mrp: 193.26, type: "chemotherapy", contentMg: 100 },
+    { brand: "DAUNORUBITEC 20MG INJ", generic: "DAUNORUBICIN", mrp: 317.00, type: "chemotherapy", contentMg: 20 },
+    { brand: "EPIBRIV 0.88MG INJECTION", generic: "ERIBULIN", mrp: 24100.00, type: "chemotherapy", contentMg: 0.88 },
+    { brand: "POSID 100MG INJ", generic: "ETOPOSIDE", mrp: 184.33, type: "chemotherapy", contentMg: 100 },
     { brand: "LASTET 100MG INJ", generic: "ETOPOSIDE", mrp: 173.87, type: "chemotherapy", contentMg: 100 },
     { brand: "FLU-STIM 50MG INJECTION", generic: "FLUDARABINE", mrp: 13732.00, type: "chemotherapy", contentMg: 50 },
     { brand: "PLASTOMET 500MG INJ", generic: "METHOTREXATE", mrp: 1179.00, type: "chemotherapy", contentMg: 500 },
@@ -619,30 +586,111 @@ const mahadevapuraDrugDatabase = [
     { brand: "TOPOTEC 2.5MG INJ", generic: "TOPOTECAN", mrp: 6575.00, type: "chemotherapy", contentMg: 2.5 },
     { brand: "TRABEC 1MG INJ", generic: "TRABECTEDIN", mrp: 28600.00, type: "chemotherapy", contentMg: 1 },
     { brand: "TREOALL 5GM INJ", generic: "TREOSULFAN", mrp: 22000.00, type: "chemotherapy", contentMg: 5000 },
-    { brand: "DABAZ 200MG INJ", generic: "DACARBAZINE", mrp: 427.55, type: "chemotherapy", contentMg: 200 },
-    { brand: "DABAZ 500MG INJ", generic: "DACARBAZINE", mrp: 581.07, type: "chemotherapy", contentMg: 500 },
+    { brand: "DABAZ 200MG INJ", generic: "DACARBAZINE", mrp: 400.83, type: "chemotherapy", contentMg: 200 },
+    { brand: "DABAZ 500MG INJ", generic: "DACARBAZINE", mrp: 544.75, type: "chemotherapy", contentMg: 500 },
     { brand: "UNIBLASTIN 10MG INJ", generic: "VINBLASTINE", mrp: 267.00, type: "chemotherapy", contentMg: 10 },
     { brand: "VINLON 1MG INJ", generic: "VINCRISTINE", mrp: 60.00, type: "chemotherapy", contentMg: 1 },
-    { brand: "APRECAP KIT", generic: "APREPITANT", mrp: 1314.00, type: "supportive", contentMg: 125, form: "kit" },
-    { brand: "KRYXANA 200MG TAB", generic: "RIBOCICLIB", mrp: 1159.76, type: "targeted", contentMg: 200, form: "tablet", unitsPerPack: 21 },
+    { brand: "IRINOTEL 40MG INJ", generic: "IRINOTECAN", mrp: 495.16, type: "chemotherapy", contentMg: 40 },
+    { brand: "FARMORUBICIN 50MG INJ", generic: "EPIRUBICIN", mrp: 4339.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "IRINOTEL 100MG INJ", generic: "IRINOTECAN", mrp: 1114.40, type: "chemotherapy", contentMg: 100 },
+    { brand: "FOLITRAX 15MG INJ", generic: "METHOTREXATE", mrp: 93.65, type: "chemotherapy", contentMg: 15 },
+    { brand: "6-MP 50MG TAB", generic: "MERCAPTOPURINE", mrp: 5.60, type: "chemotherapy", contentMg: 50, form: "tablet" },
+    { brand: "ADRIAMYCIN 50MG INJ", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 847.88, type: "chemotherapy", contentMg: 50 },
+    { brand: "FOLITRAX 50MG INJ", generic: "METHOTREXATE", mrp: 149.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "BIOVORIN 50MG INJ", generic: "LEUCOVORIN CALCIUM", mrp: 520.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "RELITREXED 100MG INJ", generic: "PEMETREXED", mrp: 2113.13, type: "chemotherapy", contentMg: 100 },
+    { brand: "FOLITRAX 20MG INJ", generic: "METHOTREXATE", mrp: 152.10, type: "chemotherapy", contentMg: 20 },
+    { brand: "ZYTAX 20MG INJ", generic: "DOCETAXEL", mrp: 3063.56, type: "chemotherapy", contentMg: 20 },
+    { brand: "DOXOTERO 50MG INJ", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 845.90, type: "chemotherapy", contentMg: 50 },
+    { brand: "PEMPRO 100MG INJ", generic: "PEMETREXED", mrp: 1131.00, type: "chemotherapy", contentMg: 100 },
+    { brand: "PETAXEL 260MG INJ", generic: "PACLITAXEL", mrp: 9965.40, type: "chemotherapy", contentMg: 260 },
+    { brand: "IFEX-M 1GM INJ", generic: "IFOSFAMIDE", mrp: 433.60, type: "chemotherapy", contentMg: 1000 },
+    { brand: "EMTREO 5GM INJ", generic: "TREOSULFAN", mrp: 24344.00, type: "chemotherapy", contentMg: 5000 },
+    { brand: "RELITREXED 500MG INJ", generic: "PEMETREXED", mrp: 9070.00, type: "chemotherapy", contentMg: 500 },
+    { brand: "BIOBIN 100MG INJ", generic: "CYTARABINE", mrp: 68.10, type: "chemotherapy", contentMg: 100 },
+    { brand: "PEGADRIA 20MG INJ", generic: "PEGYLATED LIPOSOMAL DOXORUBICIN", mrp: 3829.50, type: "chemotherapy", contentMg: 20 },
+    { brand: "LEUCORIN 15MG INJ", generic: "LEUCOVORIN CALCIUM", mrp: 127.60, type: "chemotherapy", contentMg: 15 },
+    { brand: "PEG-LASGEN 3750 IU INJ", generic: "PEG L-ASPARAGINASE", mrp: 26329.69, type: "chemotherapy", contentMg: 3750 },
+    { brand: "ZYTAX 120MG INJ", generic: "DOCETAXEL", mrp: 13020.90, type: "chemotherapy", contentMg: 120 },
+    { brand: "GEMPOWER 200MG INJ", generic: "GEMCITABINE", mrp: 1237.00, type: "chemotherapy", contentMg: 200 },
+    { brand: "GEMPOWER 1GM INJ", generic: "GEMCITABINE", mrp: 5326.00, type: "chemotherapy", contentMg: 1000 },
+    { brand: "XOLCAL 50MG INJ", generic: "LEUCOVORIN CALCIUM", mrp: 530.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "CTX-GLS 500MG INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 77.00, type: "chemotherapy", contentMg: 500 },
+    { brand: "CTX-GLS 200MG INJ", generic: "CYCLOPHOSPHAMIDE", mrp: 36.00, type: "chemotherapy", contentMg: 200 },
+    { brand: "IRNOCAM 100MG INJECTION", generic: "IRINOTECAN", mrp: 1674.70, type: "chemotherapy", contentMg: 100 },
+    { brand: "IRNOCAM 40MG INJECTION", generic: "IRINOTECAN", mrp: 831.44, type: "chemotherapy", contentMg: 40 },
+    { brand: "EMMDARA 50MG INJ", generic: "FLUDARABINE", mrp: 13737.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "THIOPLAN 100MG INJ", generic: "THIOTEPA", mrp: 35000.00, type: "chemotherapy", contentMg: 100 },
+
+    // Hormonal Therapy
+    { brand: "AVIRAT 500MG TAB", generic: "ABIRATERONE ACETATE", mrp: 650.00, type: "hormonal", contentMg: 500, form: "tablet", unitsPerPack: 60 },
+    { brand: "DECAPEPTYL 0.1MG INJ", generic: "TRIPTORELIN", mrp: 398.50, type: "hormonal", contentMg: 0.1 },
+    { brand: "DEGRELAX 80MG INJECTION", generic: "DEGARELIX", mrp: 16875.00, type: "hormonal", contentMg: 80 },
+    { brand: "AVEVA 250MG INJECTION", generic: "FULVESTRANT", mrp: 6089.00, type: "hormonal", contentMg: 250 },
+    { brand: "LEULIDE DEPOT 11.25MG INJ", generic: "LEUPROLIDE", mrp: 9928.13, type: "hormonal", contentMg: 11.25 },
+    { brand: "LEULIDE DEPOT 22.5MG INJ", generic: "LEUPROLIDE", mrp: 17934.00, type: "hormonal", contentMg: 22.5 },
+    { brand: "LUPRIDE DEPOT 11.25MG INJ", generic: "LEUPROLIDE", mrp: 9758.65, type: "hormonal", contentMg: 11.25 },
+    { brand: "LUPRIDE DEPOT 22.5MG INJ", generic: "LEUPROLIDE", mrp: 15995.63, type: "hormonal", contentMg: 22.5 },
+    { brand: "GESTONE 100MG INJ", generic: "PROGESTERONE", mrp: 132.50, type: "hormonal", contentMg: 100 },
+    { brand: "LETROZ TAB", generic: "LETROZOLE", mrp: 31.30, type: "hormonal", contentMg: 2.5, form: "tablet" },
+
+    // Supportive Care
+    { brand: "AKYNZEO 300MG CAP", generic: "NETUPITANT+PALONOSETRON", mrp: 6000.00, type: "supportive", contentMg: 300, form: "capsule" },
+    { brand: "FOSAPORT IV 150MG INJ", generic: "FOSAPREPITANT", mrp: 3073.44, type: "supportive", contentMg: 150 },
+    { brand: "FOSUP 150MG INJ", generic: "FOSAPREPITANT", mrp: 2716.88, type: "supportive", contentMg: 150 },
+    { brand: "GLOBUCEL 10GM IV INJ", generic: "IVIG", mrp: 20517.57, type: "supportive", contentMg: 10000 },
+    { brand: "GLOBUCEL 5GM IV INJ", generic: "IVIG", mrp: 11056.60, type: "supportive", contentMg: 5000 },
+    { brand: "IMMUNOREL 10GM INJ", generic: "IVIG", mrp: 21685.00, type: "supportive", contentMg: 10000 },
+    { brand: "MESNA 200MG INJ", generic: "MESNA", mrp: 33.00, type: "supportive", contentMg: 200 },
+    { brand: "NEUKINE 300MCG INJ (PFS)", generic: "GCSF", mrp: 1239.17, type: "supportive", contentMg: 0.3 },
+    { brand: "NEUKINE 300MCG INJ (VIAL)", generic: "GCSF", mrp: 587.55, type: "supportive", contentMg: 0.3 },
+    { brand: "NYKRON 300MG TAB (COMBI PACK)", generic: "NETUPITANT+PALONOSETRON", mrp: 2650.00, type: "supportive", contentMg: 300, form: "tablet" },
+    { brand: "PALNOX 0.25MG INJ", generic: "PALONOSETRON", mrp: 165.00, type: "supportive", contentMg: 0.25 },
+    { brand: "PEG RELIGRAST 6MG INJ", generic: "PEG-GCSF", mrp: 4847.00, type: "supportive", contentMg: 6 },
+    { brand: "ESENTRA 120MG INJ", generic: "DENOSUMAB", mrp: 29947.50, type: "supportive", contentMg: 120 },
+    { brand: "EXOFERRIC 1000MG INJECTION", generic: "FERRIC CARBOXYMALTOSE", mrp: 3800.00, type: "supportive", contentMg: 1000 },
+    { brand: "EXOFERRIC 500MG INJECTION", generic: "FERRIC CARBOXYMALTOSE", mrp: 6800.00, type: "supportive", contentMg: 500 },
+    { brand: "MENOPUR 1200 IU MULTIDOSE PACK", generic: "FSH+LH (MENOPUR)", mrp: 39188.37, type: "supportive", contentMg: 1, unitsPerPack: 1 },
+    { brand: "MENOPUR 600 IU MULTIDOSE PACK", generic: "FSH+LH (MENOPUR)", mrp: 2449.19, type: "supportive", contentMg: 1, unitsPerPack: 1 },
+    { brand: "FERUNO 500MG INJ", generic: "IRON ISOMALTOSIDE", mrp: 3449.00, type: "supportive", contentMg: 500 },
+    { brand: "EXOFERRIC S 100MG INJECTION", generic: "IRON SUCROSE", mrp: 327.00, type: "supportive", contentMg: 100 },
+    { brand: "MOSTIM 24MG INJECTION", generic: "PLERIXAFOR", mrp: 28115.60, type: "supportive", contentMg: 24 },
+    { brand: "MOZIFOR 24MG INJ", generic: "PLERIXAFOR", mrp: 42900.00, type: "supportive", contentMg: 24 },
+    { brand: "RASBURNAT 1.5MG INJ", generic: "RASBURICASE", mrp: 8800.00, type: "supportive", contentMg: 1.5 },
+    { brand: "AUGPLAT 250MCG INJ", generic: "ROMIPLOSTIM", mrp: 3843.70, type: "supportive", contentMg: 0.25 },
+    { brand: "ZOLTERO 4MG INJ", generic: "ZOLEDRONIC ACID", mrp: 2554.60, type: "supportive", contentMg: 4 },
+    { brand: "APRECAP 125/80MG CAP", generic: "APREPITANT", mrp: 1348.13, type: "supportive", contentMg: 125, form: "kit" },
+    { brand: "METHYLENE BLUE 100MG INJ", generic: "METHYLENE BLUE", mrp: 527.73, type: "supportive", contentMg: 100 },
+    { brand: "BIOMYF-S 360MG TAB", generic: "MYCOPHENOLATE SODIUM", mrp: 82.00, type: "supportive", contentMg: 360, form: "tablet" },
+    { brand: "THYROGEN INJ", generic: "THYROTROPIN ALFA", mrp: 99000.00, type: "supportive", contentMg: 0.9 },
+    { brand: "PEGSTIM 6MG INJ", generic: "PEG-GCSF", mrp: 5398.13, type: "supportive", contentMg: 6 },
+    { brand: "CABOPROST 250MCG INJ", generic: "CARBOPROST TROMETHAMINE", mrp: 318.56, type: "supportive", contentMg: 0.25 },
+    { brand: "DESFERAL 500MG VIAL", generic: "DESFERRIOXAMINE MESILATE", mrp: 303.29, type: "supportive", contentMg: 500 },
+    { brand: "ROMY 250MCG INJ", generic: "ROMIPLOSTIM", mrp: 3736.17, type: "supportive", contentMg: 0.25 },
+    { brand: "FOSPRITANT 150MG INJ", generic: "FOSAPREPITANT", mrp: 3764.85, type: "supportive", contentMg: 150 },
+    { brand: "THEMISET 0.25MG INJ", generic: "PALONOSETRON", mrp: 282.74, type: "supportive", contentMg: 0.25 },
+    { brand: "AZTROHIGH 2GM INJ", generic: "AZTREONAM", mrp: 1860.36, type: "supportive", contentMg: 2000 },
+    { brand: "MEBLU-N 100MG INJ", generic: "METHYLENE BLUE", mrp: 527.73, type: "supportive", contentMg: 100 },
+    { brand: "ORAZONAM 1GM INJECTION", generic: "AZTREONAM", mrp: 979.68, type: "supportive", contentMg: 1000 },
 
     // Immunotherapy
-    { brand: "KEYTRUDA 100MG", generic: "PEMBROLIZUMAB", mrp: 216500.00, type: "immunotherapy", contentMg: 100 },
+    { brand: "KEYTRUDA 100MG INJ", generic: "PEMBROLIZUMAB", mrp: 216500.00, type: "immunotherapy", contentMg: 100 },
     { brand: "TECENTRIQ 1200MG", generic: "ATEZOLIZUMAB", mrp: 338877.00, type: "immunotherapy", contentMg: 1200 },
     { brand: "TISHTHA 40MG INJ", generic: "NIVOLUMAB", mrp: 13950.00, type: "immunotherapy", contentMg: 40 },
     { brand: "TISHTHA 100MG INJ", generic: "NIVOLUMAB", mrp: 28950.00, type: "immunotherapy", contentMg: 100 },
     { brand: "OPDYTA 240MG INJ", generic: "NIVOLUMAB", mrp: 240000.00, type: "immunotherapy", contentMg: 240 },
     { brand: "IMFINZI 500MG INJ", generic: "DURVALUMAB", mrp: 171324.00, type: "immunotherapy", contentMg: 500 },
-    { brand: "TEVIMBRA 100MG", generic: "TISLELIZUMAB", mrp: 65250.00, type: "immunotherapy", contentMg: 100 },
+    { brand: "TEVIMBRA 100MG INJ", generic: "TISLELIZUMAB", mrp: 65250.00, type: "immunotherapy", contentMg: 100 },
 
     // Targeted Therapy
-    { brand: "BIOMAB EGFR 10ML INJECTION", generic: "NIMOTUZUMAB", mrp: 65643.92, type: "targeted", contentMg: 50 },
+    { brand: "KRYXANA 200MG TAB", generic: "RIBOCICLIB", mrp: 1159.76, type: "targeted", contentMg: 200, form: "tablet", unitsPerPack: 21 },
+    { brand: "BIOMAB EGFR 50MG INJECTION", generic: "NIMOTUZUMAB", mrp: 65643.92, type: "targeted", contentMg: 50 },
     { brand: "PROTEOZ 2.5MG INJ", generic: "BORTEZOMIB", mrp: 4668.70, type: "targeted", contentMg: 2.5 },
     { brand: "CABDUAL 20MG TAB", generic: "CABOZANTINIB", mrp: 166.50, type: "targeted", contentMg: 20, form: "tablet", unitsPerPack: 30 },
     { brand: "CABDUAL 40MG TAB", generic: "CABOZANTINIB", mrp: 333.00, type: "targeted", contentMg: 40, form: "tablet", unitsPerPack: 30 },
     { brand: "CABDUAL 60MG TAB", generic: "CABOZANTINIB", mrp: 499.50, type: "targeted", contentMg: 60, form: "tablet", unitsPerPack: 30 },
     { brand: "REGONAT 40MG TAB", generic: "REGORAFENIB", mrp: 353.57, type: "targeted", contentMg: 40, form: "tablet", unitsPerPack: 28 },
-    { brand: "THERASPHERE (YTTRIUM-90) 5ML VIAL", generic: "YTTRIUM-90 MICROSPHERES", mrp: 950000.00, type: "targeted", contentMg: 1, unitsPerPack: 1 },
+    { brand: "THERASPHERE (YTTRIUM-90) VIAL", generic: "YTTRIUM-90 MICROSPHERES", mrp: 950000.00, type: "targeted", contentMg: 1, unitsPerPack: 1 },
     { brand: "LUPITUS 100MG INJ", generic: "CETUXIMAB", mrp: 9990.00, type: "targeted", contentMg: 100 },
     { brand: "AVASTIN 100MG INJ", generic: "BEVACIZUMAB", mrp: 33863.00, type: "targeted", contentMg: 100 },
     { brand: "AVASTIN 400MG INJ", generic: "BEVACIZUMAB", mrp: 123506.00, type: "targeted", contentMg: 400 },
@@ -651,13 +699,13 @@ const mahadevapuraDrugDatabase = [
     { brand: "POLIVY 30MG INJ", generic: "POLATUZUMAB VEDOTIN", mrp: 190000.00, type: "targeted", contentMg: 30 },
     { brand: "ENFIERA 100MG INJ", generic: "RITUXIMAB", mrp: 8137.50, type: "targeted", contentMg: 100 },
     { brand: "LUPIXIMAB 100MG INJ", generic: "RITUXIMAB", mrp: 4074.00, type: "targeted", contentMg: 100 },
-    { brand: "MABTAS 100MG INJ", generic: "RITUXIMAB", mrp: 8533.00, type: "targeted", contentMg: 100 },
+    { brand: "MABTAS 100MG INJ", generic: "RITUXIMAB", mrp: 7998.99, type: "targeted", contentMg: 100 },
     { brand: "MABTHERA (RISTOVA) 100MG INJ", generic: "RITUXIMAB", mrp: 8135.00, type: "targeted", contentMg: 100 },
     { brand: "ENFIERA 500MG INJ", generic: "RITUXIMAB", mrp: 40688.20, type: "targeted", contentMg: 500 },
     { brand: "LUPIXIMAB 500MG INJ", generic: "RITUXIMAB", mrp: 14689.00, type: "targeted", contentMg: 500 },
-    { brand: "MABTAS 500MG INJ", generic: "RITUXIMAB", mrp: 43404.00, type: "targeted", contentMg: 500 },
+    { brand: "MABTAS 500MG INJ", generic: "RITUXIMAB", mrp: 40690.99, type: "targeted", contentMg: 500 },
     { brand: "MABTHERA (RISTOVA) 500MG INJ", generic: "RITUXIMAB", mrp: 40680.00, type: "targeted", contentMg: 500 },
-    { brand: "MABTAS 600MG INJ", generic: "RITUXIMAB", mrp: 40690.00, type: "targeted", contentMg: 600 },
+    { brand: "MABTAS 600MG INJ", generic: "RITUXIMAB", mrp: 40690.99, type: "targeted", contentMg: 600 },
     { brand: "ELEFTHA 150MG INJ", generic: "TRASTUZUMAB", mrp: 6491.72, type: "targeted", contentMg: 150 },
     { brand: "ELEFTHA 440MG INJ", generic: "TRASTUZUMAB", mrp: 19402.00, type: "targeted", contentMg: 440 },
     { brand: "VIVITRA 150MG INJ", generic: "TRASTUZUMAB", mrp: 22447.00, type: "targeted", contentMg: 150 },
@@ -667,22 +715,27 @@ const mahadevapuraDrugDatabase = [
     { brand: "PERTUZA 420MG INJ", generic: "PERTUZUMAB", mrp: 56000.00, type: "targeted", contentMg: 420 },
     { brand: "SIGRIMA 420MG INJ", generic: "PERTUZUMAB", mrp: 74995.00, type: "targeted", contentMg: 420 },
     { brand: "HERTUMAB 420MG INJ", generic: "PERTUZUMAB", mrp: 94951.00, type: "targeted", contentMg: 420 },
-    { brand: "PHESGO INJ", generic: "PERTUZUMAB + TRASTUZUMAB (PHESGO)", mrp: 254000.00, type: "targeted", contentMg: 1, unitsPerPack: 1 },
+    { brand: "PHESGO 600MG INJ", generic: "PERTUZUMAB + TRASTUZUMAB (PHESGO)", mrp: 257207.00, type: "targeted", contentMg: 1, unitsPerPack: 1 },
     { brand: "UJVIRA 100MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 37495.30, type: "targeted", contentMg: 100 },
     { brand: "UJVIRA 160MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 56245.30, type: "targeted", contentMg: 160 },
     { brand: "KADCYLA 100MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 162000.00, type: "targeted", contentMg: 100 },
     { brand: "KADCYLA 160MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 258000.00, type: "targeted", contentMg: 160 },
     { brand: "KADCYLA 260MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 420000.00, type: "targeted", contentMg: 260 },
+    { brand: "BEVATAS 400MG INJ", generic: "BEVACIZUMAB", mrp: 56991.00, type: "targeted", contentMg: 400 },
+    { brand: "TAGRISSO 80MG TAB", generic: "OSIMERTINIB", mrp: 4627.69, type: "targeted", contentMg: 80, form: "tablet", unitsPerPack: 30 },
+    { brand: "INONZA 1MG INJ", generic: "INOTUZUMAB", mrp: 309375.00, type: "targeted", contentMg: 1 },
+    { brand: "KYFIL 30MG INJ", generic: "CARFILZOMIB", mrp: 7321.80, type: "targeted", contentMg: 30 },
+    { brand: "KYFIL 60MG INJ", generic: "CARFILZOMIB", mrp: 13500.00, type: "targeted", contentMg: 60 },
 ];
 
 // Electronic City branch prices — from EC pharmacy list
 const electronicCityDrugDatabase = [
     // Chemotherapy
-    { brand: "ARSENAM 10MG/10ML INJ", generic: "ARSENIC TRIOXIDE", mrp: 342.00, type: "chemotherapy", contentMg: 10 },
+    { brand: "ARSENAM 10MG INJ", generic: "ARSENIC TRIOXIDE", mrp: 342.00, type: "chemotherapy", contentMg: 10 },
     { brand: "BENZZ 100MG INJ", generic: "BENDAMUSTINE", mrp: 4705.77, type: "chemotherapy", contentMg: 100 },
     { brand: "BIOCARB 150MG INJ", generic: "CARBOPLATIN", mrp: 946.30, type: "chemotherapy", contentMg: 150 },
     { brand: "BIOCARB 450MG INJ", generic: "CARBOPLATIN", mrp: 2839.10, type: "chemotherapy", contentMg: 450 },
-    { brand: "BUSUPRO 10ML INJECTION", generic: "BUSULPHAN", mrp: 7500.00, type: "chemotherapy", contentMg: 60 },
+    { brand: "BUSUPRO 60MG INJECTION", generic: "BUSULPHAN", mrp: 7500.00, type: "chemotherapy", contentMg: 60 },
     { brand: "CAPETERO 500MG TAB", generic: "CAPECITABINE", mrp: 128.39, type: "chemotherapy", contentMg: 500, form: "tablet", unitsPerPack: 10 },
     { brand: "CARSTIM 100MG INJECTION", generic: "CARMUSTINE", mrp: 6588.00, type: "chemotherapy", contentMg: 100 },
     { brand: "CISTERO 10MG INJ", generic: "CISPLATIN", mrp: 80.55, type: "chemotherapy", contentMg: 10 },
@@ -702,8 +755,8 @@ const electronicCityDrugDatabase = [
     { brand: "DOXORUBIN 10MG INJECTION", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 179.20, type: "chemotherapy", contentMg: 10 },
     { brand: "DOXORUBIN 50MG INJECTION", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 902.40, type: "chemotherapy", contentMg: 50 },
     { brand: "ZYRUBIN 50MG INJ", generic: "EPIRUBICIN", mrp: 1375.00, type: "chemotherapy", contentMg: 50 },
-    { brand: "EPIBRIV 2ML INJECTION", generic: "ERIBULIN", mrp: 24100.00, type: "chemotherapy", contentMg: 0.88 },
-    { brand: "POSID 100MG 5ML INJ", generic: "ETOPOSIDE", mrp: 193.26, type: "chemotherapy", contentMg: 100 },
+    { brand: "EPIBRIV 0.88MG INJECTION", generic: "ERIBULIN", mrp: 24100.00, type: "chemotherapy", contentMg: 0.88 },
+    { brand: "POSID 100MG INJ", generic: "ETOPOSIDE", mrp: 193.26, type: "chemotherapy", contentMg: 100 },
     { brand: "LASTET 100MG INJ", generic: "ETOPOSIDE", mrp: 173.87, type: "chemotherapy", contentMg: 100 },
     { brand: "FLU-STIM 50MG INJECTION", generic: "FLUDARABINE", mrp: 13732.00, type: "chemotherapy", contentMg: 50 },
     { brand: "ONCOFLUOR 500MG INJ", generic: "FLUOROURACIL (5-FU)", mrp: 28.50, type: "chemotherapy", contentMg: 500 },
@@ -717,7 +770,7 @@ const electronicCityDrugDatabase = [
     { brand: "IRINOTEL 100MG INJECTION", generic: "IRINOTECAN", mrp: 1188.27, type: "chemotherapy", contentMg: 100 },
     { brand: "FOIRI 40MG INJ", generic: "IRINOTECAN", mrp: 1812.10, type: "chemotherapy", contentMg: 40 },
     { brand: "IRINOTEL 40MG INJ", generic: "IRINOTECAN", mrp: 528.00, type: "chemotherapy", contentMg: 40 },
-    { brand: "XOLCAL 50MG/5ML INJECTION", generic: "LEUCOVORIN CALCIUM", mrp: 530.00, type: "chemotherapy", contentMg: 50 },
+    { brand: "XOLCAL 50MG INJECTION", generic: "LEUCOVORIN CALCIUM", mrp: 530.00, type: "chemotherapy", contentMg: 50 },
     { brand: "PLASTOMET 500MG INJ", generic: "METHOTREXATE", mrp: 1179.00, type: "chemotherapy", contentMg: 500 },
     { brand: "XALIPAT 100MG INJECTION", generic: "OXALIPLATIN", mrp: 5299.00, type: "chemotherapy", contentMg: 100 },
     { brand: "XALIPAT 50MG INJECTION", generic: "OXALIPLATIN", mrp: 3331.00, type: "chemotherapy", contentMg: 50 },
@@ -735,7 +788,7 @@ const electronicCityDrugDatabase = [
     { brand: "TOPOTEC 2.5MG INJ", generic: "TOPOTECAN", mrp: 2500.00, type: "chemotherapy", contentMg: 2.5 },
     { brand: "TRABEC 1MG INJ", generic: "TRABECTEDIN", mrp: 28600.00, type: "chemotherapy", contentMg: 1 },
     { brand: "TREOALL 5GM INJ", generic: "TREOSULFAN", mrp: 22000.00, type: "chemotherapy", contentMg: 5000 },
-    { brand: "UNIBLASTIN 10MG/10ML INJ", generic: "VINBLASTINE", mrp: 250.00, type: "chemotherapy", contentMg: 10 },
+    { brand: "UNIBLASTIN 10MG INJ", generic: "VINBLASTINE", mrp: 250.00, type: "chemotherapy", contentMg: 10 },
 
     // Immunotherapy
     { brand: "KEYTRUDA 100MG", generic: "PEMBROLIZUMAB", mrp: 216500.00, type: "immunotherapy", contentMg: 100 },
@@ -753,9 +806,9 @@ const electronicCityDrugDatabase = [
     { brand: "BRYXTA 400MG INJ", generic: "BEVACIZUMAB", mrp: 69995.00, type: "targeted", contentMg: 400 },
     { brand: "BEVAZZA 400MG INJ", generic: "BEVACIZUMAB", mrp: 45782.00, type: "targeted", contentMg: 400 },
     { brand: "PROTEOZ 2.5MG INJ", generic: "BORTEZOMIB", mrp: 4668.70, type: "targeted", contentMg: 2.5 },
-    { brand: "LUPITUX 100MG/20ML INJ", generic: "CETUXIMAB", mrp: 9990.00, type: "targeted", contentMg: 100 },
-    { brand: "BIOMAB EGFR 10ML INJECTION", generic: "NIMOTUZUMAB", mrp: 65643.92, type: "targeted", contentMg: 50 },
-    { brand: "SIGRIMA 420MG/14ML INJ", generic: "PERTUZUMAB", mrp: 74995.30, type: "targeted", contentMg: 420 },
+    { brand: "LUPITUX 100MG INJ", generic: "CETUXIMAB", mrp: 9990.00, type: "targeted", contentMg: 100 },
+    { brand: "BIOMAB EGFR 50MG INJECTION", generic: "NIMOTUZUMAB", mrp: 65643.92, type: "targeted", contentMg: 50 },
+    { brand: "SIGRIMA 420MG INJ", generic: "PERTUZUMAB", mrp: 74995.30, type: "targeted", contentMg: 420 },
     { brand: "CABDUAL 20MG TAB", generic: "CABOZANTINIB", mrp: 166.50, type: "targeted", contentMg: 20, form: "tablet", unitsPerPack: 30 },
     { brand: "CABDUAL 40MG TAB", generic: "CABOZANTINIB", mrp: 333.00, type: "targeted", contentMg: 40, form: "tablet", unitsPerPack: 30 },
     { brand: "CABDUAL 60MG TAB", generic: "CABOZANTINIB", mrp: 499.50, type: "targeted", contentMg: 60, form: "tablet", unitsPerPack: 30 },
@@ -780,35 +833,35 @@ const electronicCityDrugDatabase = [
     { brand: "KADCYLA 160MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 258000.00, type: "targeted", contentMg: 160 },
     { brand: "KADCYLA 260MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 420000.00, type: "targeted", contentMg: 260 },
     { brand: "PHESGO INJ", generic: "PERTUZUMAB + TRASTUZUMAB (PHESGO)", mrp: 254000.00, type: "targeted", contentMg: 1, unitsPerPack: 1 },
-    { brand: "THERASPHERE (YTTRIUM-90) 5ML VIAL", generic: "YTTRIUM-90 MICROSPHERES", mrp: 950000.00, type: "targeted", contentMg: 1, unitsPerPack: 1 },
+    { brand: "THERASPHERE (YTTRIUM-90) VIAL", generic: "YTTRIUM-90 MICROSPHERES", mrp: 950000.00, type: "targeted", contentMg: 1, unitsPerPack: 1 },
 
     // Hormonal Therapy
     { brand: "AVIRAT 500MG TAB", generic: "ABIRATERONE ACETATE", mrp: 650.00, type: "hormonal", contentMg: 500, form: "tablet", unitsPerPack: 60 },
     { brand: "DEGRELAX 80MG INJECTION", generic: "DEGARELIX", mrp: 16875.00, type: "hormonal", contentMg: 80 },
-    { brand: "AVEVA 250MG/5ML INJECTION", generic: "FULVESTRANT", mrp: 6089.00, type: "hormonal", contentMg: 250 },
+    { brand: "AVEVA 250MG INJECTION", generic: "FULVESTRANT", mrp: 6089.00, type: "hormonal", contentMg: 250 },
     { brand: "LEUGARD DEPOT 11.25MG INJECTION", generic: "LEUPROLIDE", mrp: 9396.00, type: "hormonal", contentMg: 11.25 },
     { brand: "LEUGARD DEPOT 22.5MG INJ", generic: "LEUPROLIDE", mrp: 16993.20, type: "hormonal", contentMg: 22.5 },
-    { brand: "GESTONE 100MG 2ML INJ", generic: "PROGESTERONE", mrp: 132.50, type: "hormonal", contentMg: 100 },
+    { brand: "GESTONE 100MG INJ", generic: "PROGESTERONE", mrp: 132.50, type: "hormonal", contentMg: 100 },
     { brand: "DECAPEPTYL 0.1MG INJ", generic: "TRIPTORELIN", mrp: 398.50, type: "hormonal", contentMg: 0.1 },
 
     // Supportive Care
     { brand: "APRETERO 125/80MG CAP", generic: "APREPITANT", mrp: 1430.00, type: "supportive", contentMg: 125, form: "kit" },
     { brand: "FOSAPORT IV 150MG INJ", generic: "FOSAPREPITANT", mrp: 3073.44, type: "supportive", contentMg: 150 },
     { brand: "FOSUP 150MG INJ", generic: "FOSAPREPITANT", mrp: 2716.00, type: "supportive", contentMg: 150 },
-    { brand: "ESENTRA 120MG/1.7ML INJ", generic: "DENOSUMAB", mrp: 29947.50, type: "supportive", contentMg: 120 },
+    { brand: "ESENTRA 120MG INJ", generic: "DENOSUMAB", mrp: 29947.50, type: "supportive", contentMg: 120 },
     { brand: "EMGRAST 300MCG PFS INJECTION", generic: "GCSF", mrp: 1321.77, type: "supportive", contentMg: 0.3 },
     { brand: "GRASTIM 300MCG INJ (VIAL)", generic: "GCSF", mrp: 772.60, type: "supportive", contentMg: 0.3 },
-    { brand: "EXOFERRIC 1000MG/20ML INJECTION", generic: "FERRIC CARBOXYMALTOSE", mrp: 3800.00, type: "supportive", contentMg: 1000 },
-    { brand: "EXOFERRIC 500MG/10ML INJECTION", generic: "FERRIC CARBOXYMALTOSE", mrp: 6800.00, type: "supportive", contentMg: 500 },
-    { brand: "FERUNO 500MG 5ML INJ", generic: "IRON ISOMALTOSIDE", mrp: 3449.00, type: "supportive", contentMg: 500 },
-    { brand: "EXOFERRIC S 100MG/5ML INJECTION", generic: "IRON SUCROSE", mrp: 327.00, type: "supportive", contentMg: 100 },
+    { brand: "EXOFERRIC 1000MG INJECTION", generic: "FERRIC CARBOXYMALTOSE", mrp: 3800.00, type: "supportive", contentMg: 1000 },
+    { brand: "EXOFERRIC 500MG INJECTION", generic: "FERRIC CARBOXYMALTOSE", mrp: 6800.00, type: "supportive", contentMg: 500 },
+    { brand: "FERUNO 500MG INJ", generic: "IRON ISOMALTOSIDE", mrp: 3449.00, type: "supportive", contentMg: 500 },
+    { brand: "EXOFERRIC S 100MG INJECTION", generic: "IRON SUCROSE", mrp: 327.00, type: "supportive", contentMg: 100 },
     { brand: "MENOPUR 1200 IU MULTIDOSE PACK", generic: "FSH+LH (MENOPUR)", mrp: 39188.37, type: "supportive", contentMg: 1, unitsPerPack: 1 },
     { brand: "MENOPUR 600 IU MULTIDOSE PACK", generic: "FSH+LH (MENOPUR)", mrp: 2449.19, type: "supportive", contentMg: 1, unitsPerPack: 1 },
     { brand: "MESNA 200MG INJ", generic: "MESNA", mrp: 33.00, type: "supportive", contentMg: 200 },
     { brand: "PEG FILTERO 6MG PFS INJ", generic: "PEG-GCSF", mrp: 9700.00, type: "supportive", contentMg: 6 },
     { brand: "PEGSTIM 6MG VIAL INJ", generic: "PEG-GCSF", mrp: 5398.10, type: "supportive", contentMg: 6 },
-    { brand: "MOSTIM 1.2ML INJECTION", generic: "PLERIXAFOR", mrp: 28115.60, type: "supportive", contentMg: 24 },
-    { brand: "MOZIFOR 1.2ML INJ", generic: "PLERIXAFOR", mrp: 42900.00, type: "supportive", contentMg: 24 },
+    { brand: "MOSTIM 24MG INJECTION", generic: "PLERIXAFOR", mrp: 28115.60, type: "supportive", contentMg: 24 },
+    { brand: "MOZIFOR 24MG INJ", generic: "PLERIXAFOR", mrp: 42900.00, type: "supportive", contentMg: 24 },
     { brand: "RASBURNAT 1.5MG INJ", generic: "RASBURICASE", mrp: 8800.00, type: "supportive", contentMg: 1.5 },
     { brand: "AUGPLAT 250MCG INJ", generic: "ROMIPLOSTIM", mrp: 3843.70, type: "supportive", contentMg: 0.25 },
     { brand: "ZOLTERO 4MG INJ", generic: "ZOLEDRONIC ACID", mrp: 2554.60, type: "supportive", contentMg: 4 },
@@ -1472,10 +1525,10 @@ function getBrandFamily(brandName) {
 
 // Core optimizer for a single brand family's vials
 function _optimizeFamily(requiredDose, floor, familyVials) {
-    // Pick cheapest entry per vial size within this family
+    // Pick highest-MRP entry per vial size within this family
     const sizeMap = {};
     familyVials.forEach(v => {
-        if (!sizeMap[v.contentMg] || v.mrp < sizeMap[v.contentMg].mrp) {
+        if (!sizeMap[v.contentMg] || v.mrp > sizeMap[v.contentMg].mrp) {
             sizeMap[v.contentMg] = { ...v };
         }
     });
@@ -1550,7 +1603,7 @@ function _optimizeFamily(requiredDose, floor, familyVials) {
     return practical[0].combo.filter(v => v.qty > 0);
 }
 
-// Smart vial optimizer: never mixes brands, optimizes per brand family, picks cheapest family
+// Smart vial optimizer: never mixes brands, optimizes per brand family, picks highest-MRP family
 // tolerance (0–1): injectable chemo drugs allow rounding down up to 10% of required dose
 function optimizeVials(requiredDose, availableVials, tolerance = 0) {
     const floor = requiredDose * (1 - tolerance);
@@ -1562,13 +1615,13 @@ function optimizeVials(requiredDose, availableVials, tolerance = 0) {
         (familyMap[fam] = familyMap[fam] || []).push(v);
     });
 
-    // Optimize within each family, pick cheapest result
-    let best = null, bestCost = Infinity;
+    // Optimize within each family, pick highest-MRP result
+    let best = null, bestCost = -Infinity;
     for (const familyVials of Object.values(familyMap)) {
         const result = _optimizeFamily(requiredDose, floor, familyVials);
         if (!result) continue;
         const cost = result.reduce((s, v) => s + v.qty * v.mrp, 0);
-        if (cost < bestCost) { bestCost = cost; best = result; }
+        if (cost > bestCost) { bestCost = cost; best = result; }
     }
     return best || [];
 }
@@ -1672,8 +1725,8 @@ function calculateRegimen() {
             const days = drug.daysPerCycle || times;
             const matching = brands.filter(b => b.contentMg === drug.dose);
             const pool = matching.length > 0 ? matching : brands;
-            // Cheapest brand at the matching strength (per-tab cost)
-            const chosen = pool.reduce((a, b) => (a.mrp <= b.mrp ? a : b));
+            // Highest-MRP brand at the matching strength (per-tab cost)
+            const chosen = pool.reduce((a, b) => (a.mrp >= b.mrp ? a : b));
             optimalPerAdmin = [{ ...chosen, qty: days }];
         } else {
             optimalPerAdmin = optimizeVials(dosePerAdmin, brands, tolerance);
@@ -1870,7 +1923,9 @@ function updateBrandOptions() {
 
     if (!generic) return;
 
-    const brands = currentDrugDatabase.filter(d => d.generic === generic && d.type === currentDrugType);
+    const brands = currentDrugDatabase
+        .filter(d => d.generic === generic && d.type === currentDrugType)
+        .sort((a, b) => b.mrp - a.mrp || a.brand.localeCompare(b.brand));
     brands.forEach((b, i) => {
         const opt = document.createElement('option');
         opt.value = JSON.stringify(b);
@@ -1878,7 +1933,7 @@ function updateBrandOptions() {
         brandSelect.appendChild(opt);
     });
 
-    if (brands.length === 1) {
+    if (brands.length > 0) {
         brandSelect.selectedIndex = 1;
         updatePriceDisplay();
     } else {
