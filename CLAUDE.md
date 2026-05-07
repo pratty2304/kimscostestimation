@@ -21,7 +21,7 @@ kims-onco-sciences-logo.png  # KIMS Onco Sciences logo (used in overlay, header,
 - Drug types: `chemotherapy`, `immunotherapy`, `targeted`, `hormonal`, `supportive`
 - Tab buttons filter the generic dropdown by `type`
 - Brand dropdowns sort highest MRP first and auto-select the highest-MRP brand by default; users can manually choose a lower-cost brand later
-- Hospital charges (consumables, consultation, ward, procedure) are selectable, and `numberOfDays` multiplies these charges
+- Hospital charges (consumables, consultation, hospital services, procedure) are selectable, and `numberOfDays` multiplies these charges
 - Print sheet is generated dynamically in `generatePrint(mode)` — two modes: `'patient'` and `'doctor'`
 - Patient print: 3-line cost breakdown (Drugs + Supportive, Procedure Charges, Hospital Charges) + notes + signatures
 - Doctor print: detailed drug list with quantities + hospital charges breakdown
@@ -72,15 +72,15 @@ Electronic City:
 
 ## Hospital Charges
 - **Procedure Types**: Chemo Infusion Single/Multi Drug, Chemotherapy Minor/Medium/Major/Major Plus/Supra Major, Immunotherapy
-- **Consumables**: Rs. 5,000 or Waive Off
+- **Consumables**: Rs. 5,000 / Rs. 6,000 / Rs. 7,000 / Waive Off
 - **Consultation**: Rs. 1,600 / Rs. 2,000 / Waive Off
-- **Ward**: Day Care (Rs. 2,500) / Private (TBD)
-- **Number of Days**: multiplies procedure, consumables, consultation, and ward charges
+- **Hospital Services** (formerly Ward Charges; covers medical records, day care charges, admission charges): Rs. 3,200 / Private (TBD). DOM id remains `wardCharge` / `labelWard` and JS variable is still `wardCharges` for backward compatibility.
+- **Number of Days**: multiplies procedure, consumables, consultation, and hospital services charges
 
 ## Print Sheet
 - Two print modes: `generatePrint('patient')` and `generatePrint('doctor')`
-- **Patient print**: KIMS Onco Sciences logo, branch label, patient details, 3-line cost breakdown (Drugs + Supportive, Procedure Charges, Hospital Charges with consumables/ward/consultation), total, +/- 10% variance disclaimer, acknowledgement with signature fields
-- **Doctor print**: detailed drug list table (brand, generic, qty, unit price, total) + hospital charges breakdown
+- **Patient print**: KIMS Onco Sciences logo, branch label, patient details, 3-line cost breakdown (Drugs + Supportive, Procedure Charges, Hospital Charges with consumables/hospital services/consultation), total, +/- 10% variance disclaimer, acknowledgement with signature fields
+- **Doctor print**: detailed drug list table (brand, generic, qty, unit price, total) + hospital charges breakdown; the Hospital Services row is annotated "(medical records, day care charges, admission charges)"
 - Print defaults to B&W mode; user can tick “Keep colours” when saving a colour PDF
 - Designed to fit on a single A4 page
 

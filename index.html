@@ -448,14 +448,16 @@
                 <select id="consumablesCharge" onchange="updateSummary()">
                     <option value="" selected>-- Select --</option>
                     <option value="5000">Rs. 5,000</option>
+                    <option value="6000">Rs. 6,000</option>
+                    <option value="7000">Rs. 7,000</option>
                     <option value="0">Waive Off</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Ward Charges</label>
+                <label>Hospital Services</label>
                 <select id="wardCharge" onchange="updateSummary()">
                     <option value="" selected>-- Select --</option>
-                    <option value="2500">Day Care (Rs. 2,500)</option>
+                    <option value="3200">Rs. 3,200</option>
                     <option value="0">Private (TBD)</option>
                 </select>
             </div>
@@ -492,7 +494,7 @@
                 <td id="summaryConsultation">Rs. 0.00</td>
             </tr>
             <tr>
-                <td id="labelWard">Ward Charges</td>
+                <td id="labelWard">Hospital Services</td>
                 <td id="summaryWard">Rs. 0.00</td>
             </tr>
             <tr>
@@ -2028,7 +2030,7 @@ function updateSummary() {
     const dayLabel = days > 1 ? ` (×${days} days)` : '';
     document.getElementById('labelConsumables').textContent = `Consumables${dayLabel}`;
     document.getElementById('labelConsultation').textContent = `Consultation Charges${dayLabel}`;
-    document.getElementById('labelWard').textContent = `Ward Charges${dayLabel}`;
+    document.getElementById('labelWard').textContent = `Hospital Services${dayLabel}`;
     document.getElementById('labelProcedure').textContent = `Procedure Charges${dayLabel}`;
 
     document.getElementById('summaryDrugs').textContent = `Rs. ${formatNum(drugTotal)}`;
@@ -2117,7 +2119,7 @@ function generatePrint(mode) {
                 <tr><td>Procedure Charges (${procedureLabel}${dayLabel})</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
                 <tr><td>Consumables${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables)}</td></tr>
                 <tr><td>Consultation Charges${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consultation)}</td></tr>
-                <tr><td>Ward Charges${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(wardCharges)}</td></tr>
+                <tr><td>Hospital Services (medical records, day care charges, admission charges)${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(wardCharges)}</td></tr>
                 <tr style="font-weight:700; background:#e8f0fe;"><td>Total Hospital Charges</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges + procedure)}</td></tr>
             </table>
 
@@ -2136,7 +2138,7 @@ function generatePrint(mode) {
                 <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
                 <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td></tr>
                 <tr><td>Procedure Charges${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
-                <tr><td>Hospital Charges (Consumables, Ward Charges, Consultation Charges)${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td></tr>
+                <tr><td>Hospital Charges (Consumables, Hospital Services, Consultation Charges)${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td></tr>
                 <tr style="font-weight:700; background:#e8f0fe;"><td>TOTAL</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
             </table>
 
