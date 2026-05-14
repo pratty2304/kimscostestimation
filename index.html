@@ -570,6 +570,8 @@ const mahadevapuraDrugDatabase = [
     { brand: "OXALTERO 50MG INJ", generic: "OXALIPLATIN", mrp: 2385.75, type: "chemotherapy", contentMg: 50 },
     { brand: "PEMTERO 500MG INJ", generic: "PEMETREXED", mrp: 8500.00, type: "chemotherapy", contentMg: 500 },
     { brand: "PEMTERO 100MG INJ", generic: "PEMETREXED", mrp: 2500.00, type: "chemotherapy", contentMg: 100 },
+    { brand: "S-1 20MG CAP", generic: "S-1", mrp: 414.29, type: "chemotherapy", contentMg: 20, form: "capsule", unitsPerPack: 7 },
+    { brand: "TIPANAT 20MG TAB", generic: "TAS-102", mrp: 427.00, type: "chemotherapy", contentMg: 20, form: "tablet", unitsPerPack: 20 },
     { brand: "THALIX 100MG CAP", generic: "THALIDOMIDE", mrp: 65.10, type: "chemotherapy", contentMg: 100, form: "capsule", unitsPerPack: 10 },
     { brand: "THALIX 50MG CAP", generic: "THALIDOMIDE", mrp: 33.27, type: "chemotherapy", contentMg: 50, form: "capsule", unitsPerPack: 10 },
     { brand: "ZUBIDOX 10MG INJ", generic: "DOXORUBICIN (ADRIAMYCIN)", mrp: 289.06, type: "chemotherapy", contentMg: 10 },
@@ -795,6 +797,8 @@ const electronicCityDrugDatabase = [
     { brand: "PEGADRIA 50MG INJ", generic: "PEGYLATED LIPOSOMAL DOXORUBICIN", mrp: 10406.00, type: "chemotherapy", contentMg: 50 },
     { brand: "PEMPRO 100MG INJ", generic: "PEMETREXED", mrp: 1060.30, type: "chemotherapy", contentMg: 100 },
     { brand: "PEMPRO 500MG INJ", generic: "PEMETREXED", mrp: 3650.60, type: "chemotherapy", contentMg: 500 },
+    { brand: "S-1 20MG CAP", generic: "S-1", mrp: 414.29, type: "chemotherapy", contentMg: 20, form: "capsule", unitsPerPack: 7 },
+    { brand: "TIPANAT 20MG TAB", generic: "TAS-102", mrp: 427.00, type: "chemotherapy", contentMg: 20, form: "tablet", unitsPerPack: 20 },
     { brand: "TEPASTIM 15MG INJ", generic: "THIOTEPA", mrp: 12742.00, type: "chemotherapy", contentMg: 15 },
     { brand: "THIORAY 15MG INJ", generic: "THIOTEPA", mrp: 20000.00, type: "chemotherapy", contentMg: 15 },
     { brand: "TOPOTEC 2.5MG INJ", generic: "TOPOTECAN", mrp: 2500.00, type: "chemotherapy", contentMg: 2.5 },
@@ -971,7 +975,7 @@ function resetFormSilent() {
 }
 
 // ==================== REGIMEN DATABASE ====================
-// Dose types: mg_per_m2, auc (Calvert), mg_per_kg, flat_mg, oral_bd_14d (capecitabine), oral_daily / oral_bid_daily (continuous oral, uses daysPerCycle)
+// Dose types: mg_per_m2, auc (Calvert), mg_per_kg, flat_mg, oral_bd_14d (capecitabine), oral_bd_days, oral_daily / oral_bid_daily (continuous oral, uses daysPerCycle)
 // timesPerCycle: how many times per cycle (default 1, e.g., weekly paclitaxel in Q3W = 3)
 const regimenDatabase = [
     {
@@ -1090,6 +1094,53 @@ const regimenDatabase = [
         cycle: "Q3W",
         drugs: [
             { generic: "CAPECITABINE", dose: 1250, doseType: "oral_bd_14d", note: "1250 mg/m² BD D1-14" },
+        ]
+    },
+    {
+        name: "TAS-102 monotherapy (RECOURSE)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "TAS-102", dose: 35, doseType: "oral_bd_days", daysPerCycle: 10, note: "35 mg/m² BD PO D1-5 and D8-12, every 28 days" },
+        ]
+    },
+    {
+        name: "TAS-102 + Bevacizumab (SUNLIGHT)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "TAS-102", dose: 35, doseType: "oral_bd_days", daysPerCycle: 10, note: "35 mg/m² BD PO D1-5 and D8-12, every 28 days" },
+            { generic: "BEVACIZUMAB", dose: 5, doseType: "mg_per_kg", timesPerCycle: 2, note: "5 mg/kg D1 and D15, every 28 days" },
+        ]
+    },
+    {
+        name: "S-1 monotherapy",
+        cycle: "Q6W",
+        drugs: [
+            { generic: "S-1", dose: 40, doseType: "oral_bd_days", daysPerCycle: 28, note: "40 mg/m² BD PO D1-28, every 42 days" },
+        ]
+    },
+    {
+        name: "S-1 + Cisplatin (SP) (SPIRITS)",
+        cycle: "Q5W",
+        drugs: [
+            { generic: "CISPLATIN", dose: 60, doseType: "mg_per_m2", note: "60 mg/m² D8, every 35 days" },
+            { generic: "S-1", dose: 40, doseType: "oral_bd_days", daysPerCycle: 21, note: "40 mg/m² BD PO D1-21, every 35 days" },
+        ]
+    },
+    {
+        name: "S-1 + Oxaliplatin (SOX) (G-SOX)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "OXALIPLATIN", dose: 130, doseType: "mg_per_m2", note: "130 mg/m² D1, every 21 days" },
+            { generic: "S-1", dose: 40, doseType: "oral_bd_days", daysPerCycle: 14, note: "40 mg/m² BD PO D1-14, every 21 days" },
+        ]
+    },
+    {
+        name: "S-1 + Oxaliplatin + Nivolumab (ATTRACTION-4)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 360, doseType: "flat_mg", note: "360 mg D1, every 21 days" },
+            { generic: "OXALIPLATIN", dose: 130, doseType: "mg_per_m2", note: "130 mg/m² D1, every 21 days" },
+            { generic: "S-1", dose: 40, doseType: "oral_bd_days", daysPerCycle: 14, note: "40 mg/m² BD PO D1-14, every 21 days" },
         ]
     },
     {
@@ -1914,6 +1965,8 @@ const regimenCancerTypes = [
             "mFOLFOX6 + Bevacizumab",
             "mFOLFOX6 + Cetuximab",
             "Nivolumab + Ipilimumab (NICHE-2, dMMR colon cancer)",
+            "TAS-102 monotherapy (RECOURSE)",
+            "TAS-102 + Bevacizumab (SUNLIGHT)",
         ],
     },
     {
@@ -2077,6 +2130,10 @@ const regimenCancerTypes = [
             "FLOT",
             "FLOT + Durvalumab (MATTERHORN)",
             "mFOLFOX6",
+            "S-1 monotherapy",
+            "S-1 + Cisplatin (SP) (SPIRITS)",
+            "S-1 + Oxaliplatin (SOX) (G-SOX)",
+            "S-1 + Oxaliplatin + Nivolumab (ATTRACTION-4)",
             "TPF (Docetaxel + Cisplatin + 5-FU)",
         ],
     },
@@ -2298,6 +2355,13 @@ function calculateRegimen() {
                 doseLabel = `${drug.dose} mg/m² BD × 14d = ${singleDose} mg BD (${dosePerAdmin} mg total)`;
                 break;
             }
+            case 'oral_bd_days': {
+                const days = drug.daysPerCycle || times;
+                const singleDose = drug.dose * bsa;
+                dosePerAdmin = singleDose * 2 * days;
+                doseLabel = `${drug.dose} mg/m² BD × ${days}d = ${singleDose.toFixed(1)} mg BD (${dosePerAdmin.toFixed(1)} mg total)`;
+                break;
+            }
             case 'oral_daily': {
                 const days = drug.daysPerCycle || times;
                 dosePerAdmin = drug.dose * days;
@@ -2337,7 +2401,7 @@ function calculateRegimen() {
 
         // 10% round-down tolerance for injectable chemo only (not tablets/capsules/immunotherapy/targeted/supportive)
         const isInjChemo = brands[0].type === 'chemotherapy'
-            && !['tablet', 'capsule'].includes(brands[0].form || 'vial');
+            && !['tablet', 'capsule', 'pack'].includes(brands[0].form || 'vial');
         const tolerance = isInjChemo ? 0.10 : 0;
 
         // Optimize vials/tablets/capsules per single administration.
@@ -2916,6 +2980,7 @@ function formatNum(n) {
 function getUnitLabel(drug, qty) {
     const form = drug.form || 'vial';
     if (form === 'kit') return qty === 1 ? 'kit' : 'kits';
+    if (form === 'pack') return qty === 1 ? 'pack' : 'packs';
     if (form === 'tablet') return qty === 1 ? 'tab' : 'tabs';
     if (form === 'capsule') return qty === 1 ? 'cap' : 'caps';
     return qty === 1 ? 'vial' : 'vials';
