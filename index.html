@@ -732,6 +732,7 @@ const mahadevapuraDrugDatabase = [
     { brand: "KADCYLA 100MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 162000.00, type: "targeted", contentMg: 100 },
     { brand: "KADCYLA 160MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 258000.00, type: "targeted", contentMg: 160 },
     { brand: "KADCYLA 260MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 420000.00, type: "targeted", contentMg: 260 },
+    { brand: "ENHERTU 100MG INJ", generic: "TRASTUZUMAB DERUXTECAN", mrp: 186000.00, type: "targeted", contentMg: 100 },
     { brand: "BEVATAS 400MG INJ", generic: "BEVACIZUMAB", mrp: 56991.00, type: "targeted", contentMg: 400 },
     { brand: "TAGRISSO 80MG TAB", generic: "OSIMERTINIB", mrp: 4627.69, type: "targeted", contentMg: 80, form: "tablet", unitsPerPack: 30 },
     { brand: "INONZA 1MG INJ", generic: "INOTUZUMAB", mrp: 309375.00, type: "targeted", contentMg: 1 },
@@ -846,6 +847,7 @@ const electronicCityDrugDatabase = [
     { brand: "KADCYLA 100MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 162000.00, type: "targeted", contentMg: 100 },
     { brand: "KADCYLA 160MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 258000.00, type: "targeted", contentMg: 160 },
     { brand: "KADCYLA 260MG INJ", generic: "TRASTUZUMAB EMTANSINE (T-DM1)", mrp: 420000.00, type: "targeted", contentMg: 260 },
+    { brand: "ENHERTU 100MG INJ", generic: "TRASTUZUMAB DERUXTECAN", mrp: 186000.00, type: "targeted", contentMg: 100 },
     { brand: "PHESGO INJ", generic: "PERTUZUMAB + TRASTUZUMAB (PHESGO)", mrp: 254000.00, type: "targeted", contentMg: 1, unitsPerPack: 1 },
     { brand: "THERASPHERE (YTTRIUM-90) VIAL", generic: "YTTRIUM-90 MICROSPHERES", mrp: 950000.00, type: "targeted", contentMg: 1, unitsPerPack: 1 },
 
@@ -1711,6 +1713,13 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Trastuzumab Deruxtecan (Enhertu)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "TRASTUZUMAB DERUXTECAN", dose: 5.4, doseType: "mg_per_kg", note: "5.4 mg/kg D1 Q3W" },
+        ]
+    },
+    {
         name: "Tislelizumab + Carboplatin + Paclitaxel (RATIONALE-315 perioperative NSCLC)",
         cycle: "Q3W",
         needsCreatinine: true,
@@ -1874,6 +1883,7 @@ const regimenCancerTypes = [
             "TCH (Docetaxel + Carboplatin + Trastuzumab)",
             "TCHP (Docetaxel + Carboplatin + Trastuzumab + Pertuzumab)",
             "T-DM1 (Trastuzumab emtansine)",
+            "Trastuzumab Deruxtecan (Enhertu)",
         ],
     },
     {
