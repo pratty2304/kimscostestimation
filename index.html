@@ -28,13 +28,13 @@
             padding-bottom: 8px; border-bottom: 2px solid #e8f0fe;
         }
 
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .form-group { display: flex; flex-direction: column; }
+        .form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+        .form-group { display: flex; flex-direction: column; min-width: 0; }
         .form-group.full { grid-column: 1 / -1; }
         .form-group label { font-size: 0.8rem; font-weight: 600; color: #555; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
         .form-group input, .form-group select, .form-group textarea {
             padding: 10px 12px; border: 1.5px solid #d1d9e6; border-radius: 6px;
-            font-size: 0.95rem; transition: border-color 0.2s;
+            font-size: 0.95rem; transition: border-color 0.2s; width: 100%; max-width: 100%;
         }
         .form-group input:focus, .form-group select:focus {
             outline: none; border-color: #2980b9; box-shadow: 0 0 0 3px rgba(41,128,185,0.1);
@@ -350,9 +350,15 @@
                 <input type="number" id="serumCreatinine" step="0.1" placeholder="For carboplatin regimens">
             </div>
             <div class="form-group">
+                <label>Cancer Type</label>
+                <select id="cancerTypeSelect" onchange="populateRegimenDropdown()">
+                    <option value="">-- Select Cancer Type --</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Regimen</label>
                 <select id="regimenSelect" onchange="onRegimenChange()">
-                    <option value="">-- Select Regimen --</option>
+                    <option value="">-- Select Cancer Type First --</option>
                 </select>
             </div>
             <div class="form-group">
@@ -681,11 +687,14 @@ const mahadevapuraDrugDatabase = [
     { brand: "TISHTHA 40MG INJ", generic: "NIVOLUMAB", mrp: 13950.00, type: "immunotherapy", contentMg: 40 },
     { brand: "TISHTHA 100MG INJ", generic: "NIVOLUMAB", mrp: 28950.00, type: "immunotherapy", contentMg: 100 },
     { brand: "OPDYTA 240MG INJ", generic: "NIVOLUMAB", mrp: 240000.00, type: "immunotherapy", contentMg: 240 },
+    { brand: "YERVOI 50MG INJ", generic: "IPILIMUMAB", mrp: 72500.00, type: "immunotherapy", contentMg: 50 },
     { brand: "IMFINZI 500MG INJ", generic: "DURVALUMAB", mrp: 171324.00, type: "immunotherapy", contentMg: 500 },
+    { brand: "JEMPERLI 500MG INJ", generic: "DOSTARLIMAB", mrp: 390692.00, type: "immunotherapy", contentMg: 500 },
     { brand: "TEVIMBRA 100MG INJ", generic: "TISLELIZUMAB", mrp: 65250.00, type: "immunotherapy", contentMg: 100 },
 
     // Targeted Therapy
     { brand: "KRYXANA 200MG TAB", generic: "RIBOCICLIB", mrp: 1159.76, type: "targeted", contentMg: 200, form: "tablet", unitsPerPack: 21 },
+    { brand: "LENVA 4MG CAP", generic: "LENVATINIB", mrp: 260.00, type: "targeted", contentMg: 4, form: "capsule", unitsPerPack: 10 },
     { brand: "BIOMAB EGFR 50MG INJECTION", generic: "NIMOTUZUMAB", mrp: 65643.92, type: "targeted", contentMg: 50 },
     { brand: "PROTEOZ 2.5MG INJ", generic: "BORTEZOMIB", mrp: 4668.70, type: "targeted", contentMg: 2.5 },
     { brand: "CABDUAL 20MG TAB", generic: "CABOZANTINIB", mrp: 166.50, type: "targeted", contentMg: 20, form: "tablet", unitsPerPack: 30 },
@@ -798,7 +807,9 @@ const electronicCityDrugDatabase = [
     { brand: "TISHTHA 40MG INJ", generic: "NIVOLUMAB", mrp: 13950.00, type: "immunotherapy", contentMg: 40 },
     { brand: "TISHTHA 100MG INJ", generic: "NIVOLUMAB", mrp: 28950.00, type: "immunotherapy", contentMg: 100 },
     { brand: "OPDYTA 240MG INJ", generic: "NIVOLUMAB", mrp: 240000.00, type: "immunotherapy", contentMg: 240 },
+    { brand: "YERVOI 50MG INJ", generic: "IPILIMUMAB", mrp: 72500.00, type: "immunotherapy", contentMg: 50 },
     { brand: "IMFINZI 500MG INJ", generic: "DURVALUMAB", mrp: 171324.00, type: "immunotherapy", contentMg: 500 },
+    { brand: "JEMPERLI 500MG INJ", generic: "DOSTARLIMAB", mrp: 390692.00, type: "immunotherapy", contentMg: 500 },
     { brand: "TEVIMBRA 100MG", generic: "TISLELIZUMAB", mrp: 65250.00, type: "immunotherapy", contentMg: 100 },
 
     // Targeted Therapy
@@ -815,6 +826,7 @@ const electronicCityDrugDatabase = [
     { brand: "CABDUAL 40MG TAB", generic: "CABOZANTINIB", mrp: 333.00, type: "targeted", contentMg: 40, form: "tablet", unitsPerPack: 30 },
     { brand: "CABDUAL 60MG TAB", generic: "CABOZANTINIB", mrp: 499.50, type: "targeted", contentMg: 60, form: "tablet", unitsPerPack: 30 },
     { brand: "REGONAT 40MG TAB", generic: "REGORAFENIB", mrp: 353.57, type: "targeted", contentMg: 40, form: "tablet", unitsPerPack: 28 },
+    { brand: "LENVA 4MG CAP", generic: "LENVATINIB", mrp: 260.00, type: "targeted", contentMg: 4, form: "capsule", unitsPerPack: 10 },
     { brand: "POLIVY 30MG INJ", generic: "POLATUZUMAB VEDOTIN", mrp: 190000.00, type: "targeted", contentMg: 30 },
     { brand: "ENFIERA 100MG INJ", generic: "RITUXIMAB", mrp: 8137.50, type: "targeted", contentMg: 100 },
     { brand: "LUPIXIMAB 100MG INJ", generic: "RITUXIMAB", mrp: 4074.00, type: "targeted", contentMg: 100 },
@@ -941,8 +953,11 @@ function resetFormSilent() {
     if (brandEl) brandEl.innerHTML = '<option value="">-- Select Brand --</option>';
     const qtyEl = document.getElementById('drugQty');
     if (qtyEl) qtyEl.value = 1;
+    const cancerTypeEl = document.getElementById('cancerTypeSelect');
+    if (cancerTypeEl) cancerTypeEl.value = '';
     const regEl = document.getElementById('regimenSelect');
     if (regEl) regEl.value = '';
+    populateRegimenDropdown();
     const bsaEl = document.getElementById('bsaValue');
     if (bsaEl) bsaEl.value = '';
     const doseEl = document.getElementById('doseResults');
@@ -1023,11 +1038,27 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Atezolizumab + Bevacizumab (HCC)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "ATEZOLIZUMAB", dose: 1200, doseType: "flat_mg", note: "1200 mg D1" },
+            { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg", note: "15 mg/kg D1" },
+        ]
+    },
+    {
         name: "Cabozantinib + Nivolumab (CHECKMATE-9ER, mRCC)",
         cycle: "Q4W",
         drugs: [
             { generic: "CABOZANTINIB", dose: 40, doseType: "oral_daily", daysPerCycle: 28, note: "40 mg PO OD continuous" },
             { generic: "NIVOLUMAB", dose: 240, doseType: "flat_mg", timesPerCycle: 2, note: "240 mg IV Q2W (D1, D15)" },
+        ]
+    },
+    {
+        name: "Nivolumab + Ipilimumab (CheckMate 214, RCC)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 3, doseType: "mg_per_kg", note: "3 mg/kg D1 Q3W × 4 doses (then nivolumab maintenance)" },
+            { generic: "IPILIMUMAB", dose: 1, doseType: "mg_per_kg", note: "1 mg/kg D1 Q3W × 4 doses" },
         ]
     },
     {
@@ -1074,6 +1105,26 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Carboplatin + Paclitaxel + Dostarlimab",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+            { generic: "DOSTARLIMAB", dose: 500, doseType: "flat_mg", note: "500 mg D1 with chemotherapy (then 1000 mg Q6W maintenance)" },
+        ]
+    },
+    {
+        name: "Carboplatin + Paclitaxel + Pembrolizumab",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 with chemotherapy (then 400 mg Q6W maintenance)" },
+        ]
+    },
+    {
         name: "Carboplatin + Paclitaxel + Pembrolizumab (KEYNOTE-522)",
         cycle: "Q3W",
         needsCreatinine: true,
@@ -1112,6 +1163,25 @@ const regimenDatabase = [
         cycle: "Q3W",
         drugs: [
             { generic: "DOCETAXEL", dose: 100, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "Durvalumab + Carboplatin + Pemetrexed (AEGEAN perioperative NSCLC)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500 mg D1 with chemotherapy (then 1500 mg Q4W adjuvant)" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2", note: "500 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Durvalumab + Cisplatin + Pemetrexed (AEGEAN perioperative NSCLC)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500 mg D1 with chemotherapy (then 1500 mg Q4W adjuvant)" },
+            { generic: "CISPLATIN", dose: 75, doseType: "mg_per_m2", note: "75 mg/m² D1" },
+            { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2", note: "500 mg/m² D1" },
         ]
     },
     {
@@ -1213,11 +1283,56 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Gemcitabine + Carboplatin (Bladder cancer)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1" },
+        ]
+    },
+    {
         name: "Gemcitabine + Cisplatin",
         cycle: "Q3W",
         drugs: [
             { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
             { generic: "CISPLATIN", dose: 25, doseType: "mg_per_m2", timesPerCycle: 2, note: "25 mg/m² D1, D8" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Cisplatin (Bladder cancer)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CISPLATIN", dose: 70, doseType: "mg_per_m2", note: "70 mg/m² D1" },
+        ]
+    },
+    {
+        name: "ddMVAC (dose-dense MVAC, bladder cancer)",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "METHOTREXATE", dose: 30, doseType: "mg_per_m2", note: "30 mg/m² D1" },
+            { generic: "VINBLASTINE", dose: 3, doseType: "mg_per_m2", note: "3 mg/m² D2" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 30, doseType: "mg_per_m2", note: "30 mg/m² D2" },
+            { generic: "CISPLATIN", dose: 70, doseType: "mg_per_m2", note: "70 mg/m² D2; requires G-CSF support" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Cisplatin + Durvalumab (NIAGARA, bladder cancer)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CISPLATIN", dose: 70, doseType: "mg_per_m2", note: "70 mg/m² D1" },
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500 mg D1 Q3W" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Cisplatin + Nivolumab (CheckMate 901, urothelial cancer)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CISPLATIN", dose: 70, doseType: "mg_per_m2", note: "70 mg/m² D1" },
+            { generic: "NIVOLUMAB", dose: 360, doseType: "flat_mg", note: "360 mg D1 Q3W" },
         ]
     },
     {
@@ -1277,13 +1392,10 @@ const regimenDatabase = [
         ]
     },
     {
-        name: "mFOLFIRINOX",
-        cycle: "Q2W",
+        name: "Lipodox (Pegylated Liposomal Doxorubicin)",
+        cycle: "Q4W",
         drugs: [
-            { generic: "OXALIPLATIN", dose: 85, doseType: "mg_per_m2" },
-            { generic: "IRINOTECAN", dose: 150, doseType: "mg_per_m2" },
-            { generic: "LEUCOVORIN CALCIUM", dose: 400, doseType: "mg_per_m2" },
-            { generic: "FLUOROURACIL (5-FU)", dose: 2400, doseType: "mg_per_m2", note: "2400 CI 46h (no bolus)" },
+            { generic: "PEGYLATED LIPOSOMAL DOXORUBICIN", dose: 40, doseType: "mg_per_m2", note: "40 mg/m² D1" },
         ]
     },
     {
@@ -1344,6 +1456,40 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Pembrolizumab + Nab-Paclitaxel (KEYNOTE-355)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg Q3W" },
+            { generic: "NAB-PACLITAXEL", dose: 100, doseType: "mg_per_m2", timesPerCycle: 3, note: "100 mg/m² D1, D8, D15" },
+        ]
+    },
+    {
+        name: "Nivolumab + Carboplatin + Paclitaxel (CheckMate 77T perioperative NSCLC)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 360, doseType: "flat_mg", note: "360 mg D1 with chemotherapy (then 480 mg Q4W adjuvant)" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2", note: "175 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Nivolumab + Ipilimumab (CheckMate 9DW, HCC)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 1, doseType: "mg_per_kg", note: "1 mg/kg D1 Q3W × 4 doses (then nivolumab maintenance)" },
+            { generic: "IPILIMUMAB", dose: 3, doseType: "mg_per_kg", note: "3 mg/kg D1 Q3W × 4 doses" },
+        ]
+    },
+    {
+        name: "Nivolumab + Ipilimumab (NICHE-2, dMMR colon cancer)",
+        cycle: "One course",
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 3, doseType: "mg_per_kg", timesPerCycle: 2, note: "3 mg/kg D1 and D15" },
+            { generic: "IPILIMUMAB", dose: 1, doseType: "mg_per_kg", note: "1 mg/kg D1 only" },
+        ]
+    },
+    {
         name: "Paclitaxel (weekly) + Carboplatin + Tislelizumab (Q3W)",
         cycle: "Q3W",
         needsCreatinine: true,
@@ -1361,6 +1507,15 @@ const regimenDatabase = [
             { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
             { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
             { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 Q3W" },
+        ]
+    },
+    {
+        name: "Paclitaxel + Carboplatin (Bladder cancer)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2", note: "175 mg/m² D1" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1" },
         ]
     },
     {
@@ -1394,6 +1549,33 @@ const regimenDatabase = [
             { generic: "CYCLOPHOSPHAMIDE", dose: 750, doseType: "mg_per_m2", note: "750 mg/m² D1" },
             { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 50, doseType: "mg_per_m2", note: "50 mg/m² D1" },
             { generic: "PREDNISOLONE", dose: 100, doseType: "flat_mg", note: "100 mg PO D1-5" },
+        ]
+    },
+    {
+        name: "Pembrolizumab + Lenvatinib",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1" },
+            { generic: "LENVATINIB", dose: 20, doseType: "oral_daily", daysPerCycle: 21, note: "20 mg PO OD continuous" },
+        ]
+    },
+    {
+        name: "Pembrolizumab + Carboplatin + Pemetrexed (perioperative NSCLC)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 with chemotherapy (then 200 mg Q3W or 400 mg Q6W adjuvant)" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2", note: "500 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Pembrolizumab + Cisplatin + Pemetrexed (KEYNOTE-671 perioperative NSCLC)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 with chemotherapy (then 200 mg Q3W or 400 mg Q6W adjuvant)" },
+            { generic: "CISPLATIN", dose: 75, doseType: "mg_per_m2", note: "75 mg/m² D1" },
+            { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2", note: "500 mg/m² D1" },
         ]
     },
     {
@@ -1456,6 +1638,44 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Tislelizumab + Carboplatin + Paclitaxel (RATIONALE-315 perioperative NSCLC)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 with chemotherapy (then 400 mg Q6W adjuvant)" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2", note: "175 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Tislelizumab + Carboplatin + Pemetrexed (RATIONALE-315 perioperative NSCLC)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 with chemotherapy (then 400 mg Q6W adjuvant)" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2", note: "500 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Tislelizumab + Cisplatin + Paclitaxel (RATIONALE-315 perioperative NSCLC)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 with chemotherapy (then 400 mg Q6W adjuvant)" },
+            { generic: "CISPLATIN", dose: 75, doseType: "mg_per_m2", note: "75 mg/m² D1" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2", note: "175 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Tislelizumab + Cisplatin + Pemetrexed (RATIONALE-315 perioperative NSCLC)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 with chemotherapy (then 400 mg Q6W adjuvant)" },
+            { generic: "CISPLATIN", dose: 75, doseType: "mg_per_m2", note: "75 mg/m² D1" },
+            { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2", note: "500 mg/m² D1" },
+        ]
+    },
+    {
         name: "TPF (Docetaxel + Cisplatin + 5-FU)",
         cycle: "Q3W",
         drugs: [
@@ -1475,6 +1695,59 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "BEP (Bleomycin + Etoposide + Cisplatin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "BLEOMYCIN", dose: 30, doseType: "flat_mg", timesPerCycle: 3, note: "30 units D1, D8, D15" },
+            { generic: "ETOPOSIDE", dose: 100, doseType: "mg_per_m2", timesPerCycle: 5, note: "100 mg/m²/day D1-5" },
+            { generic: "CISPLATIN", dose: 20, doseType: "mg_per_m2", timesPerCycle: 5, note: "20 mg/m²/day D1-5" },
+        ]
+    },
+    {
+        name: "EP (Etoposide + Cisplatin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "ETOPOSIDE", dose: 100, doseType: "mg_per_m2", timesPerCycle: 5, note: "100 mg/m²/day D1-5" },
+            { generic: "CISPLATIN", dose: 20, doseType: "mg_per_m2", timesPerCycle: 5, note: "20 mg/m²/day D1-5" },
+        ]
+    },
+    {
+        name: "VIP (Etoposide + Ifosfamide + Cisplatin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "ETOPOSIDE", dose: 75, doseType: "mg_per_m2", timesPerCycle: 5, note: "75 mg/m²/day D1-5" },
+            { generic: "IFOSFAMIDE", dose: 1200, doseType: "mg_per_m2", timesPerCycle: 5, note: "1200 mg/m²/day D1-5" },
+            { generic: "CISPLATIN", dose: 20, doseType: "mg_per_m2", timesPerCycle: 5, note: "20 mg/m²/day D1-5" },
+            { generic: "MESNA", dose: 1200, doseType: "mg_per_m2", timesPerCycle: 5, note: "Equal to Ifosfamide dose/day, D1-5" },
+        ]
+    },
+    {
+        name: "VeIP (Vinblastine + Ifosfamide + Cisplatin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "VINBLASTINE", dose: 0.11, doseType: "mg_per_kg", timesPerCycle: 2, note: "0.11 mg/kg/day D1-2" },
+            { generic: "IFOSFAMIDE", dose: 1200, doseType: "mg_per_m2", timesPerCycle: 5, note: "1200 mg/m²/day D1-5" },
+            { generic: "CISPLATIN", dose: 20, doseType: "mg_per_m2", timesPerCycle: 5, note: "20 mg/m²/day D1-5" },
+            { generic: "MESNA", dose: 1200, doseType: "mg_per_m2", timesPerCycle: 5, note: "Equal to Ifosfamide dose/day, D1-5" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Oxaliplatin",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "OXALIPLATIN", dose: 130, doseType: "mg_per_m2", note: "130 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Paclitaxel",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 3, note: "1000 mg/m² D1, D8, D15" },
+            { generic: "PACLITAXEL", dose: 110, doseType: "mg_per_m2", timesPerCycle: 3, note: "110 mg/m² D1, D8, D15" },
+        ]
+    },
+    {
         name: "TIP — Testicular cancer salvage (Paclitaxel + Ifosfamide + Cisplatin)",
         cycle: "Q3W",
         drugs: [
@@ -1483,6 +1756,234 @@ const regimenDatabase = [
             { generic: "CISPLATIN", dose: 25, doseType: "mg_per_m2", timesPerCycle: 4, note: "25 mg/m²/day D2-5" },
             { generic: "MESNA", dose: 1500, doseType: "mg_per_m2", timesPerCycle: 4, note: "Equal to Ifosfamide dose/day, D2-5" },
         ]
+    },
+];
+
+const regimenCancerTypes = [
+    {
+        value: 'lung',
+        label: 'Lung / NSCLC',
+        regimens: [
+            "ABCP (Atezolizumab + Bevacizumab + Carboplatin + Paclitaxel)",
+            "Carboplatin + Paclitaxel (3-weekly)",
+            "Carboplatin + Paclitaxel (weekly)",
+            "Carboplatin single agent (weekly, with concurrent RT)",
+            "Cisplatin single agent (weekly, with concurrent RT)",
+            "Durvalumab + Carboplatin + Pemetrexed (AEGEAN perioperative NSCLC)",
+            "Durvalumab + Cisplatin + Pemetrexed (AEGEAN perioperative NSCLC)",
+            "Gemcitabine + Carboplatin",
+            "Gemcitabine + Cisplatin",
+            "Nivolumab + Carboplatin + Paclitaxel (CheckMate 77T perioperative NSCLC)",
+            "Paclitaxel (weekly) + Carboplatin + Tislelizumab (Q3W)",
+            "Paclitaxel + Carboplatin + Tislelizumab (Q3W)",
+            "Paclitaxel single agent (3-weekly)",
+            "Paclitaxel single agent (weekly)",
+            "Pembrolizumab + Carboplatin + Pemetrexed (perioperative NSCLC)",
+            "Pembrolizumab + Cisplatin + Pemetrexed (KEYNOTE-671 perioperative NSCLC)",
+            "Pemetrexed + Carboplatin",
+            "Pemetrexed + Carboplatin + Tislelizumab",
+            "Tislelizumab + Carboplatin + Paclitaxel (RATIONALE-315 perioperative NSCLC)",
+            "Tislelizumab + Carboplatin + Pemetrexed (RATIONALE-315 perioperative NSCLC)",
+            "Tislelizumab + Cisplatin + Paclitaxel (RATIONALE-315 perioperative NSCLC)",
+            "Tislelizumab + Cisplatin + Pemetrexed (RATIONALE-315 perioperative NSCLC)",
+        ],
+    },
+    {
+        value: 'breast',
+        label: 'Breast',
+        regimens: [
+            "AC",
+            "AC + Pembrolizumab (KEYNOTE-522)",
+            "Carboplatin + Paclitaxel + Pembrolizumab (KEYNOTE-522)",
+            "EC (Epirubicin + Cyclophosphamide)",
+            "Gemcitabine + Carboplatin",
+            "Lipodox (Pegylated Liposomal Doxorubicin)",
+            "Paclitaxel + Trastuzumab (APT trial, weekly)",
+            "Paclitaxel single agent (3-weekly)",
+            "Paclitaxel single agent (weekly)",
+            "Pembrolizumab + Nab-Paclitaxel (KEYNOTE-355)",
+            "TC (Docetaxel + Cyclophosphamide)",
+            "TCH (Docetaxel + Carboplatin + Trastuzumab)",
+            "TCHP (Docetaxel + Carboplatin + Trastuzumab + Pertuzumab)",
+        ],
+    },
+    {
+        value: 'colorectal',
+        label: 'Colorectal',
+        regimens: [
+            "CAPOX",
+            "Capecitabine single agent (with concurrent RT)",
+            "FOLFIRI",
+            "FOLFIRI + Bevacizumab",
+            "FOLFIRI + Cetuximab",
+            "FOLFOXIRI",
+            "FOLFIRINOX + Cetuximab",
+            "Irinotecan single agent",
+            "Irinotecan + Bevacizumab",
+            "mFOLFIRINOX + Bevacizumab",
+            "mFOLFOX6",
+            "mFOLFOX6 + Bevacizumab",
+            "mFOLFOX6 + Cetuximab",
+            "Nivolumab + Ipilimumab (NICHE-2, dMMR colon cancer)",
+        ],
+    },
+    {
+        value: 'upper_gi',
+        label: 'Upper GI / Esophageal / Gastric',
+        regimens: [
+            "CAPOX",
+            "Carboplatin + Paclitaxel (CROSS protocol, weekly, with concurrent RT)",
+            "FLOT",
+            "FLOT + Durvalumab (MATTERHORN)",
+            "mFOLFOX6",
+            "TPF (Docetaxel + Cisplatin + 5-FU)",
+        ],
+    },
+    {
+        value: 'pancreatic_biliary',
+        label: 'Pancreatic / Biliary',
+        regimens: [
+            "FOLFIRINOX",
+            "Gemcitabine + Capecitabine (GemCap)",
+            "Gemcitabine + Cisplatin",
+            "Gemcitabine + Cisplatin + Pembrolizumab",
+            "Gemcitabine + Nab-Paclitaxel",
+            "Gemcitabine single agent",
+            "Nab-Paclitaxel single agent (weekly)",
+        ],
+    },
+    {
+        value: 'head_neck',
+        label: 'Head & Neck',
+        regimens: [
+            "5-FU + Carboplatin + Cetuximab (EXTREME regimen)",
+            "5-FU + Cisplatin + Cetuximab (EXTREME regimen)",
+            "Carboplatin + Paclitaxel (weekly)",
+            "Cisplatin single agent (weekly, with concurrent RT)",
+            "Gemcitabine + Cisplatin",
+            "TPF (Docetaxel + Cisplatin + 5-FU)",
+        ],
+    },
+    {
+        value: 'ovarian',
+        label: 'Ovarian',
+        regimens: [
+            "Carboplatin + Paclitaxel (3-weekly)",
+            "Carboplatin + Paclitaxel (weekly)",
+            "Carboplatin + Paclitaxel + Bevacizumab (Ovarian)",
+            "Gemcitabine + Carboplatin",
+            "Gemcitabine + Cisplatin",
+            "Gemcitabine single agent",
+            "Lipodox (Pegylated Liposomal Doxorubicin)",
+            "Nab-Paclitaxel + Carboplatin + Bevacizumab",
+            "Nab-Paclitaxel single agent (weekly)",
+            "Paclitaxel single agent (3-weekly)",
+            "Paclitaxel single agent (weekly)",
+        ],
+    },
+    {
+        value: 'endometrial',
+        label: 'Endometrial',
+        regimens: [
+            "AP (Adriamycin + Cisplatin)",
+            "Carboplatin + Paclitaxel (3-weekly)",
+            "Carboplatin + Paclitaxel + Dostarlimab",
+            "Carboplatin + Paclitaxel + Pembrolizumab",
+            "Gemcitabine + Carboplatin",
+            "Gemcitabine + Cisplatin",
+            "Lipodox (Pegylated Liposomal Doxorubicin)",
+            "Paclitaxel single agent (3-weekly)",
+            "Pembrolizumab + Lenvatinib",
+        ],
+    },
+    {
+        value: 'cervical',
+        label: 'Cervical',
+        regimens: [
+            "Carboplatin + Paclitaxel (3-weekly)",
+            "Carboplatin + Paclitaxel (weekly)",
+            "Cisplatin single agent (weekly, with concurrent RT)",
+            "Paclitaxel single agent (weekly)",
+        ],
+    },
+    {
+        value: 'hepatocellular',
+        label: 'Hepatocellular',
+        regimens: [
+            "Atezolizumab + Bevacizumab (HCC)",
+            "mFOLFOX6",
+            "Nivolumab + Ipilimumab (CheckMate 9DW, HCC)",
+        ],
+    },
+    {
+        value: 'renal',
+        label: 'Renal Cell Carcinoma',
+        regimens: [
+            "Cabozantinib + Nivolumab (CHECKMATE-9ER, mRCC)",
+            "Nivolumab + Ipilimumab (CheckMate 214, RCC)",
+        ],
+    },
+    {
+        value: 'lymphoma',
+        label: 'Lymphoma',
+        regimens: [
+            "ABVD",
+            "Pola-R-CHP (POLARIX)",
+            "R-CHOP",
+        ],
+    },
+    {
+        value: 'sarcoma',
+        label: 'Sarcoma',
+        regimens: [
+            "AP (Adriamycin + Cisplatin)",
+            "Docetaxel single agent",
+            "IA (Ifosfamide + Adriamycin)",
+            "Lipodox (Pegylated Liposomal Doxorubicin)",
+        ],
+    },
+    {
+        value: 'penile',
+        label: 'Penile',
+        regimens: [
+            "TIP — Penile cancer (Paclitaxel + Ifosfamide + Cisplatin)",
+            "TPF (Docetaxel + Cisplatin + 5-FU)",
+        ],
+    },
+    {
+        value: 'testicular',
+        label: 'Testicular',
+        regimens: [
+            "BEP (Bleomycin + Etoposide + Cisplatin)",
+            "EP (Etoposide + Cisplatin)",
+            "VIP (Etoposide + Ifosfamide + Cisplatin)",
+            "VeIP (Vinblastine + Ifosfamide + Cisplatin)",
+            "Gemcitabine + Oxaliplatin",
+            "Gemcitabine + Paclitaxel",
+            "TIP — Testicular cancer salvage (Paclitaxel + Ifosfamide + Cisplatin)",
+        ],
+    },
+    {
+        value: 'urothelial',
+        label: 'Bladder / Urothelial',
+        regimens: [
+            "Gemcitabine + Carboplatin (Bladder cancer)",
+            "Gemcitabine + Cisplatin (Bladder cancer)",
+            "ddMVAC (dose-dense MVAC, bladder cancer)",
+            "Gemcitabine + Cisplatin + Durvalumab (NIAGARA, bladder cancer)",
+            "Gemcitabine + Cisplatin + Nivolumab (CheckMate 901, urothelial cancer)",
+            "Paclitaxel + Carboplatin (Bladder cancer)",
+        ],
+    },
+    {
+        value: 'other',
+        label: 'Other / General',
+        regimens: [
+            "Docetaxel single agent",
+            "Gemcitabine single agent",
+            "Paclitaxel single agent (3-weekly)",
+            "Paclitaxel single agent (weekly)",
+        ],
     },
 ];
 
@@ -1630,9 +2131,13 @@ function optimizeVials(requiredDose, availableVials, tolerance = 0) {
 
 function onRegimenChange() {
     const idx = document.getElementById('regimenSelect').value;
-    if (idx === '') return;
-    const regimen = regimenDatabase[idx];
     const creatField = document.getElementById('creatinineGroup');
+    if (idx === '') {
+        creatField.style.background = '';
+        creatField.style.padding = '';
+        return;
+    }
+    const regimen = regimenDatabase[idx];
     if (regimen.needsCreatinine) {
         creatField.style.background = '#fff8e1';
         creatField.style.borderRadius = '6px';
@@ -1714,22 +2219,37 @@ function calculateRegimen() {
 
         // Find available brands for this generic
         const brands = currentDrugDatabase.filter(d => d.generic === drug.generic);
+        if (brands.length === 0) {
+            return {
+                generic: drug.generic,
+                dosePerAdmin,
+                doseLabel,
+                note: drug.note || '',
+                times,
+                vials: [],
+                vialDesc: '',
+                totalMgPerAdmin: 0,
+                totalCost: 0,
+                missingPrice: true,
+            };
+        }
 
         // 10% round-down tolerance for injectable chemo only (not tablets/capsules/immunotherapy/targeted/supportive)
-        const isInjChemo = brands.length > 0 && brands[0].type === 'chemotherapy'
+        const isInjChemo = brands[0].type === 'chemotherapy'
             && !['tablet', 'capsule'].includes(brands[0].form || 'vial');
         const tolerance = isInjChemo ? 0.10 : 0;
 
-        // Optimize vials per single administration.
-        // oral_daily takes exactly one tablet/day at the prescribed strength — don't mix strengths.
+        // Optimize vials/tablets/capsules per single administration.
+        // Oral daily drugs use exact strength when available; otherwise combine available units to cover the daily dose.
         let optimalPerAdmin;
         if (drug.doseType === 'oral_daily') {
             const days = drug.daysPerCycle || times;
             const matching = brands.filter(b => b.contentMg === drug.dose);
             const pool = matching.length > 0 ? matching : brands;
-            // Highest-MRP brand at the matching strength (per-tab cost)
-            const chosen = pool.reduce((a, b) => (a.mrp >= b.mrp ? a : b));
-            optimalPerAdmin = [{ ...chosen, qty: days }];
+            const dailyUnits = matching.length > 0
+                ? [pool.reduce((a, b) => (a.mrp >= b.mrp ? a : b))]
+                : optimizeVials(drug.dose, pool, 0);
+            optimalPerAdmin = dailyUnits.map(v => ({ ...v, qty: (v.qty || 1) * days }));
         } else {
             optimalPerAdmin = optimizeVials(dosePerAdmin, brands, tolerance);
         }
@@ -1789,7 +2309,10 @@ function calculateRegimen() {
                 <tbody>`;
 
     calculations.forEach((calc, i) => {
-        const vialHtml = calc.vials.map(v => {
+        const vialHtml = calc.missingPrice ? `
+            <span style="display:inline-block; background:#fff3cd; color:#856404; padding:2px 8px; border-radius:4px; margin:2px; font-size:0.82rem;">
+                No branch price available
+            </span>` : calc.vials.map(v => {
             const unit = getUnitLabel(v, v.qty);
             let packInfo = '';
             if (v.unitsPerPack) {
@@ -1805,7 +2328,9 @@ function calculateRegimen() {
         html += `
             <tr>
                 <td><strong>${calc.generic}</strong>${calc.note ? `<br><span style="font-size:0.75rem; color:#888;">${calc.note}</span>` : ''}</td>
-                <td style="font-size:0.85rem;">${calc.doseLabel}<br>${calc.totalMgPerAdmin < calc.dosePerAdmin - 0.01
+                <td style="font-size:0.85rem;">${calc.doseLabel}<br>${calc.missingPrice
+                    ? `<span style="font-size:0.75rem; color:#856404;">Add this drug to the branch database to calculate cost</span>`
+                    : calc.totalMgPerAdmin < calc.dosePerAdmin - 0.01
                     ? `<span style="font-size:0.75rem; color:#e67e22;">&#9888; Giving: ${calc.totalMgPerAdmin} mg <b>(rounded from ${calc.dosePerAdmin.toFixed(1)} mg)</b></span>`
                     : `<span style="font-size:0.75rem; color:#27ae60;">Covering: ${calc.totalMgPerAdmin} mg</span>`
                 }</td>
@@ -1860,6 +2385,7 @@ function addCalcDrugsToEstimate() {
 // ==================== INITIALIZATION ====================
 function init() {
     populateGenericDropdown();
+    populateCancerTypeDropdown();
     populateRegimenDropdown();
     updateSummary();
 
@@ -1870,29 +2396,94 @@ function init() {
         // Split typed text into words and check if ALL words appear in regimen name
         const words = typed.split(/[\s+,\-]+/).filter(w => w.length >= 2);
         if (words.length === 0) { document.getElementById('regimenSelect').value = ''; return; }
-        const match = regimenDatabase.findIndex(r => {
+        const activeIndices = getActiveRegimenIndices();
+        const searchIndices = activeIndices.length > 0 ? activeIndices : regimenDatabase.map((_, i) => i);
+        const match = searchIndices.find(i => {
+            const r = regimenDatabase[i];
             const name = r.name.toLowerCase();
             return words.every(w => name.includes(w));
         });
-        if (match !== -1) {
-            document.getElementById('regimenSelect').value = match;
+        if (match !== undefined) {
+            const cancerTypeSelect = document.getElementById('cancerTypeSelect');
+            if (!cancerTypeSelect.value || !getActiveRegimenIndices().includes(match)) {
+                cancerTypeSelect.value = findCancerTypeForRegimenIndex(match) || '';
+                populateRegimenDropdown(match);
+            }
+            document.getElementById('regimenSelect').value = String(match);
             onRegimenChange();
         } else {
             document.getElementById('regimenSelect').value = '';
+            onRegimenChange();
         }
     });
 }
 
-function populateRegimenDropdown() {
-    const select = document.getElementById('regimenSelect');
-    regimenDatabase.forEach((r, i) => {
+function populateCancerTypeDropdown() {
+    const select = document.getElementById('cancerTypeSelect');
+    if (!select) return;
+    select.innerHTML = '<option value="">-- Select Cancer Type --</option>';
+    regimenCancerTypes.forEach(c => {
         const opt = document.createElement('option');
-        opt.value = i;
-        const nameLC = r.name.toLowerCase();
-        const showCycle = !nameLC.includes('weekly') && !nameLC.includes('q2w') && !nameLC.includes('q3w');
-        opt.textContent = showCycle ? `${r.name} (${r.cycle})` : r.name;
+        opt.value = c.value;
+        opt.textContent = c.label;
         select.appendChild(opt);
     });
+}
+
+function getRegimenIndexByName(name) {
+    return regimenDatabase.findIndex(r => r.name === name);
+}
+
+function getRegimenDisplayText(regimen) {
+    const nameLC = regimen.name.toLowerCase();
+    const showCycle = !nameLC.includes('weekly') && !nameLC.includes('q2w') && !nameLC.includes('q3w');
+    return showCycle ? `${regimen.name} (${regimen.cycle})` : regimen.name;
+}
+
+function getRegimenIndicesForCancerType(cancerTypeValue) {
+    const cancerType = regimenCancerTypes.find(c => c.value === cancerTypeValue);
+    if (!cancerType) return [];
+    return cancerType.regimens
+        .map(getRegimenIndexByName)
+        .filter(i => i !== -1);
+}
+
+function getActiveRegimenIndices() {
+    const cancerTypeValue = document.getElementById('cancerTypeSelect')?.value || '';
+    return getRegimenIndicesForCancerType(cancerTypeValue);
+}
+
+function findCancerTypeForRegimenIndex(regimenIndex) {
+    return regimenCancerTypes.find(c => getRegimenIndicesForCancerType(c.value).includes(regimenIndex))?.value || '';
+}
+
+function populateRegimenDropdown(preselectedIndex = null) {
+    const select = document.getElementById('regimenSelect');
+    const previous = preselectedIndex !== null ? String(preselectedIndex) : select.value;
+    const indices = getActiveRegimenIndices();
+
+    select.innerHTML = '<option value="">-- Select Regimen --</option>';
+    if (indices.length === 0) {
+        select.innerHTML = '<option value="">-- Select Cancer Type First --</option>';
+        select.disabled = true;
+        onRegimenChange();
+        return;
+    }
+
+    select.disabled = false;
+    indices.forEach(i => {
+        const r = regimenDatabase[i];
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = getRegimenDisplayText(r);
+        select.appendChild(opt);
+    });
+    if (indices.includes(Number(previous))) {
+        select.value = previous;
+    } else {
+        select.value = '';
+        onRegimenChange();
+    }
 }
 
 function populateGenericDropdown() {
@@ -2202,7 +2793,9 @@ function resetForm() {
     document.getElementById('genericSelect').value = '';
     document.getElementById('brandSelect').innerHTML = '<option value="">-- Select Brand --</option>';
     document.getElementById('drugQty').value = 1;
+    document.getElementById('cancerTypeSelect').value = '';
     document.getElementById('regimenSelect').value = '';
+    populateRegimenDropdown();
     document.getElementById('bsaValue').value = '';
     document.getElementById('doseResults').innerHTML = '';
     document.getElementById('creatinineGroup').style.background = '';
