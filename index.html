@@ -969,7 +969,7 @@ function resetFormSilent() {
 }
 
 // ==================== REGIMEN DATABASE ====================
-// Dose types: mg_per_m2, auc (Calvert), mg_per_kg, flat_mg, oral_bd_14d (capecitabine), oral_daily (continuous oral, uses daysPerCycle)
+// Dose types: mg_per_m2, auc (Calvert), mg_per_kg, flat_mg, oral_bd_14d (capecitabine), oral_daily / oral_bid_daily (continuous oral, uses daysPerCycle)
 // timesPerCycle: how many times per cycle (default 1, e.g., weekly paclitaxel in Q3W = 3)
 const regimenDatabase = [
     {
@@ -1030,6 +1030,13 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Abemaciclib (Adjuvant setting)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "ABEMACICLIB", dose: 150, doseType: "oral_bid_daily", daysPerCycle: 28, note: "150 mg PO BD continuous; with endocrine therapy" },
+        ]
+    },
+    {
         name: "AP (Adriamycin + Cisplatin)",
         cycle: "Q3W",
         drugs: [
@@ -1074,6 +1081,13 @@ const regimenDatabase = [
         cycle: "Daily",
         drugs: [
             { generic: "CAPECITABINE", dose: 825, doseType: "oral_bd_14d", note: "825 mg/m² BD on RT days" },
+        ]
+    },
+    {
+        name: "Capecitabine single agent",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "CAPECITABINE", dose: 1250, doseType: "oral_bd_14d", note: "1250 mg/m² BD D1-14" },
         ]
     },
     {
@@ -1449,10 +1463,36 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Nab-Paclitaxel + Carboplatin (3-weekly)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "NAB-PACLITAXEL", dose: 260, doseType: "mg_per_m2", note: "260 mg/m² D1" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1" },
+        ]
+    },
+    {
+        name: "Nab-Paclitaxel + Carboplatin (weekly)",
+        cycle: "Weekly",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "NAB-PACLITAXEL", dose: 100, doseType: "mg_per_m2", note: "100 mg/m² weekly" },
+            { generic: "CARBOPLATIN", dose: 2, doseType: "auc", note: "AUC 2 weekly" },
+        ]
+    },
+    {
         name: "Nab-Paclitaxel single agent (weekly)",
         cycle: "Weekly",
         drugs: [
             { generic: "NAB-PACLITAXEL", dose: 100, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "Pembrolizumab + Paclitaxel (KEYNOTE-355)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg Q3W" },
+            { generic: "PACLITAXEL", dose: 90, doseType: "mg_per_m2", timesPerCycle: 3, note: "90 mg/m² D1, D8, D15" },
         ]
     },
     {
@@ -1461,6 +1501,16 @@ const regimenDatabase = [
         drugs: [
             { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg Q3W" },
             { generic: "NAB-PACLITAXEL", dose: 100, doseType: "mg_per_m2", timesPerCycle: 3, note: "100 mg/m² D1, D8, D15" },
+        ]
+    },
+    {
+        name: "Pembrolizumab + Gemcitabine + Carboplatin (KEYNOTE-355)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 Q3W" },
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CARBOPLATIN", dose: 2, doseType: "auc", timesPerCycle: 2, note: "AUC 2 D1, D8" },
         ]
     },
     {
@@ -1609,11 +1659,27 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Ribociclib (Adjuvant setting)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "RIBOCICLIB", dose: 400, doseType: "oral_daily", daysPerCycle: 21, note: "400 mg PO OD D1-21; with aromatase inhibitor" },
+        ]
+    },
+    {
         name: "TC (Docetaxel + Cyclophosphamide)",
         cycle: "Q3W",
         drugs: [
             { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2" },
             { generic: "CYCLOPHOSPHAMIDE", dose: 600, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "TAC (Docetaxel + Doxorubicin + Cyclophosphamide)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 50, doseType: "mg_per_m2" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 500, doseType: "mg_per_m2" },
         ]
     },
     {
@@ -1635,6 +1701,13 @@ const regimenDatabase = [
             { generic: "CARBOPLATIN", dose: 6, doseType: "auc", note: "AUC 6" },
             { generic: "TRASTUZUMAB", dose: 6, doseType: "mg_per_kg", note: "6 mg/kg (loading: 8 mg/kg C1)" },
             { generic: "PERTUZUMAB", dose: 420, doseType: "flat_mg", note: "420 mg (loading: 840 mg C1)" },
+        ]
+    },
+    {
+        name: "T-DM1 (Trastuzumab emtansine)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "TRASTUZUMAB EMTANSINE (T-DM1)", dose: 3.6, doseType: "mg_per_kg", note: "3.6 mg/kg D1 Q3W" },
         ]
     },
     {
@@ -1761,6 +1834,115 @@ const regimenDatabase = [
 
 const regimenCancerTypes = [
     {
+        value: 'urothelial',
+        label: 'Bladder / Urothelial',
+        regimens: [
+            "Gemcitabine + Carboplatin (Bladder cancer)",
+            "Gemcitabine + Cisplatin (Bladder cancer)",
+            "ddMVAC (dose-dense MVAC, bladder cancer)",
+            "Gemcitabine + Cisplatin + Durvalumab (NIAGARA, bladder cancer)",
+            "Gemcitabine + Cisplatin + Nivolumab (CheckMate 901, urothelial cancer)",
+            "Paclitaxel + Carboplatin (Bladder cancer)",
+        ],
+    },
+    {
+        value: 'breast',
+        label: 'Breast',
+        regimens: [
+            "AC",
+            "AC + Pembrolizumab (KEYNOTE-522)",
+            "Abemaciclib (Adjuvant setting)",
+            "Capecitabine single agent",
+            "Carboplatin + Paclitaxel (3-weekly)",
+            "Carboplatin + Paclitaxel (weekly)",
+            "Carboplatin + Paclitaxel + Pembrolizumab (KEYNOTE-522)",
+            "Docetaxel single agent",
+            "EC (Epirubicin + Cyclophosphamide)",
+            "Gemcitabine + Carboplatin",
+            "Lipodox (Pegylated Liposomal Doxorubicin)",
+            "Nab-Paclitaxel + Carboplatin (3-weekly)",
+            "Nab-Paclitaxel + Carboplatin (weekly)",
+            "Paclitaxel + Trastuzumab (APT trial, weekly)",
+            "Paclitaxel single agent (3-weekly)",
+            "Paclitaxel single agent (weekly)",
+            "Pembrolizumab + Gemcitabine + Carboplatin (KEYNOTE-355)",
+            "Pembrolizumab + Nab-Paclitaxel (KEYNOTE-355)",
+            "Pembrolizumab + Paclitaxel (KEYNOTE-355)",
+            "Ribociclib (Adjuvant setting)",
+            "TAC (Docetaxel + Doxorubicin + Cyclophosphamide)",
+            "TC (Docetaxel + Cyclophosphamide)",
+            "TCH (Docetaxel + Carboplatin + Trastuzumab)",
+            "TCHP (Docetaxel + Carboplatin + Trastuzumab + Pertuzumab)",
+            "T-DM1 (Trastuzumab emtansine)",
+        ],
+    },
+    {
+        value: 'cervical',
+        label: 'Cervical',
+        regimens: [
+            "Carboplatin + Paclitaxel (3-weekly)",
+            "Carboplatin + Paclitaxel (weekly)",
+            "Cisplatin single agent (weekly, with concurrent RT)",
+            "Paclitaxel single agent (weekly)",
+        ],
+    },
+    {
+        value: 'colorectal',
+        label: 'Colorectal',
+        regimens: [
+            "CAPOX",
+            "Capecitabine single agent (with concurrent RT)",
+            "FOLFIRI",
+            "FOLFIRI + Bevacizumab",
+            "FOLFIRI + Cetuximab",
+            "FOLFOXIRI",
+            "FOLFIRINOX + Cetuximab",
+            "Irinotecan single agent",
+            "Irinotecan + Bevacizumab",
+            "mFOLFIRINOX + Bevacizumab",
+            "mFOLFOX6",
+            "mFOLFOX6 + Bevacizumab",
+            "mFOLFOX6 + Cetuximab",
+            "Nivolumab + Ipilimumab (NICHE-2, dMMR colon cancer)",
+        ],
+    },
+    {
+        value: 'endometrial',
+        label: 'Endometrial',
+        regimens: [
+            "AP (Adriamycin + Cisplatin)",
+            "Carboplatin + Paclitaxel (3-weekly)",
+            "Carboplatin + Paclitaxel + Dostarlimab",
+            "Carboplatin + Paclitaxel + Pembrolizumab",
+            "Gemcitabine + Carboplatin",
+            "Gemcitabine + Cisplatin",
+            "Lipodox (Pegylated Liposomal Doxorubicin)",
+            "Paclitaxel single agent (3-weekly)",
+            "Pembrolizumab + Lenvatinib",
+        ],
+    },
+    {
+        value: 'head_neck',
+        label: 'Head & Neck',
+        regimens: [
+            "5-FU + Carboplatin + Cetuximab (EXTREME regimen)",
+            "5-FU + Cisplatin + Cetuximab (EXTREME regimen)",
+            "Carboplatin + Paclitaxel (weekly)",
+            "Cisplatin single agent (weekly, with concurrent RT)",
+            "Gemcitabine + Cisplatin",
+            "TPF (Docetaxel + Cisplatin + 5-FU)",
+        ],
+    },
+    {
+        value: 'hepatocellular',
+        label: 'Hepatocellular',
+        regimens: [
+            "Atezolizumab + Bevacizumab (HCC)",
+            "mFOLFOX6",
+            "Nivolumab + Ipilimumab (CheckMate 9DW, HCC)",
+        ],
+    },
+    {
         value: 'lung',
         label: 'Lung / NSCLC',
         regimens: [
@@ -1789,79 +1971,22 @@ const regimenCancerTypes = [
         ],
     },
     {
-        value: 'breast',
-        label: 'Breast',
+        value: 'lymphoma',
+        label: 'Lymphoma',
         regimens: [
-            "AC",
-            "AC + Pembrolizumab (KEYNOTE-522)",
-            "Carboplatin + Paclitaxel + Pembrolizumab (KEYNOTE-522)",
-            "EC (Epirubicin + Cyclophosphamide)",
-            "Gemcitabine + Carboplatin",
-            "Lipodox (Pegylated Liposomal Doxorubicin)",
-            "Paclitaxel + Trastuzumab (APT trial, weekly)",
+            "ABVD",
+            "Pola-R-CHP (POLARIX)",
+            "R-CHOP",
+        ],
+    },
+    {
+        value: 'other',
+        label: 'Other / General',
+        regimens: [
+            "Docetaxel single agent",
+            "Gemcitabine single agent",
             "Paclitaxel single agent (3-weekly)",
             "Paclitaxel single agent (weekly)",
-            "Pembrolizumab + Nab-Paclitaxel (KEYNOTE-355)",
-            "TC (Docetaxel + Cyclophosphamide)",
-            "TCH (Docetaxel + Carboplatin + Trastuzumab)",
-            "TCHP (Docetaxel + Carboplatin + Trastuzumab + Pertuzumab)",
-        ],
-    },
-    {
-        value: 'colorectal',
-        label: 'Colorectal',
-        regimens: [
-            "CAPOX",
-            "Capecitabine single agent (with concurrent RT)",
-            "FOLFIRI",
-            "FOLFIRI + Bevacizumab",
-            "FOLFIRI + Cetuximab",
-            "FOLFOXIRI",
-            "FOLFIRINOX + Cetuximab",
-            "Irinotecan single agent",
-            "Irinotecan + Bevacizumab",
-            "mFOLFIRINOX + Bevacizumab",
-            "mFOLFOX6",
-            "mFOLFOX6 + Bevacizumab",
-            "mFOLFOX6 + Cetuximab",
-            "Nivolumab + Ipilimumab (NICHE-2, dMMR colon cancer)",
-        ],
-    },
-    {
-        value: 'upper_gi',
-        label: 'Upper GI / Esophageal / Gastric',
-        regimens: [
-            "CAPOX",
-            "Carboplatin + Paclitaxel (CROSS protocol, weekly, with concurrent RT)",
-            "FLOT",
-            "FLOT + Durvalumab (MATTERHORN)",
-            "mFOLFOX6",
-            "TPF (Docetaxel + Cisplatin + 5-FU)",
-        ],
-    },
-    {
-        value: 'pancreatic_biliary',
-        label: 'Pancreatic / Biliary',
-        regimens: [
-            "FOLFIRINOX",
-            "Gemcitabine + Capecitabine (GemCap)",
-            "Gemcitabine + Cisplatin",
-            "Gemcitabine + Cisplatin + Pembrolizumab",
-            "Gemcitabine + Nab-Paclitaxel",
-            "Gemcitabine single agent",
-            "Nab-Paclitaxel single agent (weekly)",
-        ],
-    },
-    {
-        value: 'head_neck',
-        label: 'Head & Neck',
-        regimens: [
-            "5-FU + Carboplatin + Cetuximab (EXTREME regimen)",
-            "5-FU + Cisplatin + Cetuximab (EXTREME regimen)",
-            "Carboplatin + Paclitaxel (weekly)",
-            "Cisplatin single agent (weekly, with concurrent RT)",
-            "Gemcitabine + Cisplatin",
-            "TPF (Docetaxel + Cisplatin + 5-FU)",
         ],
     },
     {
@@ -1882,37 +2007,24 @@ const regimenCancerTypes = [
         ],
     },
     {
-        value: 'endometrial',
-        label: 'Endometrial',
+        value: 'pancreatic_biliary',
+        label: 'Pancreatic / Biliary',
         regimens: [
-            "AP (Adriamycin + Cisplatin)",
-            "Carboplatin + Paclitaxel (3-weekly)",
-            "Carboplatin + Paclitaxel + Dostarlimab",
-            "Carboplatin + Paclitaxel + Pembrolizumab",
-            "Gemcitabine + Carboplatin",
+            "FOLFIRINOX",
+            "Gemcitabine + Capecitabine (GemCap)",
             "Gemcitabine + Cisplatin",
-            "Lipodox (Pegylated Liposomal Doxorubicin)",
-            "Paclitaxel single agent (3-weekly)",
-            "Pembrolizumab + Lenvatinib",
+            "Gemcitabine + Cisplatin + Pembrolizumab",
+            "Gemcitabine + Nab-Paclitaxel",
+            "Gemcitabine single agent",
+            "Nab-Paclitaxel single agent (weekly)",
         ],
     },
     {
-        value: 'cervical',
-        label: 'Cervical',
+        value: 'penile',
+        label: 'Penile',
         regimens: [
-            "Carboplatin + Paclitaxel (3-weekly)",
-            "Carboplatin + Paclitaxel (weekly)",
-            "Cisplatin single agent (weekly, with concurrent RT)",
-            "Paclitaxel single agent (weekly)",
-        ],
-    },
-    {
-        value: 'hepatocellular',
-        label: 'Hepatocellular',
-        regimens: [
-            "Atezolizumab + Bevacizumab (HCC)",
-            "mFOLFOX6",
-            "Nivolumab + Ipilimumab (CheckMate 9DW, HCC)",
+            "TIP — Penile cancer (Paclitaxel + Ifosfamide + Cisplatin)",
+            "TPF (Docetaxel + Cisplatin + 5-FU)",
         ],
     },
     {
@@ -1924,15 +2036,6 @@ const regimenCancerTypes = [
         ],
     },
     {
-        value: 'lymphoma',
-        label: 'Lymphoma',
-        regimens: [
-            "ABVD",
-            "Pola-R-CHP (POLARIX)",
-            "R-CHOP",
-        ],
-    },
-    {
         value: 'sarcoma',
         label: 'Sarcoma',
         regimens: [
@@ -1940,14 +2043,6 @@ const regimenCancerTypes = [
             "Docetaxel single agent",
             "IA (Ifosfamide + Adriamycin)",
             "Lipodox (Pegylated Liposomal Doxorubicin)",
-        ],
-    },
-    {
-        value: 'penile',
-        label: 'Penile',
-        regimens: [
-            "TIP — Penile cancer (Paclitaxel + Ifosfamide + Cisplatin)",
-            "TPF (Docetaxel + Cisplatin + 5-FU)",
         ],
     },
     {
@@ -1964,25 +2059,15 @@ const regimenCancerTypes = [
         ],
     },
     {
-        value: 'urothelial',
-        label: 'Bladder / Urothelial',
+        value: 'upper_gi',
+        label: 'Upper GI / Esophageal / Gastric',
         regimens: [
-            "Gemcitabine + Carboplatin (Bladder cancer)",
-            "Gemcitabine + Cisplatin (Bladder cancer)",
-            "ddMVAC (dose-dense MVAC, bladder cancer)",
-            "Gemcitabine + Cisplatin + Durvalumab (NIAGARA, bladder cancer)",
-            "Gemcitabine + Cisplatin + Nivolumab (CheckMate 901, urothelial cancer)",
-            "Paclitaxel + Carboplatin (Bladder cancer)",
-        ],
-    },
-    {
-        value: 'other',
-        label: 'Other / General',
-        regimens: [
-            "Docetaxel single agent",
-            "Gemcitabine single agent",
-            "Paclitaxel single agent (3-weekly)",
-            "Paclitaxel single agent (weekly)",
+            "CAPOX",
+            "Carboplatin + Paclitaxel (CROSS protocol, weekly, with concurrent RT)",
+            "FLOT",
+            "FLOT + Durvalumab (MATTERHORN)",
+            "mFOLFOX6",
+            "TPF (Docetaxel + Cisplatin + 5-FU)",
         ],
     },
 ];
@@ -2209,6 +2294,12 @@ function calculateRegimen() {
                 doseLabel = `${drug.dose} mg OD × ${days}d = ${dosePerAdmin} mg total`;
                 break;
             }
+            case 'oral_bid_daily': {
+                const days = drug.daysPerCycle || times;
+                dosePerAdmin = drug.dose * 2 * days;
+                doseLabel = `${drug.dose} mg BD × ${days}d = ${dosePerAdmin} mg total`;
+                break;
+            }
         }
 
         // Universal vincristine cap: 2 mg per administration
@@ -2242,13 +2333,14 @@ function calculateRegimen() {
         // Optimize vials/tablets/capsules per single administration.
         // Oral daily drugs use exact strength when available; otherwise combine available units to cover the daily dose.
         let optimalPerAdmin;
-        if (drug.doseType === 'oral_daily') {
+        if (drug.doseType === 'oral_daily' || drug.doseType === 'oral_bid_daily') {
             const days = drug.daysPerCycle || times;
-            const matching = brands.filter(b => b.contentMg === drug.dose);
+            const dailyDose = drug.doseType === 'oral_bid_daily' ? drug.dose * 2 : drug.dose;
+            const matching = brands.filter(b => b.contentMg === dailyDose);
             const pool = matching.length > 0 ? matching : brands;
             const dailyUnits = matching.length > 0
                 ? [pool.reduce((a, b) => (a.mrp >= b.mrp ? a : b))]
-                : optimizeVials(drug.dose, pool, 0);
+                : optimizeVials(dailyDose, pool, 0);
             optimalPerAdmin = dailyUnits.map(v => ({ ...v, qty: (v.qty || 1) * days }));
         } else {
             optimalPerAdmin = optimizeVials(dosePerAdmin, brands, tolerance);
