@@ -1051,6 +1051,37 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Abiraterone acetate",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "ABIRATERONE ACETATE", dose: 1000, doseType: "oral_daily", daysPerCycle: 28, note: "1000 mg PO OD continuous; prednisone/ADT per protocol" },
+        ]
+    },
+    {
+        name: "Abiraterone acetate + Degarelix",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "ABIRATERONE ACETATE", dose: 1000, doseType: "oral_daily", daysPerCycle: 28, note: "1000 mg PO OD continuous; prednisone per protocol" },
+            { generic: "DEGARELIX", dose: 80, doseType: "flat_mg", note: "80 mg SC every 28 days; maintenance dose" },
+        ]
+    },
+    {
+        name: "Abiraterone acetate + Goserelin",
+        cycle: "Q12W",
+        drugs: [
+            { generic: "ABIRATERONE ACETATE", dose: 1000, doseType: "oral_daily", daysPerCycle: 84, note: "1000 mg PO OD continuous; prednisone per protocol" },
+            { generic: "GOSERELIN", dose: 10.8, doseType: "flat_mg", note: "10.8 mg SC implant every 12 weeks" },
+        ]
+    },
+    {
+        name: "Abiraterone acetate + Leuprolide",
+        cycle: "Q12W",
+        drugs: [
+            { generic: "ABIRATERONE ACETATE", dose: 1000, doseType: "oral_daily", daysPerCycle: 84, note: "1000 mg PO OD continuous; prednisone per protocol" },
+            { generic: "LEUPROLIDE", dose: 22.5, doseType: "flat_mg", note: "22.5 mg depot IM every 12 weeks" },
+        ]
+    },
+    {
         name: "AP (Adriamycin + Cisplatin)",
         cycle: "Q3W",
         drugs: [
@@ -1059,11 +1090,42 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Apalutamide + Degarelix",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "APALUTAMIDE", dose: 240, doseType: "oral_daily", daysPerCycle: 28, note: "240 mg PO OD continuous" },
+            { generic: "DEGARELIX", dose: 80, doseType: "flat_mg", note: "80 mg SC every 28 days; maintenance dose" },
+        ]
+    },
+    {
+        name: "Apalutamide + Goserelin",
+        cycle: "Q12W",
+        drugs: [
+            { generic: "APALUTAMIDE", dose: 240, doseType: "oral_daily", daysPerCycle: 84, note: "240 mg PO OD continuous" },
+            { generic: "GOSERELIN", dose: 10.8, doseType: "flat_mg", note: "10.8 mg SC implant every 12 weeks" },
+        ]
+    },
+    {
+        name: "Apalutamide + Leuprolide",
+        cycle: "Q12W",
+        drugs: [
+            { generic: "APALUTAMIDE", dose: 240, doseType: "oral_daily", daysPerCycle: 84, note: "240 mg PO OD continuous" },
+            { generic: "LEUPROLIDE", dose: 22.5, doseType: "flat_mg", note: "22.5 mg depot IM every 12 weeks" },
+        ]
+    },
+    {
         name: "Atezolizumab + Bevacizumab (HCC)",
         cycle: "Q3W",
         drugs: [
             { generic: "ATEZOLIZUMAB", dose: 1200, doseType: "flat_mg", note: "1200 mg D1" },
             { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg", note: "15 mg/kg D1" },
+        ]
+    },
+    {
+        name: "Cabazitaxel (Prostate cancer)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "CABAZITAXEL", dose: 20, doseType: "mg_per_m2", note: "20 mg/m² D1; prednisone per protocol" },
         ]
     },
     {
@@ -1234,6 +1296,13 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Docetaxel (Prostate cancer)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2", note: "75 mg/m² D1; prednisone/ADT per protocol" },
+        ]
+    },
+    {
         name: "Docetaxel single agent",
         cycle: "Q3W",
         drugs: [
@@ -1265,6 +1334,37 @@ const regimenDatabase = [
         drugs: [
             { generic: "EPIRUBICIN", dose: 90, doseType: "mg_per_m2" },
             { generic: "CYCLOPHOSPHAMIDE", dose: 600, doseType: "mg_per_m2" },
+        ]
+    },
+    {
+        name: "Enzalutamide",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "ENZALUTAMIDE", dose: 160, doseType: "oral_daily", daysPerCycle: 28, note: "160 mg PO OD continuous; ADT per protocol" },
+        ]
+    },
+    {
+        name: "Enzalutamide + Degarelix",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "ENZALUTAMIDE", dose: 160, doseType: "oral_daily", daysPerCycle: 28, note: "160 mg PO OD continuous" },
+            { generic: "DEGARELIX", dose: 80, doseType: "flat_mg", note: "80 mg SC every 28 days; maintenance dose" },
+        ]
+    },
+    {
+        name: "Enzalutamide + Goserelin",
+        cycle: "Q12W",
+        drugs: [
+            { generic: "ENZALUTAMIDE", dose: 160, doseType: "oral_daily", daysPerCycle: 84, note: "160 mg PO OD continuous" },
+            { generic: "GOSERELIN", dose: 10.8, doseType: "flat_mg", note: "10.8 mg SC implant every 12 weeks" },
+        ]
+    },
+    {
+        name: "Enzalutamide + Leuprolide",
+        cycle: "Q12W",
+        drugs: [
+            { generic: "ENZALUTAMIDE", dose: 160, doseType: "oral_daily", daysPerCycle: 84, note: "160 mg PO OD continuous" },
+            { generic: "LEUPROLIDE", dose: 22.5, doseType: "flat_mg", note: "22.5 mg depot IM every 12 weeks" },
         ]
     },
     {
@@ -2096,6 +2196,25 @@ const regimenCancerTypes = [
         regimens: [
             "TIP — Penile cancer (Paclitaxel + Ifosfamide + Cisplatin)",
             "TPF (Docetaxel + Cisplatin + 5-FU)",
+        ],
+    },
+    {
+        value: 'prostate',
+        label: 'Prostate',
+        regimens: [
+            "Abiraterone acetate",
+            "Docetaxel (Prostate cancer)",
+            "Enzalutamide",
+            "Abiraterone acetate + Degarelix",
+            "Abiraterone acetate + Leuprolide",
+            "Abiraterone acetate + Goserelin",
+            "Enzalutamide + Degarelix",
+            "Enzalutamide + Leuprolide",
+            "Enzalutamide + Goserelin",
+            "Apalutamide + Degarelix",
+            "Apalutamide + Leuprolide",
+            "Apalutamide + Goserelin",
+            "Cabazitaxel (Prostate cancer)",
         ],
     },
     {
