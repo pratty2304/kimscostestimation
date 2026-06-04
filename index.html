@@ -45,6 +45,24 @@
         /* Drug selection area */
         .drug-selector { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 10px; align-items: end; margin-bottom: 12px; }
         .drug-selector .form-group { margin-bottom: 0; }
+        .custom-drug-section {
+            margin: 4px 0 16px; padding: 14px; border: 1.5px dashed #b6c8da;
+            border-radius: 8px; background: #f8fbff;
+        }
+        .custom-drug-title {
+            font-size: 0.82rem; font-weight: 700; color: #1a5276; margin-bottom: 10px;
+            text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        .custom-drug-grid {
+            display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) 150px 70px auto;
+            gap: 10px; align-items: end;
+        }
+        .custom-drug-grid .form-group { margin-bottom: 0; }
+        #customDrugQty { width: 70px; }
+        .approx-badge {
+            display: inline-block; margin-top: 3px; padding: 2px 6px; border-radius: 4px;
+            background: #fff3cd; color: #856404; font-size: 0.72rem; font-weight: 600;
+        }
         .btn {
             padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer;
             font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
@@ -211,6 +229,9 @@
             .drug-selector .form-group { width: 100%; }
             #drugPrice { font-size: 0.9rem; }
             #drugQty { width: 100% !important; }
+            .custom-drug-section { padding: 12px; }
+            .custom-drug-grid { grid-template-columns: 1fr !important; gap: 8px; }
+            #customDrugQty { width: 100% !important; }
 
             /* Drug table — scroll horizontally */
             #drugListContainer { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -403,6 +424,31 @@
             <div class="form-group">
                 <label>&nbsp;</label>
                 <button class="btn btn-primary" onclick="addDrug()">+ Add</button>
+            </div>
+        </div>
+        <div class="custom-drug-section">
+            <div class="custom-drug-title">Custom Drug (Approx.)</div>
+            <div class="custom-drug-grid">
+                <div class="form-group">
+                    <label>Generic Name</label>
+                    <input type="text" id="customDrugGeneric" placeholder="Generic name">
+                </div>
+                <div class="form-group">
+                    <label>Brand (Optional)</label>
+                    <input type="text" id="customDrugBrand" placeholder="Optional">
+                </div>
+                <div class="form-group">
+                    <label>Approx. Unit Cost</label>
+                    <input type="number" id="customDrugPrice" min="0" step="0.01" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Qty</label>
+                    <input type="number" id="customDrugQty" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-success" onclick="addCustomDrug()">Add Custom</button>
+                </div>
             </div>
         </div>
 
@@ -2836,6 +2882,43 @@ function updatePriceDisplay() {
 }
 
 // ==================== DRUG MANAGEMENT ====================
+function normalizeDrugText(value) {
+    return String(value || '').trim().replace(/\s+/g, ' ').toUpperCase();
+}
+
+function clearCustomDrugFields() {
+    document.getElementById('customDrugGeneric').value = '';
+    document.getElementById('customDrugBrand').value = '';
+    document.getElementById('customDrugPrice').value = '';
+    document.getElementById('customDrugQty').value = 1;
+}
+
+function addCustomDrug() {
+    const generic = normalizeDrugText(document.getElementById('customDrugGeneric').value);
+    const brand = normalizeDrugText(document.getElementById('customDrugBrand').value);
+    const mrp = parseFloat(document.getElementById('customDrugPrice').value);
+    const qty = parseInt(document.getElementById('customDrugQty').value) || 1;
+
+    if (!generic) { alert('Please enter the generic drug name.'); return; }
+    if (!Number.isFinite(mrp) || mrp <= 0) { alert('Please enter the approximate unit cost.'); return; }
+    if (qty < 1) { alert('Please enter quantity (minimum 1).'); return; }
+
+    addedDrugs.push({
+        brand: brand || 'GENERIC ONLY',
+        generic,
+        mrp,
+        type: currentDrugType,
+        contentMg: 0,
+        form: 'custom',
+        qty,
+        custom: true
+    });
+
+    clearCustomDrugFields();
+    renderDrugTable();
+    updateSummary();
+}
+
 function addDrug() {
     const brandVal = document.getElementById('brandSelect').value;
     const qty = parseInt(document.getElementById('drugQty').value) || 1;
@@ -2881,24 +2964,27 @@ function renderDrugTable() {
     table.style.display = 'table';
     noMsg.style.display = 'none';
 
-    tbody.innerHTML = addedDrugs.map((d, i) => `
-        <tr>
-            <td>${d.brand}</td>
-            <td>${d.generic}</td>
-            <td><input type="number" class="qty-input" value="${d.qty}" min="1" onchange="updateDrugQty(${i}, this.value)"></td>
-            <td class="price">Rs. ${formatNum(d.mrp)}</td>
-            <td class="price">Rs. ${formatNum(d.mrp * d.qty)}</td>
-            <td><button class="btn btn-danger" onclick="removeDrug(${i})">Remove</button></td>
-        </tr>
-    `).join('');
+    tbody.innerHTML = addedDrugs.map((d, i) => {
+        const approxBadge = d.custom ? '<br><span class="approx-badge">Approx. entry</span>' : '';
+        return `
+            <tr>
+                <td>${escapeHtml(d.brand)}${approxBadge}</td>
+                <td>${escapeHtml(d.generic)}</td>
+                <td><input type="number" class="qty-input" value="${d.qty}" min="1" onchange="updateDrugQty(${i}, this.value)"></td>
+                <td class="price">Rs. ${formatNum(getDrugUnitPrice(d))}</td>
+                <td class="price">Rs. ${formatNum(getDrugLineTotal(d))}</td>
+                <td><button class="btn btn-danger" onclick="removeDrug(${i})">Remove</button></td>
+            </tr>
+        `;
+    }).join('');
 
-    const totalDrug = addedDrugs.reduce((sum, d) => sum + (d.mrp * d.qty), 0);
+    const totalDrug = addedDrugs.reduce((sum, d) => sum + getDrugLineTotal(d), 0);
     document.getElementById('totalDrugCost').textContent = `Rs. ${formatNum(totalDrug)}`;
 }
 
 // ==================== SUMMARY ====================
 function updateSummary() {
-    const drugTotal = addedDrugs.reduce((sum, d) => sum + (d.mrp * d.qty), 0);
+    const drugTotal = addedDrugs.reduce((sum, d) => sum + getDrugLineTotal(d), 0);
     const days = Math.max(1, parseInt(document.getElementById('numberOfDays')?.value) || 1);
     const procedurePerDay = parseFloat(document.getElementById('procedureType').value);
     const consultationPerDay = parseFloat(document.getElementById('consultationCharge')?.value) || 0;
@@ -2936,7 +3022,7 @@ function generatePrint(mode) {
     const reg = document.getElementById('regimen').value || '_______________';
     const doc = document.getElementById('consultant').value || '_______________';
 
-    const drugTotal = addedDrugs.reduce((sum, d) => sum + (d.mrp * d.qty), 0);
+    const drugTotal = addedDrugs.reduce((sum, d) => sum + getDrugLineTotal(d), 0);
     const days = Math.max(1, parseInt(document.getElementById('numberOfDays')?.value) || 1);
     const procedurePerDay = parseFloat(document.getElementById('procedureType').value);
     const consultationPerDay = parseFloat(document.getElementById('consultationCharge')?.value) || 0;
@@ -2979,11 +3065,11 @@ function generatePrint(mode) {
         // Doctor print — detailed drug list + hospital charges breakdown
         const drugRows = addedDrugs.map(d => `
             <tr>
-                <td>${d.brand}</td>
-                <td>${d.generic}</td>
+                <td>${escapeHtml(d.brand)}${d.custom ? '<br><span style="font-size:0.72rem; color:#856404;">Approx. entry</span>' : ''}</td>
+                <td>${escapeHtml(d.generic)}</td>
                 <td style="text-align:center">${d.qty}</td>
-                <td style="text-align:right">Rs. ${formatNum(d.mrp)}</td>
-                <td style="text-align:right">Rs. ${formatNum(d.mrp * d.qty)}</td>
+                <td style="text-align:right">Rs. ${formatNum(getDrugUnitPrice(d))}</td>
+                <td style="text-align:right">Rs. ${formatNum(getDrugLineTotal(d))}</td>
             </tr>`).join('');
 
         html = `
@@ -3086,6 +3172,7 @@ function resetForm() {
     document.getElementById('genericSelect').value = '';
     document.getElementById('brandSelect').innerHTML = '<option value="">-- Select Brand --</option>';
     document.getElementById('drugQty').value = 1;
+    clearCustomDrugFields();
     document.getElementById('cancerTypeSelect').value = '';
     document.getElementById('regimenSelect').value = '';
     populateRegimenDropdown();
@@ -3102,6 +3189,24 @@ function resetForm() {
 // ==================== HELPERS ====================
 function formatNum(n) {
     return n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function getDrugUnitPrice(drug) {
+    return Number(drug?.mrp) || 0;
+}
+
+function getDrugLineTotal(drug) {
+    return getDrugUnitPrice(drug) * (Number(drug?.qty) || 0);
+}
+
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
 }
 
 function getUnitLabel(drug, qty) {
