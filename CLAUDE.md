@@ -34,6 +34,7 @@ kims-onco-sciences-logo.png  # KIMS Onco Sciences logo (used in overlay, header,
 - **Formulas**: BSA = √(ht × wt / 3600), GFR = ((140-age) × wt) / (72 × Cr) × 0.85 if female, Carboplatin = AUC × (GFR + 25)
 - **Dose types**: `mg_per_m2`, `auc` (Calvert), `mg_per_kg`, `flat_mg`, `oral_bd_14d` (capecitabine), `oral_daily`
 - `timesPerCycle` for multi-day or weekly drugs within a cycle (e.g., paclitaxel weekly ×3 in Q3W, ifosfamide D1-3)
+- Optional `maxDose` caps a calculated per-administration dose before vial optimization (used for capped weekly CyBorD cyclophosphamide dosing)
 - **Smart vial optimizer** (`optimizeVials`): never mixes brands — optimizes within each brand family separately (via `_optimizeFamily`) and picks the highest-MRP eligible family result by default
 - Within a brand family, different vial sizes can be combined to cover the dose (e.g., oxaliplatin 150 mg can use `OXALTERO 100MG INJ` + `OXALTERO 50MG INJ`)
 - **Brand family**: extracted via `getBrandFamily()` — prefix before first digit in brand name (e.g. `"OXALTERO 50MG INJ"` → `"OXALTERO"`). Same brand, different vial sizes = same family and can be combined. Different brands = never mixed.
@@ -47,7 +48,7 @@ kims-onco-sciences-logo.png  # KIMS Onco Sciences logo (used in overlay, header,
 ## Regimens
 Regimens stored in `regimenDatabase` array, **sorted alphabetically**. New regimens must be inserted in alphabetical order.
 
-Current regimen set includes: EXTREME regimens, ABCP, ABVD, AC, AC+Pembrolizumab, AP, cabozantinib+nivolumab, CAPOX, capecitabine with RT, carboplatin/paclitaxel variants, cisplatin/carboplatin with RT, CROSS, docetaxel single agent, EC, FLOT, FLOT+Durvalumab, FOLFIRI variants, FOLFIRINOX variants, FOLFOXIRI, gemcitabine variants, IA, irinotecan variants, mFOLFOX6 variants, nab-paclitaxel variants, paclitaxel variants, Pola-R-CHP, pemetrexed/carboplatin variants, R-CHOP, TC, TCH, TCHP, TPF, and TIP variants.
+Current regimen set includes: EXTREME regimens, ABCP, ABVD, AC, AC+Pembrolizumab, AP, cabozantinib+nivolumab, CAPOX, capecitabine with RT, carboplatin/paclitaxel variants, cisplatin/carboplatin with RT, CROSS, docetaxel single agent, EC, FLOT, FLOT+Durvalumab, FOLFIRI variants, FOLFIRINOX variants, FOLFOXIRI, gemcitabine variants, IA, irinotecan variants, multiple myeloma regimens (VRd, VTD, CyBorD, Dara-VTD, Dara-VRd, VRd-lite, Dara-Rd, Dara-VMP, Dara-CyBorD), mFOLFOX6 variants, nab-paclitaxel variants, paclitaxel variants, Pola-R-CHP, pemetrexed/carboplatin variants, R-CHOP, TC, TCH, TCHP, TPF, and TIP variants.
 
 ## Consultants
 Consultants are branch-specific via `BRANCH_CONFIG`.

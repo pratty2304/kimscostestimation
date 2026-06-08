@@ -749,6 +749,8 @@ const mahadevapuraDrugDatabase = [
     { brand: "LENVA 4MG CAP", generic: "LENVATINIB", mrp: 260.00, type: "targeted", contentMg: 4, form: "capsule", unitsPerPack: 10 },
     { brand: "BIOMAB EGFR 50MG INJECTION", generic: "NIMOTUZUMAB", mrp: 65643.92, type: "targeted", contentMg: 50 },
     { brand: "PROTEOZ 2.5MG INJ", generic: "BORTEZOMIB", mrp: 4668.70, type: "targeted", contentMg: 2.5 },
+    { brand: "DARZALEX 400MG INJ", generic: "DARATUMUMAB", mrp: 76000.00, type: "targeted", contentMg: 400 },
+    { brand: "DARZALEX FASPRO 1800MG INJ", generic: "DARATUMUMAB S/C", mrp: 228000.00, type: "targeted", contentMg: 1800 },
     { brand: "CABDUAL 20MG TAB", generic: "CABOZANTINIB", mrp: 166.50, type: "targeted", contentMg: 20, form: "tablet", unitsPerPack: 30 },
     { brand: "CABDUAL 40MG TAB", generic: "CABOZANTINIB", mrp: 333.00, type: "targeted", contentMg: 40, form: "tablet", unitsPerPack: 30 },
     { brand: "CABDUAL 60MG TAB", generic: "CABOZANTINIB", mrp: 499.50, type: "targeted", contentMg: 60, form: "tablet", unitsPerPack: 30 },
@@ -875,6 +877,8 @@ const electronicCityDrugDatabase = [
     { brand: "BRYXTA 400MG INJ", generic: "BEVACIZUMAB", mrp: 69995.00, type: "targeted", contentMg: 400 },
     { brand: "BEVAZZA 400MG INJ", generic: "BEVACIZUMAB", mrp: 45782.00, type: "targeted", contentMg: 400 },
     { brand: "PROTEOZ 2.5MG INJ", generic: "BORTEZOMIB", mrp: 4668.70, type: "targeted", contentMg: 2.5 },
+    { brand: "DARZALEX 400MG INJ", generic: "DARATUMUMAB", mrp: 76000.00, type: "targeted", contentMg: 400 },
+    { brand: "DARZALEX FASPRO 1800MG INJ", generic: "DARATUMUMAB S/C", mrp: 228000.00, type: "targeted", contentMg: 1800 },
     { brand: "LUPITUX 100MG INJ", generic: "CETUXIMAB", mrp: 9990.00, type: "targeted", contentMg: 100 },
     { brand: "BIOMAB EGFR 50MG INJECTION", generic: "NIMOTUZUMAB", mrp: 65643.92, type: "targeted", contentMg: 50 },
     { brand: "SIGRIMA 420MG INJ", generic: "PERTUZUMAB", mrp: 74995.30, type: "targeted", contentMg: 420 },
@@ -1340,6 +1344,64 @@ const regimenDatabase = [
         drugs: [
             { generic: "CARBOPLATIN", dose: 2, doseType: "auc", note: "AUC 2 weekly × 5" },
             { generic: "PACLITAXEL", dose: 50, doseType: "mg_per_m2", note: "50 mg/m² weekly × 5" },
+        ]
+    },
+    {
+        name: "CyBorD (Cyclophosphamide + Bortezomib + Dexamethasone)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "CYCLOPHOSPHAMIDE", dose: 300, doseType: "mg_per_m2", timesPerCycle: 4, maxDose: 500, note: "300 mg/m² PO/IV D1, D8, D15, D22 (max 500 mg/dose)" },
+            { generic: "BORTEZOMIB", dose: 1.3, doseType: "mg_per_m2", timesPerCycle: 4, note: "1.3 mg/m² SC D1, D8, D15, D22" },
+            { generic: "DEXAMETHASONE", dose: 40, doseType: "flat_mg", timesPerCycle: 4, note: "40 mg PO/IV D1, D8, D15, D22" },
+        ]
+    },
+    {
+        name: "Dara-CyBorD (Daratumumab + Cyclophosphamide + Bortezomib + Dexamethasone)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "DARATUMUMAB", dose: 16, doseType: "mg_per_kg", timesPerCycle: 4, note: "16 mg/kg weekly in cycles 1-2; then q2w/q4w per protocol" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 300, doseType: "mg_per_m2", timesPerCycle: 4, maxDose: 500, note: "300 mg/m² PO/IV D1, D8, D15, D22 (max 500 mg/dose)" },
+            { generic: "BORTEZOMIB", dose: 1.3, doseType: "mg_per_m2", timesPerCycle: 4, note: "1.3 mg/m² SC D1, D8, D15, D22" },
+            { generic: "DEXAMETHASONE", dose: 40, doseType: "flat_mg", timesPerCycle: 4, note: "40 mg PO/IV D1, D8, D15, D22; 20 mg may be used in frail/older patients" },
+        ]
+    },
+    {
+        name: "Dara-Rd (Daratumumab + Lenalidomide + Dexamethasone)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "DARATUMUMAB", dose: 16, doseType: "mg_per_kg", timesPerCycle: 4, note: "16 mg/kg weekly in cycles 1-2; then q2w to week 24; then q4w" },
+            { generic: "LENALIDOMIDE", dose: 25, doseType: "oral_daily", daysPerCycle: 21, note: "25 mg PO OD D1-21" },
+            { generic: "DEXAMETHASONE", dose: 40, doseType: "flat_mg", timesPerCycle: 4, note: "40 mg PO/IV D1, D8, D15, D22; 20 mg weekly if >75 years or frail" },
+        ]
+    },
+    {
+        name: "Dara-VMP (Daratumumab + Bortezomib + Melphalan + Prednisolone)",
+        cycle: "Q6W",
+        drugs: [
+            { generic: "DARATUMUMAB", dose: 16, doseType: "mg_per_kg", timesPerCycle: 6, note: "16 mg/kg weekly in cycle 1; then q3w through cycle 9; then q4w" },
+            { generic: "BORTEZOMIB", dose: 1.3, doseType: "mg_per_m2", timesPerCycle: 8, note: "Cycle 1: 1.3 mg/m² SC D1, D4, D8, D11, D22, D25, D29, D32; cycles 2-9: D1, D8, D22, D29" },
+            { generic: "MELPHALAN", dose: 9, doseType: "mg_per_m2", timesPerCycle: 4, note: "9 mg/m² PO D1-4" },
+            { generic: "PREDNISOLONE", dose: 60, doseType: "mg_per_m2", timesPerCycle: 4, note: "Prednisone/prednisolone 60 mg/m² PO D1-4" },
+        ]
+    },
+    {
+        name: "Dara-VRd (Daratumumab + Bortezomib + Lenalidomide + Dexamethasone)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "DARATUMUMAB", dose: 16, doseType: "mg_per_kg", timesPerCycle: 4, note: "16 mg/kg weekly in cycles 1-2; then q2w through cycle 6; then q4w maintenance" },
+            { generic: "BORTEZOMIB", dose: 1.3, doseType: "mg_per_m2", timesPerCycle: 4, note: "1.3 mg/m² SC D1, D4, D8, D11" },
+            { generic: "LENALIDOMIDE", dose: 25, doseType: "oral_daily", daysPerCycle: 21, note: "25 mg PO OD D1-21" },
+            { generic: "DEXAMETHASONE", dose: 40, doseType: "flat_mg", timesPerCycle: 8, note: "40 mg PO/IV D1-4 and D9-12 during induction/consolidation" },
+        ]
+    },
+    {
+        name: "Dara-VTD (Daratumumab + Bortezomib + Thalidomide + Dexamethasone)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "DARATUMUMAB", dose: 16, doseType: "mg_per_kg", timesPerCycle: 4, note: "16 mg/kg weekly in cycles 1-2; then q2w through induction/consolidation" },
+            { generic: "BORTEZOMIB", dose: 1.3, doseType: "mg_per_m2", timesPerCycle: 4, note: "1.3 mg/m² SC D1, D4, D8, D11" },
+            { generic: "THALIDOMIDE", dose: 100, doseType: "oral_daily", daysPerCycle: 28, note: "100 mg PO OD D1-28" },
+            { generic: "DEXAMETHASONE", dose: 40, doseType: "flat_mg", timesPerCycle: 8, note: "40 mg PO/IV D1, D2, D8, D9, D15, D16, D22, D23 in cycles 1-2; later reductions per protocol" },
         ]
     },
     {
@@ -2010,6 +2072,33 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "VRd (Bortezomib + Lenalidomide + Dexamethasone)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "BORTEZOMIB", dose: 1.3, doseType: "mg_per_m2", timesPerCycle: 4, note: "1.3 mg/m² SC D1, D4, D8, D11" },
+            { generic: "LENALIDOMIDE", dose: 25, doseType: "oral_daily", daysPerCycle: 14, note: "25 mg PO OD D1-14" },
+            { generic: "DEXAMETHASONE", dose: 20, doseType: "flat_mg", timesPerCycle: 8, note: "20 mg PO/IV D1, D2, D4, D5, D8, D9, D11, D12" },
+        ]
+    },
+    {
+        name: "VRd-lite (Bortezomib + Lenalidomide + Dexamethasone)",
+        cycle: "Q5W",
+        drugs: [
+            { generic: "BORTEZOMIB", dose: 1.3, doseType: "mg_per_m2", timesPerCycle: 4, note: "1.3 mg/m² SC D1, D8, D15, D22" },
+            { generic: "LENALIDOMIDE", dose: 15, doseType: "oral_daily", daysPerCycle: 21, note: "15 mg PO OD D1-21" },
+            { generic: "DEXAMETHASONE", dose: 20, doseType: "flat_mg", timesPerCycle: 8, note: "20 mg PO D1, D2, D8, D9, D15, D16, D22, D23" },
+        ]
+    },
+    {
+        name: "VTD (Bortezomib + Thalidomide + Dexamethasone)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "BORTEZOMIB", dose: 1.3, doseType: "mg_per_m2", timesPerCycle: 4, note: "1.3 mg/m² SC D1, D4, D8, D11" },
+            { generic: "THALIDOMIDE", dose: 100, doseType: "oral_daily", daysPerCycle: 28, note: "100 mg PO OD D1-28" },
+            { generic: "DEXAMETHASONE", dose: 40, doseType: "flat_mg", timesPerCycle: 8, note: "40 mg PO/IV D1, D2, D8, D9, D15, D16, D22, D23 in cycles 1-2; later reductions per protocol" },
+        ]
+    },
+    {
         name: "VeIP (Vinblastine + Ifosfamide + Cisplatin)",
         cycle: "Q3W",
         drugs: [
@@ -2195,6 +2284,21 @@ const regimenCancerTypes = [
             "ABVD",
             "Pola-R-CHP (POLARIX)",
             "R-CHOP",
+        ],
+    },
+    {
+        value: 'multiple_myeloma',
+        label: 'Multiple Myeloma',
+        regimens: [
+            "VRd (Bortezomib + Lenalidomide + Dexamethasone)",
+            "VTD (Bortezomib + Thalidomide + Dexamethasone)",
+            "CyBorD (Cyclophosphamide + Bortezomib + Dexamethasone)",
+            "Dara-VTD (Daratumumab + Bortezomib + Thalidomide + Dexamethasone)",
+            "Dara-VRd (Daratumumab + Bortezomib + Lenalidomide + Dexamethasone)",
+            "VRd-lite (Bortezomib + Lenalidomide + Dexamethasone)",
+            "Dara-Rd (Daratumumab + Lenalidomide + Dexamethasone)",
+            "Dara-VMP (Daratumumab + Bortezomib + Melphalan + Prednisolone)",
+            "Dara-CyBorD (Daratumumab + Cyclophosphamide + Bortezomib + Dexamethasone)",
         ],
     },
     {
@@ -2514,14 +2618,17 @@ function calculateRegimen() {
             case 'auc':
                 dosePerAdmin = calcCarboplatinDose(drug.dose, gfr);
                 doseLabel = `AUC ${drug.dose} × (GFR ${gfr.toFixed(0)} + 25) = ${dosePerAdmin.toFixed(1)} mg`;
+                if (times > 1) doseLabel += ` (×${times}/cycle)`;
                 break;
             case 'mg_per_kg':
                 dosePerAdmin = drug.dose * weightKg;
                 doseLabel = `${drug.dose} mg/kg × ${weightKg} kg = ${dosePerAdmin.toFixed(1)} mg`;
+                if (times > 1) doseLabel += ` (×${times}/cycle)`;
                 break;
             case 'flat_mg':
                 dosePerAdmin = drug.dose;
                 doseLabel = `${drug.dose} mg (flat dose)`;
+                if (times > 1) doseLabel += ` (×${times}/cycle)`;
                 break;
             case 'oral_bd_14d': {
                 const singleDose = Math.round((drug.dose * bsa) / 500) * 500;
@@ -2548,6 +2655,11 @@ function calculateRegimen() {
                 doseLabel = `${drug.dose} mg BD × ${days}d = ${dosePerAdmin} mg total`;
                 break;
             }
+        }
+
+        if (drug.maxDose && dosePerAdmin > drug.maxDose) {
+            doseLabel += ` → capped to ${drug.maxDose} mg`;
+            dosePerAdmin = drug.maxDose;
         }
 
         // Universal vincristine cap: 2 mg per administration
