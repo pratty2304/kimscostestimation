@@ -529,6 +529,28 @@
         </div>
     </div>
 
+    <!-- Total Treatment Estimate -->
+    <div class="card">
+        <h2>Total Treatment Estimate (Optional)</h2>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Number of Cycles</label>
+                <input type="number" id="treatmentCycles" min="1" step="1" placeholder="Optional" oninput="updateSummary()">
+            </div>
+            <div class="form-group">
+                <label>Cycle Interval</label>
+                <select id="cycleInterval" onchange="updateSummary()">
+                    <option value="">-- Select --</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="q2w">Every 2 weeks</option>
+                    <option value="q3w">Every 3 weeks</option>
+                    <option value="q4w">Every 4 weeks</option>
+                    <option value="q6w">Every 6 weeks</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
     <!-- Cost Summary -->
     <div class="card">
         <h2>Cost Summary (Per Cycle)</h2>
@@ -556,6 +578,10 @@
             <tr class="total-row">
                 <td>TOTAL ESTIMATED COST</td>
                 <td id="summaryTotal">Rs. 0.00</td>
+            </tr>
+            <tr class="total-row" id="summaryTreatmentRow" style="display:none;">
+                <td id="labelTreatmentTotal">Total Treatment Estimate</td>
+                <td id="summaryTreatmentTotal">Rs. 0.00</td>
             </tr>
         </table>
     </div>
@@ -1018,6 +1044,12 @@ function resetFormSilent() {
     if (brandEl) brandEl.innerHTML = '<option value="">-- Select Brand --</option>';
     const qtyEl = document.getElementById('drugQty');
     if (qtyEl) qtyEl.value = 1;
+    const daysEl = document.getElementById('numberOfDays');
+    if (daysEl) daysEl.value = 1;
+    const treatmentCyclesEl = document.getElementById('treatmentCycles');
+    if (treatmentCyclesEl) treatmentCyclesEl.value = '';
+    const cycleIntervalEl = document.getElementById('cycleInterval');
+    if (cycleIntervalEl) cycleIntervalEl.value = '';
     const cancerTypeEl = document.getElementById('cancerTypeSelect');
     if (cancerTypeEl) cancerTypeEl.value = '';
     const regEl = document.getElementById('regimenSelect');
@@ -3096,10 +3128,18 @@ function renderDrugTable() {
 }
 
 // ==================== SUMMARY ====================
-function updateSummary() {
+const CYCLE_INTERVAL_LABELS = {
+    weekly: 'weekly',
+    q2w: 'every 2 weeks',
+    q3w: 'every 3 weeks',
+    q4w: 'every 4 weeks',
+    q6w: 'every 6 weeks',
+};
+
+function getCostBreakdown() {
     const drugTotal = addedDrugs.reduce((sum, d) => sum + getDrugLineTotal(d), 0);
     const days = Math.max(1, parseInt(document.getElementById('numberOfDays')?.value) || 1);
-    const procedurePerDay = parseFloat(document.getElementById('procedureType').value);
+    const procedurePerDay = parseFloat(document.getElementById('procedureType').value) || 0;
     const consultationPerDay = parseFloat(document.getElementById('consultationCharge')?.value) || 0;
     const consumablesPerDay = parseFloat(document.getElementById('consumablesCharge')?.value) || 0;
     const wardPerDay = parseFloat(document.getElementById('wardCharge')?.value) || 0;
@@ -3109,19 +3149,63 @@ function updateSummary() {
     const wardCharges = wardPerDay * days;
     const hospitalCharges = consultation + wardCharges + procedure;
     const total = drugTotal + consumables + hospitalCharges;
-
     const dayLabel = days > 1 ? ` (×${days} days)` : '';
-    document.getElementById('labelConsumables').textContent = `Consumables${dayLabel}`;
-    document.getElementById('labelConsultation').textContent = `Consultation Charges${dayLabel}`;
-    document.getElementById('labelWard').textContent = `Hospital Services${dayLabel}`;
-    document.getElementById('labelProcedure').textContent = `Procedure Charges${dayLabel}`;
 
-    document.getElementById('summaryDrugs').textContent = `Rs. ${formatNum(drugTotal)}`;
-    document.getElementById('summaryConsumables').textContent = `Rs. ${formatNum(consumables)}`;
-    document.getElementById('summaryConsultation').textContent = `Rs. ${formatNum(consultation)}`;
-    document.getElementById('summaryWard').textContent = `Rs. ${formatNum(wardCharges)}`;
-    document.getElementById('summaryProcedure').textContent = `Rs. ${formatNum(procedure)}`;
-    document.getElementById('summaryTotal').textContent = `Rs. ${formatNum(total)}`;
+    return {
+        drugTotal,
+        days,
+        procedure,
+        consultation,
+        consumables,
+        wardCharges,
+        hospitalCharges,
+        total,
+        dayLabel,
+    };
+}
+
+function getTreatmentEstimate(perCycleTotal) {
+    const rawCycles = document.getElementById('treatmentCycles')?.value.trim() || '';
+    const cycles = Math.floor(Number(rawCycles));
+    const active = rawCycles !== '' && Number.isFinite(cycles) && cycles > 0;
+    const intervalValue = document.getElementById('cycleInterval')?.value || '';
+    const intervalLabel = CYCLE_INTERVAL_LABELS[intervalValue] || '';
+    const cycleWord = cycles === 1 ? 'cycle' : 'cycles';
+    const cycleText = active
+        ? `${cycles} ${cycleWord}${intervalLabel ? `, ${intervalLabel}` : ''}`
+        : '';
+
+    return {
+        active,
+        cycles: active ? cycles : 0,
+        intervalLabel,
+        cycleText,
+        total: active ? perCycleTotal * cycles : 0,
+    };
+}
+
+function updateSummary() {
+    const costs = getCostBreakdown();
+    const treatment = getTreatmentEstimate(costs.total);
+
+    document.getElementById('labelConsumables').textContent = `Consumables${costs.dayLabel}`;
+    document.getElementById('labelConsultation').textContent = `Consultation Charges${costs.dayLabel}`;
+    document.getElementById('labelWard').textContent = `Hospital Services${costs.dayLabel}`;
+    document.getElementById('labelProcedure').textContent = `Procedure Charges${costs.dayLabel}`;
+
+    document.getElementById('summaryDrugs').textContent = `Rs. ${formatNum(costs.drugTotal)}`;
+    document.getElementById('summaryConsumables').textContent = `Rs. ${formatNum(costs.consumables)}`;
+    document.getElementById('summaryConsultation').textContent = `Rs. ${formatNum(costs.consultation)}`;
+    document.getElementById('summaryWard').textContent = `Rs. ${formatNum(costs.wardCharges)}`;
+    document.getElementById('summaryProcedure').textContent = `Rs. ${formatNum(costs.procedure)}`;
+    document.getElementById('summaryTotal').textContent = `Rs. ${formatNum(costs.total)}`;
+
+    const treatmentRow = document.getElementById('summaryTreatmentRow');
+    treatmentRow.style.display = treatment.active ? 'table-row' : 'none';
+    if (treatment.active) {
+        document.getElementById('labelTreatmentTotal').textContent = `Total Treatment Estimate (${treatment.cycleText})`;
+        document.getElementById('summaryTreatmentTotal').textContent = `Rs. ${formatNum(treatment.total)}`;
+    }
 }
 
 // ==================== PRINT ====================
@@ -3135,21 +3219,19 @@ function generatePrint(mode) {
     const reg = document.getElementById('regimen').value || '_______________';
     const doc = document.getElementById('consultant').value || '_______________';
 
-    const drugTotal = addedDrugs.reduce((sum, d) => sum + getDrugLineTotal(d), 0);
-    const days = Math.max(1, parseInt(document.getElementById('numberOfDays')?.value) || 1);
-    const procedurePerDay = parseFloat(document.getElementById('procedureType').value);
-    const consultationPerDay = parseFloat(document.getElementById('consultationCharge')?.value) || 0;
-    const consumablesPerDay = parseFloat(document.getElementById('consumablesCharge')?.value) || 0;
-    const wardPerDay = parseFloat(document.getElementById('wardCharge')?.value) || 0;
-    const procedure = procedurePerDay * days;
-    const consultation = consultationPerDay * days;
-    const consumables = consumablesPerDay * days;
-    const wardCharges = wardPerDay * days;
-    const hospitalCharges = consultation + wardCharges + procedure;
-    const total = drugTotal + consumables + hospitalCharges;
-
+    const costs = getCostBreakdown();
+    const treatment = getTreatmentEstimate(costs.total);
+    const {
+        drugTotal,
+        procedure,
+        consultation,
+        consumables,
+        wardCharges,
+        total,
+        days,
+    } = costs;
     const today = new Date().toLocaleDateString('en-IN');
-    const dayLabel = days > 1 ? ` × ${days} days` : '';
+    const printDayLabel = days > 1 ? ` × ${days} days` : '';
 
     const procedureLabel = document.getElementById('procedureType').selectedOptions[0]?.text || '--';
 
@@ -3184,6 +3266,9 @@ function generatePrint(mode) {
                 <td style="text-align:right">Rs. ${formatNum(getDrugUnitPrice(d))}</td>
                 <td style="text-align:right">Rs. ${formatNum(getDrugLineTotal(d))}</td>
             </tr>`).join('');
+        const doctorTreatmentRows = treatment.active ? `
+                <tr style="font-weight:700; background:#e8f0fe;"><td>Total Treatment Estimate (${treatment.cycleText})</td><td style="text-align:right">Rs. ${formatNum(treatment.total)}</td></tr>
+            ` : '';
 
         html = `
         <div>
@@ -3199,31 +3284,46 @@ function generatePrint(mode) {
             <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Hospital Charges</p>
             <table class="est-table">
                 <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
-                <tr><td>Procedure Charges (${procedureLabel}${dayLabel})</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
-                <tr><td>Consumables${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables)}</td></tr>
-                <tr><td>Consultation Charges${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consultation)}</td></tr>
-                <tr><td>Hospital Services (medical records, day care charges, admission charges)${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(wardCharges)}</td></tr>
+                <tr><td>Procedure Charges (${procedureLabel}${printDayLabel})</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
+                <tr><td>Consumables${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables)}</td></tr>
+                <tr><td>Consultation Charges${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(consultation)}</td></tr>
+                <tr><td>Hospital Services (medical records, day care charges, admission charges)${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(wardCharges)}</td></tr>
                 <tr style="font-weight:700; background:#e8f0fe;"><td>Total Hospital Charges</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges + procedure)}</td></tr>
             </table>
 
             <table class="est-table" style="margin-top:14px;">
-                <tr style="font-weight:700; background:white; color:#000000; font-size:0.95rem;"><td>TOTAL ESTIMATED COST</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
+                <tr style="font-weight:700; background:white; color:#000000; font-size:0.95rem;"><td>Per-Cycle Estimated Cost</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
+                ${doctorTreatmentRows}
             </table>
         </div>`;
     } else {
         // Patient print — summary view with notes + signatures
-        html = `
-        <div>
-            ${headerHtml}
-
+        const patientCostTable = treatment.active ? `
+            <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Procedure Cost Estimate</p>
+            <table class="est-table">
+                <tr><th>Component</th><th style="text-align:right">Per Cycle</th><th style="text-align:right">Total for ${treatment.cycles} ${treatment.cycles === 1 ? 'Cycle' : 'Cycles'}</th></tr>
+                <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td><td style="text-align:right">Rs. ${formatNum(drugTotal * treatment.cycles)}</td></tr>
+                <tr><td>Procedure Charges${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td><td style="text-align:right">Rs. ${formatNum(procedure * treatment.cycles)}</td></tr>
+                <tr><td>Hospital Charges (Consumables, Hospital Services, Consultation Charges)${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td><td style="text-align:right">Rs. ${formatNum((consumables + consultation + wardCharges) * treatment.cycles)}</td></tr>
+                <tr style="font-weight:700; background:#e8f0fe;"><td>TOTAL ESTIMATED COST</td><td style="text-align:right">Rs. ${formatNum(total)}</td><td style="text-align:right">Rs. ${formatNum(treatment.total)}</td></tr>
+            </table>
+            <p style="font-size:0.76rem; color:#555; margin-top:-8px;">Total treatment estimate = per-cycle total × ${treatment.cycles} ${treatment.cycles === 1 ? 'cycle' : 'cycles'}${treatment.intervalLabel ? ` (${treatment.intervalLabel})` : ''}.</p>
+        ` : `
             <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Procedure Cost (Per Cycle)</p>
             <table class="est-table">
                 <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
                 <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td></tr>
-                <tr><td>Procedure Charges${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
-                <tr><td>Hospital Charges (Consumables, Hospital Services, Consultation Charges)${dayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td></tr>
+                <tr><td>Procedure Charges${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
+                <tr><td>Hospital Charges (Consumables, Hospital Services, Consultation Charges)${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td></tr>
                 <tr style="font-weight:700; background:#e8f0fe;"><td>TOTAL</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
             </table>
+        `;
+
+        html = `
+        <div>
+            ${headerHtml}
+
+            ${patientCostTable}
 
             <div style="margin-top:24px; font-size:0.8rem; line-height:1.6;">
                 <p style="font-weight:700; text-decoration:underline; margin-bottom:2px;">NOTE:</p>
@@ -3285,6 +3385,9 @@ function resetForm() {
     document.getElementById('genericSelect').value = '';
     document.getElementById('brandSelect').innerHTML = '<option value="">-- Select Brand --</option>';
     document.getElementById('drugQty').value = 1;
+    document.getElementById('numberOfDays').value = 1;
+    document.getElementById('treatmentCycles').value = '';
+    document.getElementById('cycleInterval').value = '';
     clearCustomDrugFields();
     document.getElementById('cancerTypeSelect').value = '';
     document.getElementById('regimenSelect').value = '';
