@@ -63,6 +63,9 @@
             display: inline-block; margin-top: 3px; padding: 2px 6px; border-radius: 4px;
             background: #fff3cd; color: #856404; font-size: 0.72rem; font-weight: 600;
         }
+        .saved-estimate-actions { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+        .saved-estimate-actions .btn { white-space: nowrap; padding: 10px 18px; font-size: 0.9rem; }
+        .saved-estimate-count { font-size: 0.78rem; color: #666; margin-top: 4px; }
         .btn {
             padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer;
             font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
@@ -232,6 +235,7 @@
             .custom-drug-section { padding: 12px; }
             .custom-drug-grid { grid-template-columns: 1fr !important; gap: 8px; }
             #customDrugQty { width: 100% !important; }
+            .saved-estimate-actions { flex-direction: column; align-items: stretch; }
 
             /* Drug table — scroll horizontally */
             #drugListContainer { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -267,6 +271,7 @@
             /* Buttons */
             .btn { padding: 9px 14px; font-size: 0.85rem; }
             .btn-danger { padding: 6px 10px; font-size: 0.75rem; }
+            .saved-estimate-actions .btn { padding: 9px 14px; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -586,6 +591,29 @@
         </table>
     </div>
 
+    <!-- Saved Estimates -->
+    <div class="card no-print">
+        <h2>Saved Estimates</h2>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Save Name</label>
+                <input type="text" id="savedEstimateName" placeholder="Optional label">
+            </div>
+            <div class="form-group">
+                <label>Saved Estimate</label>
+                <select id="savedEstimateSelect">
+                    <option value="">-- Select Saved Estimate --</option>
+                </select>
+                <div class="saved-estimate-count" id="savedEstimateCount">0/100 saved</div>
+            </div>
+        </div>
+        <div class="saved-estimate-actions" style="margin-top:14px;">
+            <button class="btn btn-success" onclick="saveCurrentEstimate()">Save Current Estimate</button>
+            <button class="btn btn-primary" onclick="loadSelectedEstimate()">Load</button>
+            <button class="btn btn-danger" onclick="deleteSelectedEstimate()">Delete</button>
+        </div>
+    </div>
+
     <!-- Action Buttons -->
     <div class="action-bar no-print">
         <button class="btn btn-success" onclick="generatePrint('patient')">Print for Patient</button>
@@ -775,6 +803,7 @@ const mahadevapuraDrugDatabase = [
     { brand: "LENVA 4MG CAP", generic: "LENVATINIB", mrp: 260.00, type: "targeted", contentMg: 4, form: "capsule", unitsPerPack: 10 },
     { brand: "BIOMAB EGFR 50MG INJECTION", generic: "NIMOTUZUMAB", mrp: 65643.92, type: "targeted", contentMg: 50 },
     { brand: "PROTEOZ 2.5MG INJ", generic: "BORTEZOMIB", mrp: 4668.70, type: "targeted", contentMg: 2.5 },
+    { brand: "DARZALEX 100MG INJ", generic: "DARATUMUMAB", mrp: 16025.00, type: "targeted", contentMg: 100 },
     { brand: "DARZALEX 400MG INJ", generic: "DARATUMUMAB", mrp: 76000.00, type: "targeted", contentMg: 400 },
     { brand: "DARZALEX FASPRO 1800MG INJ", generic: "DARATUMUMAB S/C", mrp: 228000.00, type: "targeted", contentMg: 1800 },
     { brand: "CABDUAL 20MG TAB", generic: "CABOZANTINIB", mrp: 166.50, type: "targeted", contentMg: 20, form: "tablet", unitsPerPack: 30 },
@@ -903,6 +932,7 @@ const electronicCityDrugDatabase = [
     { brand: "BRYXTA 400MG INJ", generic: "BEVACIZUMAB", mrp: 69995.00, type: "targeted", contentMg: 400 },
     { brand: "BEVAZZA 400MG INJ", generic: "BEVACIZUMAB", mrp: 45782.00, type: "targeted", contentMg: 400 },
     { brand: "PROTEOZ 2.5MG INJ", generic: "BORTEZOMIB", mrp: 4668.70, type: "targeted", contentMg: 2.5 },
+    { brand: "DARZALEX 100MG INJ", generic: "DARATUMUMAB", mrp: 16025.00, type: "targeted", contentMg: 100 },
     { brand: "DARZALEX 400MG INJ", generic: "DARATUMUMAB", mrp: 76000.00, type: "targeted", contentMg: 400 },
     { brand: "DARZALEX FASPRO 1800MG INJ", generic: "DARATUMUMAB S/C", mrp: 228000.00, type: "targeted", contentMg: 1800 },
     { brand: "LUPITUX 100MG INJ", generic: "CETUXIMAB", mrp: 9990.00, type: "targeted", contentMg: 100 },
@@ -1001,7 +1031,7 @@ const BRANCH_CONFIG = {
     },
 };
 
-function selectBranch(branch) {
+function applyBranchContext(branch) {
     currentBranch = branch;
     const cfg = BRANCH_CONFIG[branch];
     currentDrugDatabase = cfg.db();
@@ -1022,7 +1052,10 @@ function selectBranch(branch) {
     // Hide overlay, show app
     document.getElementById('branchOverlay').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
+}
 
+function selectBranch(branch) {
+    applyBranchContext(branch);
     // Initialize app
     init();
 }
@@ -1050,6 +1083,10 @@ function resetFormSilent() {
     if (treatmentCyclesEl) treatmentCyclesEl.value = '';
     const cycleIntervalEl = document.getElementById('cycleInterval');
     if (cycleIntervalEl) cycleIntervalEl.value = '';
+    const savedNameEl = document.getElementById('savedEstimateName');
+    if (savedNameEl) savedNameEl.value = '';
+    const savedSelectEl = document.getElementById('savedEstimateSelect');
+    if (savedSelectEl) savedSelectEl.value = '';
     const cancerTypeEl = document.getElementById('cancerTypeSelect');
     if (cancerTypeEl) cancerTypeEl.value = '';
     const regEl = document.getElementById('regimenSelect');
@@ -2871,9 +2908,12 @@ function init() {
     populateGenericDropdown();
     populateCancerTypeDropdown();
     populateRegimenDropdown();
+    refreshSavedEstimateList();
     updateSummary();
 
     // Auto-select regimen in dose calculator when typing in patient details regimen field
+    if (window._regimenInputListenerBound) return;
+    window._regimenInputListenerBound = true;
     document.getElementById('regimen').addEventListener('input', function() {
         const typed = this.value.trim().toLowerCase();
         if (!typed || typed.length < 2) { document.getElementById('regimenSelect').value = ''; return; }
@@ -3125,6 +3165,178 @@ function renderDrugTable() {
 
     const totalDrug = addedDrugs.reduce((sum, d) => sum + getDrugLineTotal(d), 0);
     document.getElementById('totalDrugCost').textContent = `Rs. ${formatNum(totalDrug)}`;
+}
+
+// ==================== SAVED ESTIMATES ====================
+const SAVED_ESTIMATES_KEY = 'kimsOncoCostEstimates.v1';
+const MAX_SAVED_ESTIMATES = 100;
+const PATIENT_FIELD_IDS = ['patientName', 'umrNumber', 'patientAge', 'patientSex', 'phoneNumber', 'consultant', 'diagnosis', 'regimen'];
+const DOSE_FIELD_IDS = ['heightCm', 'weightKg', 'serumCreatinine', 'cancerTypeSelect', 'regimenSelect'];
+const CHARGE_FIELD_IDS = ['procedureType', 'consumablesCharge', 'wardCharge', 'consultationCharge', 'numberOfDays', 'treatmentCycles', 'cycleInterval'];
+
+function getFieldValues(ids) {
+    return ids.reduce((values, id) => {
+        values[id] = document.getElementById(id)?.value || '';
+        return values;
+    }, {});
+}
+
+function setFieldValues(values) {
+    Object.entries(values || {}).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = value ?? '';
+    });
+}
+
+function getSavedEstimates() {
+    try {
+        const raw = localStorage.getItem(SAVED_ESTIMATES_KEY);
+        const estimates = raw ? JSON.parse(raw) : [];
+        return Array.isArray(estimates)
+            ? estimates.filter(e => e && e.id).slice(0, MAX_SAVED_ESTIMATES)
+            : [];
+    } catch (error) {
+        console.warn('Unable to read saved estimates', error);
+        return [];
+    }
+}
+
+function writeSavedEstimates(estimates) {
+    try {
+        localStorage.setItem(SAVED_ESTIMATES_KEY, JSON.stringify(estimates.slice(0, MAX_SAVED_ESTIMATES)));
+        return true;
+    } catch (error) {
+        alert('Unable to save estimate. Browser local storage may be full or disabled.');
+        return false;
+    }
+}
+
+function getSavedEstimateLabel(estimate) {
+    const savedAt = estimate.savedAt ? new Date(estimate.savedAt).toLocaleString('en-IN') : '';
+    const branchLabel = BRANCH_CONFIG[estimate.branch]?.subtitle || 'Branch not set';
+    const patientName = estimate.patient?.patientName || 'Unnamed patient';
+    const umr = estimate.patient?.umrNumber ? ` (${estimate.patient.umrNumber})` : '';
+    const saveName = estimate.saveName ? `${estimate.saveName} - ` : '';
+    return `${saveName}${patientName}${umr} - ${branchLabel}${savedAt ? ` - ${savedAt}` : ''}`;
+}
+
+function refreshSavedEstimateList(selectedId = '') {
+    const select = document.getElementById('savedEstimateSelect');
+    if (!select) return;
+
+    const estimates = getSavedEstimates();
+    select.innerHTML = '<option value="">-- Select Saved Estimate --</option>';
+    estimates.forEach(estimate => {
+        const opt = document.createElement('option');
+        opt.value = estimate.id;
+        opt.textContent = getSavedEstimateLabel(estimate);
+        select.appendChild(opt);
+    });
+
+    if (selectedId && estimates.some(e => e.id === selectedId)) select.value = selectedId;
+    const countEl = document.getElementById('savedEstimateCount');
+    if (countEl) countEl.textContent = `${estimates.length}/${MAX_SAVED_ESTIMATES} saved`;
+}
+
+function collectEstimateState() {
+    return {
+        version: 1,
+        id: `estimate-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        savedAt: new Date().toISOString(),
+        saveName: document.getElementById('savedEstimateName')?.value.trim() || '',
+        branch: currentBranch,
+        currentDrugType,
+        patient: getFieldValues(PATIENT_FIELD_IDS),
+        dose: getFieldValues(DOSE_FIELD_IDS),
+        charges: getFieldValues(CHARGE_FIELD_IDS),
+        drugs: addedDrugs.map(d => ({
+            ...d,
+            mrp: Number(d.mrp) || 0,
+            qty: Math.max(1, parseInt(d.qty) || 1),
+            contentMg: Number(d.contentMg) || 0,
+        })),
+    };
+}
+
+function saveCurrentEstimate() {
+    if (!currentBranch) { alert('Please select a branch first.'); return; }
+
+    const estimates = getSavedEstimates();
+    if (estimates.length >= MAX_SAVED_ESTIMATES) {
+        alert(`Local storage already has ${MAX_SAVED_ESTIMATES} saved estimates. Delete an old estimate before saving a new one.`);
+        return;
+    }
+
+    const estimate = collectEstimateState();
+    estimates.unshift(estimate);
+    if (!writeSavedEstimates(estimates)) return;
+    refreshSavedEstimateList(estimate.id);
+}
+
+function applySavedEstimate(estimate) {
+    const branch = BRANCH_CONFIG[estimate.branch] ? estimate.branch : currentBranch;
+    if (branch) applyBranchContext(branch);
+    init();
+
+    setFieldValues(estimate.patient);
+    setFieldValues({
+        heightCm: estimate.dose?.heightCm,
+        weightKg: estimate.dose?.weightKg,
+        serumCreatinine: estimate.dose?.serumCreatinine,
+    });
+    updateBSA();
+
+    const cancerTypeValue = estimate.dose?.cancerTypeSelect || '';
+    const regimenValue = estimate.dose?.regimenSelect || '';
+    document.getElementById('cancerTypeSelect').value = cancerTypeValue;
+    populateRegimenDropdown(regimenValue !== '' ? Number(regimenValue) : null);
+    document.getElementById('regimenSelect').value = regimenValue;
+    onRegimenChange();
+
+    setFieldValues(estimate.charges);
+    const type = estimate.currentDrugType && ['chemotherapy', 'immunotherapy', 'targeted', 'hormonal', 'supportive'].includes(estimate.currentDrugType)
+        ? estimate.currentDrugType
+        : 'chemotherapy';
+    switchDrugType(type);
+
+    addedDrugs = Array.isArray(estimate.drugs) ? estimate.drugs.map(d => ({
+        ...d,
+        mrp: Number(d.mrp) || 0,
+        qty: Math.max(1, parseInt(d.qty) || 1),
+        contentMg: Number(d.contentMg) || 0,
+    })) : [];
+    window._calcResults = null;
+    document.getElementById('doseResults').innerHTML = '';
+    document.getElementById('savedEstimateName').value = estimate.saveName || '';
+
+    renderDrugTable();
+    updateSummary();
+    refreshSavedEstimateList(estimate.id);
+}
+
+function loadSelectedEstimate() {
+    const id = document.getElementById('savedEstimateSelect')?.value || '';
+    if (!id) { alert('Please select a saved estimate.'); return; }
+
+    const estimate = getSavedEstimates().find(e => e.id === id);
+    if (!estimate) { alert('Saved estimate not found.'); refreshSavedEstimateList(); return; }
+    if (!confirm('Load this saved estimate? This will replace the current estimate on screen.')) return;
+
+    applySavedEstimate(estimate);
+}
+
+function deleteSelectedEstimate() {
+    const id = document.getElementById('savedEstimateSelect')?.value || '';
+    if (!id) { alert('Please select a saved estimate to delete.'); return; }
+
+    const estimates = getSavedEstimates();
+    const estimate = estimates.find(e => e.id === id);
+    if (!estimate) { alert('Saved estimate not found.'); refreshSavedEstimateList(); return; }
+    if (!confirm(`Delete saved estimate: ${getSavedEstimateLabel(estimate)}?`)) return;
+
+    if (!writeSavedEstimates(estimates.filter(e => e.id !== id))) return;
+    document.getElementById('savedEstimateName').value = '';
+    refreshSavedEstimateList();
 }
 
 // ==================== SUMMARY ====================
@@ -3388,6 +3600,8 @@ function resetForm() {
     document.getElementById('numberOfDays').value = 1;
     document.getElementById('treatmentCycles').value = '';
     document.getElementById('cycleInterval').value = '';
+    document.getElementById('savedEstimateName').value = '';
+    document.getElementById('savedEstimateSelect').value = '';
     clearCustomDrugFields();
     document.getElementById('cancerTypeSelect').value = '';
     document.getElementById('regimenSelect').value = '';
