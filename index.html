@@ -2231,6 +2231,190 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "AI (Doxorubicin + Ifosfamide, soft tissue sarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", timesPerCycle: 3, note: "25 mg/m²/day D1-3" },
+            { generic: "IFOSFAMIDE", dose: 2500, doseType: "mg_per_m2", timesPerCycle: 4, note: "2500 mg/m²/day D1-4" },
+            { generic: "MESNA", dose: 2500, doseType: "mg_per_m2", timesPerCycle: 4, note: "Mesna coverage for ifosfamide D1-4" },
+        ]
+    },
+    {
+        name: "AP (Osteosarcoma: Doxorubicin + Cisplatin)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 37.5, doseType: "mg_per_m2", timesPerCycle: 2, note: "37.5 mg/m²/day D1-2" },
+            { generic: "CISPLATIN", dose: 60, doseType: "mg_per_m2", timesPerCycle: 2, note: "60 mg/m²/day D1-2" },
+        ]
+    },
+    {
+        name: "Doxorubicin monotherapy (soft tissue sarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 75, doseType: "mg_per_m2", note: "75 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Eribulin (liposarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "ERIBULIN", dose: 1.4, doseType: "mg_per_m2", timesPerCycle: 2, note: "1.4 mg/m² D1, D8" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Dacarbazine (leiomyosarcoma)",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1800, doseType: "mg_per_m2", note: "1800 mg/m² fixed-dose-rate D1" },
+            { generic: "DACARBAZINE", dose: 500, doseType: "mg_per_m2", note: "500 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Docetaxel (Sarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 675, doseType: "mg_per_m2", timesPerCycle: 2, note: "675 mg/m² D1, D8" },
+            { generic: "DOCETAXEL", dose: 75, doseType: "mg_per_m2", note: "75 mg/m² D8" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Vinorelbine (soft tissue sarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "VINORELBINE", dose: 25, doseType: "mg_per_m2", timesPerCycle: 2, note: "25 mg/m² D1, D8" },
+            { generic: "GEMCITABINE", dose: 800, doseType: "mg_per_m2", timesPerCycle: 2, note: "800 mg/m² D1, D8" },
+        ]
+    },
+    {
+        name: "IAP (Ifosfamide + Adriamycin + Cisplatin, osteosarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "CISPLATIN", dose: 100, doseType: "mg_per_m2", note: "100 mg/m² D1" },
+            { generic: "IFOSFAMIDE", dose: 2000, doseType: "mg_per_m2", timesPerCycle: 3, note: "2000 mg/m²/day D1-3" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", timesPerCycle: 3, note: "25 mg/m²/day D1-3" },
+            { generic: "MESNA", dose: 1200, doseType: "mg_per_m2", timesPerCycle: 3, note: "60% of ifosfamide dose/day, D1-3" },
+        ]
+    },
+    {
+        name: "ICE (Ifosfamide + Carboplatin + Etoposide, osteosarcoma)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "IFOSFAMIDE", dose: 1800, doseType: "mg_per_m2", timesPerCycle: 5, note: "1800 mg/m²/day D1-5" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1" },
+            { generic: "ETOPOSIDE", dose: 100, doseType: "mg_per_m2", timesPerCycle: 5, note: "100 mg/m²/day D1-5" },
+            { generic: "MESNA", dose: 1800, doseType: "mg_per_m2", timesPerCycle: 5, note: "Mesna coverage for ifosfamide D1-5" },
+        ]
+    },
+    {
+        name: "IE (Ewing sarcoma)",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "IFOSFAMIDE", dose: 1800, doseType: "mg_per_m2", timesPerCycle: 5, note: "1800 mg/m²/day D1-5" },
+            { generic: "ETOPOSIDE", dose: 100, doseType: "mg_per_m2", timesPerCycle: 5, note: "100 mg/m²/day D1-5" },
+            { generic: "MESNA", dose: 1800, doseType: "mg_per_m2", timesPerCycle: 5, note: "Total mesna coverage per day D1-5" },
+        ]
+    },
+    {
+        name: "Ifosfamide + Etoposide (osteosarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "IFOSFAMIDE", dose: 2800, doseType: "mg_per_m2", timesPerCycle: 5, note: "High-dose ifosfamide 2800 mg/m²/day D1-5" },
+            { generic: "ETOPOSIDE", dose: 100, doseType: "mg_per_m2", timesPerCycle: 5, note: "100 mg/m²/day D1-5" },
+            { generic: "MESNA", dose: 2800, doseType: "mg_per_m2", timesPerCycle: 5, note: "Mesna coverage for high-dose ifosfamide D1-5" },
+        ]
+    },
+    {
+        name: "MAID (Mesna + Adriamycin + Ifosfamide + Dacarbazine)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 20, doseType: "mg_per_m2", timesPerCycle: 3, note: "20 mg/m²/day CI D1-3" },
+            { generic: "IFOSFAMIDE", dose: 2500, doseType: "mg_per_m2", timesPerCycle: 3, note: "2500 mg/m²/day CI D1-3" },
+            { generic: "DACARBAZINE", dose: 300, doseType: "mg_per_m2", timesPerCycle: 3, note: "300 mg/m²/day CI D1-3" },
+            { generic: "MESNA", dose: 2500, doseType: "mg_per_m2", timesPerCycle: 3, note: "Mesna coverage for ifosfamide D1-3" },
+        ]
+    },
+    {
+        name: "MAP (EURAMOS-1 osteosarcoma)",
+        cycle: "35-day MAP block",
+        drugs: [
+            { generic: "METHOTREXATE", dose: 12000, doseType: "mg_per_m2", timesPerCycle: 2, maxDose: 20000, note: "High-dose methotrexate 12 g/m² D22, D29; cap 20 g/admin" },
+            { generic: "LEUCOVORIN CALCIUM", dose: 15, doseType: "mg_per_m2", timesPerCycle: 8, note: "Leucovorin rescue estimate: 15 mg/m² q6h x4 after each MTX" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 37.5, doseType: "mg_per_m2", timesPerCycle: 2, note: "37.5 mg/m²/day D1-2" },
+            { generic: "CISPLATIN", dose: 60, doseType: "mg_per_m2", timesPerCycle: 2, note: "60 mg/m²/day D1-2" },
+        ]
+    },
+    {
+        name: "Pazopanib (non-adipocytic soft tissue sarcoma)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "PAZOPANIB", dose: 800, doseType: "oral_daily", daysPerCycle: 28, note: "800 mg PO OD continuous" },
+        ]
+    },
+    {
+        name: "Trabectedin (soft tissue sarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "TRABECTEDIN", dose: 1.5, doseType: "mg_per_m2", note: "1.5 mg/m² D1 over 24h" },
+        ]
+    },
+    {
+        name: "VAC (Ewing sarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "VINCRISTINE", dose: 1.5, doseType: "mg_per_m2", note: "1.5 mg/m² D1; max 2 mg" },
+            { generic: "DACTINOMYCIN", dose: 0.75, doseType: "mg_per_m2", timesPerCycle: 2, maxDose: 1.5, note: "0.75 mg/m²/day D1-2; cap 1.5 mg/admin" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 1500, doseType: "mg_per_m2", note: "1500 mg/m² D1" },
+            { generic: "MESNA", dose: 500, doseType: "mg_per_m2", note: "IV mesna loading D1; oral post-dose not priced" },
+        ]
+    },
+    {
+        name: "VAIA (Ewing sarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "VINCRISTINE", dose: 1.5, doseType: "mg_per_m2", note: "1.5 mg/m² D1; max 2 mg" },
+            { generic: "DACTINOMYCIN", dose: 0.5, doseType: "mg_per_m2", timesPerCycle: 3, maxDose: 1.5, note: "0.5 mg/m²/day D1-3; institutional dosing varies" },
+            { generic: "IFOSFAMIDE", dose: 3000, doseType: "mg_per_m2", timesPerCycle: 3, note: "3000 mg/m²/day D1-3" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 20, doseType: "mg_per_m2", timesPerCycle: 3, note: "20 mg/m²/day D1-3" },
+            { generic: "MESNA", dose: 3000, doseType: "mg_per_m2", timesPerCycle: 3, note: "Mesna coverage for ifosfamide D1-3" },
+        ]
+    },
+    {
+        name: "VDC (Ewing sarcoma)",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "VINCRISTINE", dose: 1.5, doseType: "mg_per_m2", note: "1.5 mg/m² D1; max 2 mg" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 37.5, doseType: "mg_per_m2", timesPerCycle: 2, note: "37.5 mg/m²/day D1-2" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 1200, doseType: "mg_per_m2", note: "1200 mg/m² D1" },
+            { generic: "MESNA", dose: 400, doseType: "mg_per_m2", note: "IV mesna loading D1; oral post-dose not priced" },
+        ]
+    },
+    {
+        name: "VDC/IE (Ewing sarcoma, alternating pair)",
+        cycle: "VDC + IE pair",
+        drugs: [
+            { generic: "VINCRISTINE", dose: 1.5, doseType: "mg_per_m2", note: "VDC course: 1.5 mg/m² D1; max 2 mg" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 37.5, doseType: "mg_per_m2", timesPerCycle: 2, note: "VDC course: 37.5 mg/m²/day D1-2" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 1200, doseType: "mg_per_m2", note: "VDC course: 1200 mg/m² D1" },
+            { generic: "MESNA", dose: 400, doseType: "mg_per_m2", note: "VDC course: IV mesna loading D1; oral post-dose not priced" },
+            { generic: "IFOSFAMIDE", dose: 1800, doseType: "mg_per_m2", timesPerCycle: 5, note: "IE course: 1800 mg/m²/day D1-5" },
+            { generic: "ETOPOSIDE", dose: 100, doseType: "mg_per_m2", timesPerCycle: 5, note: "IE course: 100 mg/m²/day D1-5" },
+            { generic: "MESNA", dose: 1800, doseType: "mg_per_m2", timesPerCycle: 5, note: "IE course: total mesna coverage per day D1-5" },
+        ]
+    },
+    {
+        name: "VIDE (Ewing sarcoma)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "VINCRISTINE", dose: 1.5, doseType: "mg_per_m2", note: "1.5 mg/m² D1; max 2 mg" },
+            { generic: "IFOSFAMIDE", dose: 3000, doseType: "mg_per_m2", timesPerCycle: 3, note: "3000 mg/m²/day D1-3" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 20, doseType: "mg_per_m2", timesPerCycle: 3, note: "20 mg/m²/day D1-3" },
+            { generic: "ETOPOSIDE", dose: 150, doseType: "mg_per_m2", timesPerCycle: 3, note: "150 mg/m²/day D1-3" },
+            { generic: "MESNA", dose: 1000, doseType: "mg_per_m2", note: "Mesna loading D1" },
+            { generic: "MESNA", dose: 3000, doseType: "mg_per_m2", timesPerCycle: 3, note: "Mesna continuous infusion D1-3" },
+        ]
+    },
+    {
         name: "TIP — Testicular cancer salvage (Paclitaxel + Ifosfamide + Cisplatin)",
         cycle: "Q3W",
         drugs: [
@@ -2483,13 +2667,45 @@ const regimenCancerTypes = [
         ],
     },
     {
-        value: 'sarcoma',
-        label: 'Sarcoma',
+        value: 'ewing_sarcoma',
+        label: 'Ewing Sarcoma',
+        regimens: [
+            "VDC/IE (Ewing sarcoma, alternating pair)",
+            "VDC (Ewing sarcoma)",
+            "VAC (Ewing sarcoma)",
+            "IE (Ewing sarcoma)",
+            "VIDE (Ewing sarcoma)",
+            "VAIA (Ewing sarcoma)",
+        ],
+    },
+    {
+        value: 'osteosarcoma',
+        label: 'Osteosarcoma',
+        regimens: [
+            "AP (Osteosarcoma: Doxorubicin + Cisplatin)",
+            "IAP (Ifosfamide + Adriamycin + Cisplatin, osteosarcoma)",
+            "MAP (EURAMOS-1 osteosarcoma)",
+            "Gemcitabine + Docetaxel (Sarcoma)",
+            "Ifosfamide + Etoposide (osteosarcoma)",
+            "ICE (Ifosfamide + Carboplatin + Etoposide, osteosarcoma)",
+        ],
+    },
+    {
+        value: 'soft_tissue_sarcoma',
+        label: 'Soft Tissue Sarcoma',
         regimens: [
             "AP (Adriamycin + Cisplatin)",
+            "AI (Doxorubicin + Ifosfamide, soft tissue sarcoma)",
+            "Doxorubicin monotherapy (soft tissue sarcoma)",
+            "MAID (Mesna + Adriamycin + Ifosfamide + Dacarbazine)",
+            "Gemcitabine + Docetaxel (Sarcoma)",
+            "Trabectedin (soft tissue sarcoma)",
+            "Eribulin (liposarcoma)",
+            "Gemcitabine + Dacarbazine (leiomyosarcoma)",
             "Docetaxel single agent",
-            "IA (Ifosfamide + Adriamycin)",
             "Lipodox (Pegylated Liposomal Doxorubicin)",
+            "Gemcitabine + Vinorelbine (soft tissue sarcoma)",
+            "Pazopanib (non-adipocytic soft tissue sarcoma)",
         ],
     },
     {
