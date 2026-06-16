@@ -1389,6 +1389,16 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Carboplatin + Paclitaxel + Bevacizumab",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+            { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg", note: "15 mg/kg (GOG-240, cervical)" },
+        ]
+    },
+    {
         name: "Carboplatin + Paclitaxel + Bevacizumab (Ovarian)",
         cycle: "Q3W",
         needsCreatinine: true,
@@ -1399,6 +1409,17 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Carboplatin + Paclitaxel + Bevacizumab + Pembrolizumab (KEYNOTE-826, cervical)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+            { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg", note: "15 mg/kg (optional per investigator)" },
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 (then 400 mg Q6W maintenance)" },
+        ]
+    },
+    {
         name: "Carboplatin + Paclitaxel + Dostarlimab",
         cycle: "Q3W",
         needsCreatinine: true,
@@ -1406,6 +1427,16 @@ const regimenDatabase = [
             { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
             { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
             { generic: "DOSTARLIMAB", dose: 500, doseType: "flat_mg", note: "500 mg D1 with chemotherapy (then 1000 mg Q6W maintenance)" },
+        ]
+    },
+    {
+        name: "Carboplatin + Paclitaxel + Nivolumab",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5" },
+            { generic: "PACLITAXEL", dose: 175, doseType: "mg_per_m2" },
+            { generic: "NIVOLUMAB", dose: 360, doseType: "flat_mg", note: "360 mg D1 Q3W" },
         ]
     },
     {
@@ -1441,6 +1472,14 @@ const regimenDatabase = [
         cycle: "Weekly",
         drugs: [
             { generic: "CISPLATIN", dose: 40, doseType: "mg_per_m2", note: "40 mg/m² weekly concurrent" },
+        ]
+    },
+    {
+        name: "Cisplatin + Pembrolizumab (KEYNOTE-A18, concurrent chemoRT)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "CISPLATIN", dose: 40, doseType: "mg_per_m2", timesPerCycle: 3, note: "40 mg/m² weekly during RT (×5)" },
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg Q3W concurrent (×5), then 400 mg Q6W maintenance (×15)" },
         ]
     },
     {
@@ -1682,11 +1721,40 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Gemcitabine + Carboplatin + Durvalumab (biliary tract)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1 (cisplatin-ineligible substitute)" },
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500 mg D1 Q3W; continue Q4W after chemo" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Carboplatin + Pembrolizumab (biliary tract)",
+        cycle: "Q3W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", note: "AUC 5 D1 (cisplatin-ineligible substitute)" },
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 Q3W" },
+        ]
+    },
+    {
         name: "Gemcitabine + Cisplatin",
         cycle: "Q3W",
         drugs: [
             { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
             { generic: "CISPLATIN", dose: 25, doseType: "mg_per_m2", timesPerCycle: 2, note: "25 mg/m² D1, D8" },
+        ]
+    },
+    {
+        name: "Gemcitabine + Cisplatin + Durvalumab (TOPAZ-1, biliary tract)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CISPLATIN", dose: 25, doseType: "mg_per_m2", timesPerCycle: 2, note: "25 mg/m² D1, D8" },
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500 mg D1 Q3W (×8 cycles), then 1500 mg Q4W" },
         ]
     },
     {
@@ -1726,7 +1794,7 @@ const regimenDatabase = [
         ]
     },
     {
-        name: "Gemcitabine + Cisplatin + Pembrolizumab",
+        name: "Gemcitabine + Cisplatin + Pembrolizumab (KEYNOTE-966, biliary tract)",
         cycle: "Q3W",
         drugs: [
             { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
@@ -1887,6 +1955,21 @@ const regimenDatabase = [
             { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 Q3W" },
             { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
             { generic: "CARBOPLATIN", dose: 2, doseType: "auc", timesPerCycle: 2, note: "AUC 2 D1, D8" },
+        ]
+    },
+    {
+        name: "Nimotuzumab + RT (concurrent, head & neck)",
+        cycle: "Weekly",
+        drugs: [
+            { generic: "NIMOTUZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg weekly concurrent with RT" },
+        ]
+    },
+    {
+        name: "Nimotuzumab + Cisplatin (concurrent chemoRT, head & neck)",
+        cycle: "Weekly",
+        drugs: [
+            { generic: "NIMOTUZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg weekly concurrent with RT" },
+            { generic: "CISPLATIN", dose: 40, doseType: "mg_per_m2", note: "40 mg/m² weekly concurrent" },
         ]
     },
     {
@@ -2223,6 +2306,15 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Gemcitabine + Oxaliplatin + Durvalumab (biliary tract)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "OXALIPLATIN", dose: 100, doseType: "mg_per_m2", note: "100 mg/m² D1 (cisplatin substitute)" },
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500 mg D1 Q3W; continue Q4W after chemo" },
+        ]
+    },
+    {
         name: "Gemcitabine + Paclitaxel",
         cycle: "Q4W",
         drugs: [
@@ -2428,6 +2520,22 @@ const regimenDatabase = [
 
 const regimenCancerTypes = [
     {
+        value: 'biliary',
+        label: 'Biliary Tract',
+        regimens: [
+            "Gemcitabine + Cisplatin",
+            "Gemcitabine + Cisplatin + Durvalumab (TOPAZ-1, biliary tract)",
+            "Gemcitabine + Cisplatin + Pembrolizumab (KEYNOTE-966, biliary tract)",
+            "Gemcitabine + Carboplatin + Durvalumab (biliary tract)",
+            "Gemcitabine + Carboplatin + Pembrolizumab (biliary tract)",
+            "Gemcitabine + Oxaliplatin",
+            "Gemcitabine + Oxaliplatin + Durvalumab (biliary tract)",
+            "Gemcitabine + Capecitabine (GemCap)",
+            "Gemcitabine single agent",
+            "Capecitabine single agent",
+        ],
+    },
+    {
         value: 'urothelial',
         label: 'Bladder / Urothelial',
         regimens: [
@@ -2475,9 +2583,13 @@ const regimenCancerTypes = [
         value: 'cervical',
         label: 'Cervical',
         regimens: [
+            "Cisplatin single agent (weekly, with concurrent RT)",
+            "Carboplatin single agent (weekly, with concurrent RT)",
+            "Cisplatin + Pembrolizumab (KEYNOTE-A18, concurrent chemoRT)",
             "Carboplatin + Paclitaxel (3-weekly)",
             "Carboplatin + Paclitaxel (weekly)",
-            "Cisplatin single agent (weekly, with concurrent RT)",
+            "Carboplatin + Paclitaxel + Bevacizumab",
+            "Carboplatin + Paclitaxel + Bevacizumab + Pembrolizumab (KEYNOTE-826, cervical)",
             "Paclitaxel single agent (weekly)",
         ],
     },
@@ -2522,10 +2634,15 @@ const regimenCancerTypes = [
         value: 'head_neck',
         label: 'Head & Neck',
         regimens: [
+            "Cisplatin single agent (weekly, with concurrent RT)",
+            "Nimotuzumab + RT (concurrent, head & neck)",
+            "Nimotuzumab + Cisplatin (concurrent chemoRT, head & neck)",
+            "Carboplatin + Paclitaxel (3-weekly)",
+            "Carboplatin + Paclitaxel (weekly)",
+            "Carboplatin + Paclitaxel + Pembrolizumab",
+            "Carboplatin + Paclitaxel + Nivolumab",
             "5-FU + Carboplatin + Cetuximab (EXTREME regimen)",
             "5-FU + Cisplatin + Cetuximab (EXTREME regimen)",
-            "Carboplatin + Paclitaxel (weekly)",
-            "Cisplatin single agent (weekly, with concurrent RT)",
             "Gemcitabine + Cisplatin",
             "TPF (Docetaxel + Cisplatin + 5-FU)",
         ],
@@ -2619,14 +2736,13 @@ const regimenCancerTypes = [
         ],
     },
     {
-        value: 'pancreatic_biliary',
-        label: 'Pancreatic / Biliary',
+        value: 'pancreatic',
+        label: 'Pancreatic',
         regimens: [
             "FOLFIRINOX",
-            "Gemcitabine + Capecitabine (GemCap)",
-            "Gemcitabine + Cisplatin",
-            "Gemcitabine + Cisplatin + Pembrolizumab",
             "Gemcitabine + Nab-Paclitaxel",
+            "Gemcitabine + Cisplatin",
+            "Gemcitabine + Capecitabine (GemCap)",
             "Gemcitabine single agent",
             "Nab-Paclitaxel single agent (weekly)",
         ],
