@@ -851,6 +851,7 @@ const mahadevapuraDrugDatabase = [
     { brand: "ENHERTU 100MG INJ", generic: "TRASTUZUMAB DERUXTECAN", mrp: 186000.00, type: "targeted", contentMg: 100 },
     { brand: "BEVATAS 400MG INJ", generic: "BEVACIZUMAB", mrp: 56991.00, type: "targeted", contentMg: 400 },
     { brand: "TAGRISSO 80MG TAB", generic: "OSIMERTINIB", mrp: 4627.69, type: "targeted", contentMg: 80, form: "tablet", unitsPerPack: 30 },
+    { brand: "TUCANAT 150MG TAB", generic: "TUCATINIB", mrp: 703.1166666667, type: "targeted", contentMg: 150, form: "tablet", unitsPerPack: 60, packType: "bottle" },
     { brand: "INONZA 1MG INJ", generic: "INOTUZUMAB", mrp: 309375.00, type: "targeted", contentMg: 1 },
     { brand: "KYFIL 30MG INJ", generic: "CARFILZOMIB", mrp: 7321.80, type: "targeted", contentMg: 30 },
     { brand: "KYFIL 60MG INJ", generic: "CARFILZOMIB", mrp: 13500.00, type: "targeted", contentMg: 60 },
@@ -948,6 +949,7 @@ const electronicCityDrugDatabase = [
     { brand: "CABDUAL 40MG TAB", generic: "CABOZANTINIB", mrp: 333.00, type: "targeted", contentMg: 40, form: "tablet", unitsPerPack: 30 },
     { brand: "CABDUAL 60MG TAB", generic: "CABOZANTINIB", mrp: 499.50, type: "targeted", contentMg: 60, form: "tablet", unitsPerPack: 30 },
     { brand: "REGONAT 40MG TAB", generic: "REGORAFENIB", mrp: 353.57, type: "targeted", contentMg: 40, form: "tablet", unitsPerPack: 28 },
+    { brand: "TUCANAT 150MG TAB", generic: "TUCATINIB", mrp: 703.1166666667, type: "targeted", contentMg: 150, form: "tablet", unitsPerPack: 60, packType: "bottle" },
     { brand: "LENVA 4MG CAP", generic: "LENVATINIB", mrp: 260.00, type: "targeted", contentMg: 4, form: "capsule", unitsPerPack: 10 },
     { brand: "LENALID 5MG CAP", generic: "LENALIDOMIDE", mrp: 68.6333333333, type: "targeted", contentMg: 5, form: "capsule", unitsPerPack: 30, packType: "box" },
     { brand: "LENALID 10MG CAP", generic: "LENALIDOMIDE", mrp: 141.10, type: "targeted", contentMg: 10, form: "capsule", unitsPerPack: 30, packType: "bottle" },
@@ -1192,7 +1194,7 @@ const regimenDatabase = [
         ]
     },
     {
-        name: "AC + Pembrolizumab (KEYNOTE-522)",
+        name: "AC + Pembrolizumab (KEYNOTE-522, phase B)",
         cycle: "Q3W",
         drugs: [
             { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 60, doseType: "mg_per_m2" },
@@ -1450,7 +1452,7 @@ const regimenDatabase = [
         ]
     },
     {
-        name: "Carboplatin + Paclitaxel + Pembrolizumab (KEYNOTE-522)",
+        name: "Carboplatin + Paclitaxel + Pembrolizumab (KEYNOTE-522, phase A)",
         cycle: "Q3W",
         needsCreatinine: true,
         drugs: [
@@ -2177,6 +2179,23 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Trastuzumab + Tucatinib + Capecitabine (HER2CLIMB)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "TRASTUZUMAB", dose: 6, doseType: "mg_per_kg", note: "6 mg/kg D1 Q3W (loading: 8 mg/kg C1)" },
+            { generic: "TUCATINIB", dose: 300, doseType: "oral_bid_daily", daysPerCycle: 21, note: "300 mg BD continuous (2 × 150 mg tabs BD)" },
+            { generic: "CAPECITABINE", dose: 1000, doseType: "oral_bd_14d", note: "1000 mg/m² BD D1-14" },
+        ]
+    },
+    {
+        name: "Trastuzumab + Tucatinib (MOUNTAINEER)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "TRASTUZUMAB", dose: 6, doseType: "mg_per_kg", note: "6 mg/kg D1 Q3W (loading: 8 mg/kg C1)" },
+            { generic: "TUCATINIB", dose: 300, doseType: "oral_bid_daily", daysPerCycle: 21, note: "300 mg BD continuous (2 × 150 mg tabs BD)" },
+        ]
+    },
+    {
         name: "Tislelizumab + Carboplatin + Paclitaxel (RATIONALE-315 perioperative NSCLC)",
         cycle: "Q3W",
         needsCreatinine: true,
@@ -2552,12 +2571,12 @@ const regimenCancerTypes = [
         label: 'Breast',
         regimens: [
             "AC",
-            "AC + Pembrolizumab (KEYNOTE-522)",
+            "AC + Pembrolizumab (KEYNOTE-522, phase B)",
             "Abemaciclib (Adjuvant setting)",
             "Capecitabine single agent",
             "Carboplatin + Paclitaxel (3-weekly)",
             "Carboplatin + Paclitaxel (weekly)",
-            "Carboplatin + Paclitaxel + Pembrolizumab (KEYNOTE-522)",
+            "Carboplatin + Paclitaxel + Pembrolizumab (KEYNOTE-522, phase A)",
             "Docetaxel single agent",
             "EC (Epirubicin + Cyclophosphamide)",
             "Gemcitabine + Carboplatin",
@@ -2577,6 +2596,7 @@ const regimenCancerTypes = [
             "TCHP (Docetaxel + Carboplatin + Trastuzumab + Pertuzumab)",
             "T-DM1 (Trastuzumab emtansine)",
             "Trastuzumab Deruxtecan (Enhertu)",
+            "Trastuzumab + Tucatinib + Capecitabine (HER2CLIMB)",
         ],
     },
     {
@@ -2613,6 +2633,7 @@ const regimenCancerTypes = [
             "Nivolumab + Ipilimumab (NICHE-2, dMMR colon cancer)",
             "TAS-102 monotherapy (RECOURSE)",
             "TAS-102 + Bevacizumab (SUNLIGHT)",
+            "Trastuzumab + Tucatinib (MOUNTAINEER)",
         ],
     },
     {
