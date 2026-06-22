@@ -173,6 +173,17 @@
         .drug-type-btn { background: #e8f0fe; color: #1a5276; border: 2px solid #d1d9e6; font-weight: 600; }
         .drug-type-btn:hover { background: #d0e2f5; }
         .drug-type-btn.active { background: #1a5276; color: white; border-color: #1a5276; }
+        .cycle-split-toggle {
+            margin-top: 14px; padding: 12px; border-radius: 8px;
+            background: #f8fbff; border: 1px solid #d6e8f5;
+            font-size: 0.88rem; color: #334155;
+        }
+        .cycle-split-toggle label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .cycle-split-toggle input { width: auto; }
+        .cycle-split-hint { margin-top: 6px; font-size: 0.78rem; color: #64748b; }
+        .cycle2-section { display: none; border: 2px solid #d6e8f5; }
+        .cycle2-section.active { display: block; }
+        .cycle2-section h2 { color: #0f766e; border-bottom-color: #ccfbf1; }
 
         /* Branch Selector Overlay */
         #branchOverlay {
@@ -226,6 +237,7 @@
             /* Drug type tabs — 3 per row on mobile */
             .drug-type-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
             .drug-type-btn { font-size: 0.75rem; padding: 7px 10px; flex: 1 1 30%; text-align: center; }
+            .cycle-split-toggle label { align-items: flex-start; }
 
             /* Drug selector — stack vertically */
             .drug-selector { grid-template-columns: 1fr !important; gap: 8px; }
@@ -473,7 +485,7 @@
                 <tbody id="drugTableBody"></tbody>
                 <tfoot>
                     <tr style="font-weight:700; background:#f0f4f8;">
-                        <td colspan="4">Total Drug Cost</td>
+                        <td colspan="4" id="totalDrugCostLabel">Total Drug Cost</td>
                         <td class="price" id="totalDrugCost">0.00</td>
                         <td></td>
                     </tr>
@@ -532,6 +544,154 @@
                 <input type="number" id="numberOfDays" min="1" value="1" oninput="updateSummary()" style="width:80px;">
             </div>
         </div>
+        <div class="cycle-split-toggle">
+            <label>
+                <input type="checkbox" id="cycle1OnlyToggle" onchange="toggleCycle1OnlyMode()">
+                These drugs and hospital charges apply to Cycle 1 only
+            </label>
+            <div class="cycle-split-hint" id="cycleSplitHint">Unticked: this estimate applies to all cycles, as before.</div>
+        </div>
+    </div>
+
+    <!-- Cycle 2 Onwards Details -->
+    <div class="card cycle2-section" id="cycle2Section">
+        <h2>Cycle 2 Onwards Details</h2>
+        <div style="font-size:0.84rem; color:#64748b; margin-bottom:14px;">
+            Add the drugs and hospital charges that should apply from cycle 2 onwards.
+        </div>
+
+        <div class="drug-type-tabs" style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+            <button class="btn drug-type-btn active" id="btnChemoC2" onclick="switchCycle2DrugType('chemotherapy')">Chemotherapy</button>
+            <button class="btn drug-type-btn" id="btnImmunoC2" onclick="switchCycle2DrugType('immunotherapy')">Immunotherapy</button>
+            <button class="btn drug-type-btn" id="btnTargetedC2" onclick="switchCycle2DrugType('targeted')">Targeted Therapy</button>
+            <button class="btn drug-type-btn" id="btnHormonalC2" onclick="switchCycle2DrugType('hormonal')">Hormonal Therapy</button>
+            <button class="btn drug-type-btn" id="btnSupportiveC2" onclick="switchCycle2DrugType('supportive')">Supportive Care</button>
+        </div>
+        <div class="drug-selector" style="grid-template-columns: 1fr 1fr 160px 65px auto;">
+            <div class="form-group">
+                <label>Generic Drug</label>
+                <select id="genericSelectC2" onchange="updateCycle2BrandOptions()">
+                    <option value="">-- Select Generic --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Brand</label>
+                <select id="brandSelectC2" onchange="updateCycle2PriceDisplay()">
+                    <option value="">-- Select Brand --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>MRP</label>
+                <input type="text" id="drugPriceC2" readonly style="width:100%; background:#fff8e1; border:2px solid #f59e0b; text-align:right; font-weight:700; font-size:1rem; color:#b45309;" value="--">
+            </div>
+            <div class="form-group">
+                <label>Qty</label>
+                <input type="number" id="drugQtyC2" value="1" min="1" style="width:65px;">
+            </div>
+            <div class="form-group">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary" onclick="addCycle2Drug()">+ Add</button>
+            </div>
+        </div>
+
+        <div class="custom-drug-section">
+            <div class="custom-drug-title">Custom Drug (Approx.)</div>
+            <div class="custom-drug-grid">
+                <div class="form-group">
+                    <label>Generic Name</label>
+                    <input type="text" id="customDrugGenericC2" placeholder="Generic name">
+                </div>
+                <div class="form-group">
+                    <label>Brand (Optional)</label>
+                    <input type="text" id="customDrugBrandC2" placeholder="Optional">
+                </div>
+                <div class="form-group">
+                    <label>Approx. Unit Cost</label>
+                    <input type="number" id="customDrugPriceC2" min="0" step="0.01" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Qty</label>
+                    <input type="number" id="customDrugQtyC2" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-success" onclick="addCycle2CustomDrug()">Add Custom</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="drugListContainerC2">
+            <div class="no-drugs" id="noDrugsMsgC2">No cycle 2 onwards drugs added yet.</div>
+            <table class="drug-table" id="drugTableC2" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Brand Name</th>
+                        <th>Generic</th>
+                        <th>Qty</th>
+                        <th style="text-align:right">Unit Price</th>
+                        <th style="text-align:right">Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="drugTableBodyC2"></tbody>
+                <tfoot>
+                    <tr style="font-weight:700; background:#f0f4f8;">
+                        <td colspan="4">Cycle 2 Onwards Drug Cost</td>
+                        <td class="price" id="totalDrugCostC2">0.00</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <h2 style="margin-top:22px;">Cycle 2 Onwards Hospital Charges</h2>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Procedure Type</label>
+                <select id="procedureTypeC2" onchange="updateSummary()">
+                    <option value="0" selected>-- Select --</option>
+                    <option value="1200">Chemo Infusion - Single Drug (Rs. 1,200)</option>
+                    <option value="2100">Chemo Infusion - Multi Drug (Rs. 2,100)</option>
+                    <option value="3720">Chemotherapy Minor (Rs. 3,720)</option>
+                    <option value="6600">Chemotherapy Medium (Rs. 6,600)</option>
+                    <option value="9330">Chemotherapy Major (Rs. 9,330)</option>
+                    <option value="14030">Chemotherapy Major Plus (Rs. 14,030)</option>
+                    <option value="20630">Chemotherapy Supra Major (Rs. 20,630)</option>
+                    <option value="24750">Immunotherapy (Rs. 24,750)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Consumables</label>
+                <select id="consumablesChargeC2" onchange="updateSummary()">
+                    <option value="" selected>-- Select --</option>
+                    <option value="5000">Rs. 5,000</option>
+                    <option value="6000">Rs. 6,000</option>
+                    <option value="7000">Rs. 7,000</option>
+                    <option value="0">Waive Off</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Hospital Services</label>
+                <select id="wardChargeC2" onchange="updateSummary()">
+                    <option value="" selected>-- Select --</option>
+                    <option value="3200">Rs. 3,200</option>
+                    <option value="0">Private (TBD)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Consultation Charges</label>
+                <select id="consultationChargeC2" onchange="updateSummary()">
+                    <option value="" selected>-- Select --</option>
+                    <option value="1600">Rs. 1,600</option>
+                    <option value="2000">Rs. 2,000</option>
+                    <option value="0">Waive Off</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Number of Days</label>
+                <input type="number" id="numberOfDaysC2" min="1" value="1" oninput="updateSummary()" style="width:80px;">
+            </div>
+        </div>
     </div>
 
     <!-- Total Treatment Estimate -->
@@ -561,7 +721,7 @@
         <h2>Cost Summary (Per Cycle)</h2>
         <table class="summary-table">
             <tr>
-                <td>Drugs + Supportive Medications</td>
+                <td id="labelDrugs">Drugs + Supportive Medications</td>
                 <td id="summaryDrugs">Rs. 0.00</td>
             </tr>
             <tr>
@@ -581,12 +741,15 @@
                 <td id="summaryProcedure">Rs. 0.00</td>
             </tr>
             <tr class="total-row">
-                <td>TOTAL ESTIMATED COST</td>
+                <td id="labelSummaryTotal">TOTAL ESTIMATED COST</td>
                 <td id="summaryTotal">Rs. 0.00</td>
             </tr>
             <tr class="total-row" id="summaryTreatmentRow" style="display:none;">
                 <td id="labelTreatmentTotal">Total Treatment Estimate</td>
                 <td id="summaryTreatmentTotal">Rs. 0.00</td>
+            </tr>
+            <tr id="summaryTreatmentPlanRow" style="display:none; background:#f8fbff;">
+                <td colspan="2" id="summaryTreatmentPlanDetails" style="font-size:0.84rem; line-height:1.45; color:#334155;"></td>
             </tr>
         </table>
     </div>
@@ -1088,24 +1251,35 @@ function switchBranch() {
 function clearEstimateForm() {
     document.querySelectorAll('#mainApp input[type="text"], #mainApp input[type="number"], #mainApp input[type="tel"]').forEach(el => el.value = '');
 
-    ['patientSex', 'consultant', 'genericSelect', 'cancerTypeSelect', 'regimenSelect', 'consumablesCharge', 'wardCharge', 'consultationCharge', 'cycleInterval', 'savedEstimateSelect'].forEach(id => {
+    ['patientSex', 'consultant', 'genericSelect', 'genericSelectC2', 'cancerTypeSelect', 'regimenSelect', 'consumablesCharge', 'wardCharge', 'consultationCharge', 'consumablesChargeC2', 'wardChargeC2', 'consultationChargeC2', 'cycleInterval', 'savedEstimateSelect'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
 
     const procedureEl = document.getElementById('procedureType');
     if (procedureEl) procedureEl.value = '0';
+    const procedureElC2 = document.getElementById('procedureTypeC2');
+    if (procedureElC2) procedureElC2.value = '0';
 
     const brandEl = document.getElementById('brandSelect');
     if (brandEl) brandEl.innerHTML = '<option value="">-- Select Brand --</option>';
+    const brandElC2 = document.getElementById('brandSelectC2');
+    if (brandElC2) brandElC2.innerHTML = '<option value="">-- Select Brand --</option>';
     const drugPriceEl = document.getElementById('drugPrice');
     if (drugPriceEl) drugPriceEl.value = '--';
+    const drugPriceElC2 = document.getElementById('drugPriceC2');
+    if (drugPriceElC2) drugPriceElC2.value = '--';
     const qtyEl = document.getElementById('drugQty');
     if (qtyEl) qtyEl.value = '1';
+    const qtyElC2 = document.getElementById('drugQtyC2');
+    if (qtyElC2) qtyElC2.value = '1';
     const daysEl = document.getElementById('numberOfDays');
     if (daysEl) daysEl.value = '1';
+    const daysElC2 = document.getElementById('numberOfDaysC2');
+    if (daysElC2) daysElC2.value = '1';
 
     clearCustomDrugFields();
+    clearCycle2CustomDrugFields();
     populateRegimenDropdown();
     const bsaEl = document.getElementById('bsaValue');
     if (bsaEl) bsaEl.value = '';
@@ -1125,16 +1299,27 @@ function clearEstimateForm() {
     if (estSheet) estSheet.innerHTML = '';
     const colorPrintToggle = document.getElementById('colorPrintToggle');
     if (colorPrintToggle) colorPrintToggle.checked = false;
+    const cycle1OnlyToggle = document.getElementById('cycle1OnlyToggle');
+    if (cycle1OnlyToggle) cycle1OnlyToggle.checked = false;
+    toggleCycle1OnlyMode();
 
     currentDrugType = 'chemotherapy';
+    currentDrugTypeCycle2 = 'chemotherapy';
     document.querySelectorAll('.drug-type-btn').forEach(btn => btn.classList.remove('active'));
     const chemoBtn = document.getElementById('btnChemo');
     if (chemoBtn) chemoBtn.classList.add('active');
-    if (currentDrugDatabase.length > 0) populateGenericDropdown();
+    const chemoBtnC2 = document.getElementById('btnChemoC2');
+    if (chemoBtnC2) chemoBtnC2.classList.add('active');
+    if (currentDrugDatabase.length > 0) {
+        populateGenericDropdown();
+        populateCycle2GenericDropdown();
+    }
 
     window._calcResults = null;
     addedDrugs = [];
+    addedDrugsCycle2 = [];
     renderDrugTable();
+    renderCycle2DrugTable();
     refreshSavedEstimateList();
     updateSummary();
 }
@@ -1146,6 +1331,8 @@ function resetFormSilent() {
 // ==================== REGIMEN DATABASE ====================
 // Dose types: mg_per_m2, auc (Calvert), mg_per_kg, flat_mg, oral_bd_14d (capecitabine), oral_bd_days, oral_daily / oral_bid_daily (continuous oral, uses daysPerCycle)
 // timesPerCycle: how many times per cycle (default 1, e.g., weekly paclitaxel in Q3W = 3)
+// Optional cycle rules: cycles: [1], cycles: "all", startCycle: 2, endCycle: 4.
+// Drugs without cycle rules apply to every cycle.
 const regimenDatabase = [
     {
         name: "5-FU + Carboplatin + Cetuximab (EXTREME regimen)",
@@ -1286,8 +1473,8 @@ const regimenDatabase = [
         name: "Durvalumab + Tremelimumab (STRIDE, HCC)",
         cycle: "Q4W",
         drugs: [
-            { generic: "TREMELIMUMAB", dose: 300, doseType: "flat_mg", note: "300 mg single dose on C1D1 only (STRIDE)" },
-            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500 mg C1D1, then 1500 mg Q4W maintenance" },
+            { generic: "TREMELIMUMAB", dose: 300, doseType: "flat_mg", cycles: [1], note: "300 mg single dose on C1D1 only (STRIDE)" },
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", cycles: "all", note: "1500 mg C1D1, then 1500 mg Q4W maintenance" },
         ]
     },
     {
@@ -2892,7 +3079,9 @@ const regimenCancerTypes = [
 
 // State
 let addedDrugs = [];
+let addedDrugsCycle2 = [];
 let currentDrugType = 'chemotherapy';
+let currentDrugTypeCycle2 = 'chemotherapy';
 
 // ==================== DOSE CALCULATOR ====================
 function updateBSA() {
@@ -3048,6 +3237,84 @@ function onRegimenChange() {
     }
 }
 
+function getDrugCycleRule(drug) {
+    const source = drug?.cycleRule || drug || {};
+    const rawStart = source.startCycle;
+    const rawEnd = source.endCycle;
+    const startCycle = rawStart !== undefined && rawStart !== null && rawStart !== '' ? Number(rawStart) : null;
+    const endCycle = rawEnd !== undefined && rawEnd !== null && rawEnd !== '' ? Number(rawEnd) : null;
+
+    return {
+        cycles: source.cycles ?? null,
+        startCycle: Number.isFinite(startCycle) ? startCycle : null,
+        endCycle: Number.isFinite(endCycle) ? endCycle : null,
+    };
+}
+
+function hasDrugCycleRule(rule) {
+    return Array.isArray(rule?.cycles)
+        || rule?.cycles === 'all'
+        || Number.isFinite(rule?.startCycle)
+        || Number.isFinite(rule?.endCycle);
+}
+
+function isCycleSpecificRule(rule) {
+    return Array.isArray(rule?.cycles)
+        || Number.isFinite(rule?.startCycle)
+        || Number.isFinite(rule?.endCycle);
+}
+
+function cloneCycleRule(rule) {
+    if (!hasDrugCycleRule(rule)) return null;
+    const cloned = {};
+    if (Array.isArray(rule.cycles)) cloned.cycles = rule.cycles.map(Number).filter(Number.isFinite);
+    else if (rule.cycles === 'all') cloned.cycles = 'all';
+    if (Number.isFinite(rule.startCycle)) cloned.startCycle = rule.startCycle;
+    if (Number.isFinite(rule.endCycle)) cloned.endCycle = rule.endCycle;
+    return hasDrugCycleRule(cloned) ? cloned : null;
+}
+
+function getCycleRuleForStorage(drug) {
+    return cloneCycleRule(getDrugCycleRule(drug));
+}
+
+function regimenHasCycleSpecificRules(regimen) {
+    return !!regimen?.drugs?.some(drug => isCycleSpecificRule(getDrugCycleRule(drug)));
+}
+
+function drugAppliesToCycle(drug, cycle) {
+    const rule = getDrugCycleRule(drug);
+    if (Array.isArray(rule.cycles)) return rule.cycles.map(Number).includes(cycle);
+    if (rule.cycles === 'all') return true;
+    if (Number.isFinite(rule.startCycle) && cycle < rule.startCycle) return false;
+    if (Number.isFinite(rule.endCycle) && cycle > rule.endCycle) return false;
+    return true;
+}
+
+function getCycleRuleLabel(drugOrRule) {
+    const rule = getDrugCycleRule(drugOrRule);
+    if (Array.isArray(rule.cycles) && rule.cycles.length > 0) {
+        const cycles = [...new Set(rule.cycles.map(Number).filter(Number.isFinite))].sort((a, b) => a - b);
+        if (cycles.length === 1) return `Cycle ${cycles[0]} only`;
+        return `Cycles ${cycles.join(', ')}`;
+    }
+    if (Number.isFinite(rule.startCycle) && Number.isFinite(rule.endCycle)) {
+        return rule.startCycle === rule.endCycle
+            ? `Cycle ${rule.startCycle} only`
+            : `Cycles ${rule.startCycle}-${rule.endCycle}`;
+    }
+    if (Number.isFinite(rule.startCycle)) return `From cycle ${rule.startCycle}`;
+    if (Number.isFinite(rule.endCycle)) return `Through cycle ${rule.endCycle}`;
+    return '';
+}
+
+function getCycleRuleBadgeHtml(drugOrRule) {
+    const label = getCycleRuleLabel(drugOrRule);
+    return label
+        ? `<br><span class="approx-badge" style="background:#e8f0fe; color:#1a5276;">${escapeHtml(label)}</span>`
+        : '';
+}
+
 function calculateRegimen() {
     const heightCm = parseFloat(document.getElementById('heightCm').value);
     const weightKg = parseFloat(document.getElementById('weightKg').value);
@@ -3078,6 +3345,7 @@ function calculateRegimen() {
         let dosePerAdmin = 0;
         let doseLabel = '';
         const times = drug.timesPerCycle || 1;
+        const cycleRule = getCycleRuleForStorage(drug);
 
         switch (drug.doseType) {
             case 'mg_per_m2':
@@ -3147,6 +3415,7 @@ function calculateRegimen() {
                 doseLabel,
                 note: drug.note || '',
                 times,
+                cycleRule,
                 vials: [],
                 vialDesc: '',
                 totalMgPerAdmin: 0,
@@ -3199,6 +3468,7 @@ function calculateRegimen() {
             doseLabel,
             note: drug.note || '',
             times,
+            cycleRule,
             vials: optimalPerCycle,
             vialDesc: cycleVialDesc,
             totalMgPerAdmin,
@@ -3288,14 +3558,15 @@ function addCalcDrugsToEstimate() {
     window._calcResults.forEach(calc => {
         // Add each vial size as a separate line item
         calc.vials.forEach(v => {
-            addedDrugs.push({
+            const entry = {
                 brand: v.brand,
                 generic: v.generic,
                 mrp: v.mrp,
                 type: v.type,
                 contentMg: v.contentMg,
                 qty: v.qty
-            });
+            };
+            addedDrugs.push(entry);
         });
     });
 
@@ -3308,6 +3579,7 @@ function addCalcDrugsToEstimate() {
 // ==================== INITIALIZATION ====================
 function init() {
     populateGenericDropdown();
+    populateCycle2GenericDropdown();
     populateCancerTypeDropdown();
     populateRegimenDropdown();
     refreshSavedEstimateList();
@@ -3428,11 +3700,43 @@ function populateGenericDropdown() {
     document.getElementById('drugPrice').value = '--';
 }
 
+function populateCycle2GenericDropdown() {
+    const filtered = currentDrugDatabase.filter(d => d.type === currentDrugTypeCycle2);
+    const generics = [...new Set(filtered.map(d => d.generic))].sort();
+    const select = document.getElementById('genericSelectC2');
+    if (!select) return;
+    select.innerHTML = '<option value="">-- Select Generic --</option>';
+    generics.forEach(g => {
+        const opt = document.createElement('option');
+        opt.value = g;
+        opt.textContent = g;
+        select.appendChild(opt);
+    });
+    document.getElementById('brandSelectC2').innerHTML = '<option value="">-- Select Brand --</option>';
+    document.getElementById('drugPriceC2').value = '--';
+}
+
 function switchDrugType(type) {
     currentDrugType = type;
-    document.querySelectorAll('.drug-type-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById('btn' + {chemotherapy:'Chemo', immunotherapy:'Immuno', targeted:'Targeted', hormonal:'Hormonal', supportive:'Supportive'}[type]).classList.add('active');
+    ['btnChemo', 'btnImmuno', 'btnTargeted', 'btnHormonal', 'btnSupportive'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.classList.remove('active');
+    });
+    const activeBtn = document.getElementById('btn' + {chemotherapy:'Chemo', immunotherapy:'Immuno', targeted:'Targeted', hormonal:'Hormonal', supportive:'Supportive'}[type]);
+    if (activeBtn) activeBtn.classList.add('active');
     populateGenericDropdown();
+}
+
+function switchCycle2DrugType(type) {
+    currentDrugTypeCycle2 = type;
+    ['btnChemoC2', 'btnImmunoC2', 'btnTargetedC2', 'btnHormonalC2', 'btnSupportiveC2'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.classList.remove('active');
+    });
+    const activeId = 'btn' + {chemotherapy:'ChemoC2', immunotherapy:'ImmunoC2', targeted:'TargetedC2', hormonal:'HormonalC2', supportive:'SupportiveC2'}[type];
+    const activeBtn = document.getElementById(activeId);
+    if (activeBtn) activeBtn.classList.add('active');
+    populateCycle2GenericDropdown();
 }
 
 function updateBrandOptions() {
@@ -3468,6 +3772,58 @@ function updatePriceDisplay() {
     priceInput.value = `Rs. ${formatNum(drug.mrp)}`;
 }
 
+function updateCycle2BrandOptions() {
+    const generic = document.getElementById('genericSelectC2').value;
+    const brandSelect = document.getElementById('brandSelectC2');
+    brandSelect.innerHTML = '<option value="">-- Select Brand --</option>';
+
+    if (!generic) return;
+
+    const brands = currentDrugDatabase
+        .filter(d => d.generic === generic && d.type === currentDrugTypeCycle2)
+        .sort((a, b) => b.mrp - a.mrp || a.brand.localeCompare(b.brand));
+    brands.forEach(b => {
+        const opt = document.createElement('option');
+        opt.value = JSON.stringify(b);
+        opt.textContent = b.brand;
+        brandSelect.appendChild(opt);
+    });
+
+    if (brands.length > 0) {
+        brandSelect.selectedIndex = 1;
+        updateCycle2PriceDisplay();
+    } else {
+        document.getElementById('drugPriceC2').value = '--';
+    }
+}
+
+function updateCycle2PriceDisplay() {
+    const brandVal = document.getElementById('brandSelectC2').value;
+    const priceInput = document.getElementById('drugPriceC2');
+    if (!brandVal) { priceInput.value = '--'; return; }
+    const drug = JSON.parse(brandVal);
+    priceInput.value = `Rs. ${formatNum(drug.mrp)}`;
+}
+
+function isCycle1OnlyMode() {
+    return !!document.getElementById('cycle1OnlyToggle')?.checked;
+}
+
+function toggleCycle1OnlyMode() {
+    const splitMode = isCycle1OnlyMode();
+    const section = document.getElementById('cycle2Section');
+    if (section) section.classList.toggle('active', splitMode);
+    const hint = document.getElementById('cycleSplitHint');
+    if (hint) {
+        hint.textContent = splitMode
+            ? 'Ticked: the main estimate is Cycle 1. Fill Cycle 2 onwards details below.'
+            : 'Unticked: this estimate applies to all cycles, as before.';
+    }
+    renderDrugTable();
+    renderCycle2DrugTable();
+    updateSummary();
+}
+
 // ==================== DRUG MANAGEMENT ====================
 function normalizeDrugText(value) {
     return String(value || '').trim().replace(/\s+/g, ' ').toUpperCase();
@@ -3478,6 +3834,13 @@ function clearCustomDrugFields() {
     document.getElementById('customDrugBrand').value = '';
     document.getElementById('customDrugPrice').value = '';
     document.getElementById('customDrugQty').value = '1';
+}
+
+function clearCycle2CustomDrugFields() {
+    document.getElementById('customDrugGenericC2').value = '';
+    document.getElementById('customDrugBrandC2').value = '';
+    document.getElementById('customDrugPriceC2').value = '';
+    document.getElementById('customDrugQtyC2').value = '1';
 }
 
 function addCustomDrug() {
@@ -3537,14 +3900,74 @@ function updateDrugQty(index, qty) {
     updateSummary();
 }
 
+function addCycle2CustomDrug() {
+    const generic = normalizeDrugText(document.getElementById('customDrugGenericC2').value);
+    const brand = normalizeDrugText(document.getElementById('customDrugBrandC2').value);
+    const mrp = parseFloat(document.getElementById('customDrugPriceC2').value);
+    const qty = parseInt(document.getElementById('customDrugQtyC2').value) || 1;
+
+    if (!generic) { alert('Please enter the cycle 2 onwards generic drug name.'); return; }
+    if (!Number.isFinite(mrp) || mrp <= 0) { alert('Please enter the approximate unit cost.'); return; }
+    if (qty < 1) { alert('Please enter quantity (minimum 1).'); return; }
+
+    addedDrugsCycle2.push({
+        brand: brand || 'GENERIC ONLY',
+        generic,
+        mrp,
+        type: currentDrugTypeCycle2,
+        contentMg: 0,
+        form: 'custom',
+        qty,
+        custom: true
+    });
+
+    clearCycle2CustomDrugFields();
+    renderCycle2DrugTable();
+    updateSummary();
+}
+
+function addCycle2Drug() {
+    const brandVal = document.getElementById('brandSelectC2').value;
+    const qty = parseInt(document.getElementById('drugQtyC2').value) || 1;
+
+    if (!brandVal) { alert('Please select a cycle 2 onwards drug and brand.'); return; }
+    if (qty < 1) { alert('Please enter quantity (minimum 1).'); return; }
+
+    const drug = JSON.parse(brandVal);
+    addedDrugsCycle2.push({ ...drug, qty });
+
+    document.getElementById('genericSelectC2').value = '';
+    document.getElementById('brandSelectC2').innerHTML = '<option value="">-- Select Brand --</option>';
+    document.getElementById('drugPriceC2').value = '--';
+    document.getElementById('drugQtyC2').value = 1;
+
+    renderCycle2DrugTable();
+    updateSummary();
+}
+
+function removeCycle2Drug(index) {
+    addedDrugsCycle2.splice(index, 1);
+    renderCycle2DrugTable();
+    updateSummary();
+}
+
+function updateCycle2DrugQty(index, qty) {
+    addedDrugsCycle2[index].qty = Math.max(1, parseInt(qty) || 1);
+    renderCycle2DrugTable();
+    updateSummary();
+}
+
 function renderDrugTable() {
     const tbody = document.getElementById('drugTableBody');
     const table = document.getElementById('drugTable');
     const noMsg = document.getElementById('noDrugsMsg');
+    const totalLabel = document.getElementById('totalDrugCostLabel');
+    if (totalLabel) totalLabel.textContent = isCycle1OnlyMode() ? 'Cycle 1 Drug Cost' : 'Total Drug Cost';
 
     if (addedDrugs.length === 0) {
         table.style.display = 'none';
         noMsg.style.display = 'block';
+        document.getElementById('totalDrugCost').textContent = 'Rs. 0.00';
         return;
     }
 
@@ -3565,8 +3988,40 @@ function renderDrugTable() {
         `;
     }).join('');
 
-    const totalDrug = addedDrugs.reduce((sum, d) => sum + getDrugLineTotal(d), 0);
-    document.getElementById('totalDrugCost').textContent = `Rs. ${formatNum(totalDrug)}`;
+    document.getElementById('totalDrugCost').textContent = `Rs. ${formatNum(getDrugListTotal(addedDrugs))}`;
+}
+
+function renderCycle2DrugTable() {
+    const tbody = document.getElementById('drugTableBodyC2');
+    const table = document.getElementById('drugTableC2');
+    const noMsg = document.getElementById('noDrugsMsgC2');
+    if (!tbody || !table || !noMsg) return;
+
+    if (addedDrugsCycle2.length === 0) {
+        table.style.display = 'none';
+        noMsg.style.display = 'block';
+        document.getElementById('totalDrugCostC2').textContent = 'Rs. 0.00';
+        return;
+    }
+
+    table.style.display = 'table';
+    noMsg.style.display = 'none';
+
+    tbody.innerHTML = addedDrugsCycle2.map((d, i) => {
+        const approxBadge = d.custom ? '<br><span class="approx-badge">Approx. entry</span>' : '';
+        return `
+            <tr>
+                <td>${escapeHtml(d.brand)}${approxBadge}</td>
+                <td>${escapeHtml(d.generic)}</td>
+                <td><input type="number" class="qty-input" value="${d.qty}" min="1" onchange="updateCycle2DrugQty(${i}, this.value)"></td>
+                <td class="price">Rs. ${formatNum(getDrugUnitPrice(d))}</td>
+                <td class="price">Rs. ${formatNum(getDrugLineTotal(d))}</td>
+                <td><button class="btn btn-danger" onclick="removeCycle2Drug(${i})">Remove</button></td>
+            </tr>
+        `;
+    }).join('');
+
+    document.getElementById('totalDrugCostC2').textContent = `Rs. ${formatNum(getDrugListTotal(addedDrugsCycle2))}`;
 }
 
 // ==================== SAVED ESTIMATES ====================
@@ -3574,11 +4029,23 @@ const SAVED_ESTIMATES_KEY = 'kimsOncoCostEstimates.v1';
 const MAX_SAVED_ESTIMATES = 100;
 const PATIENT_FIELD_IDS = ['patientName', 'umrNumber', 'patientAge', 'patientSex', 'phoneNumber', 'consultant', 'diagnosis', 'regimen'];
 const DOSE_FIELD_IDS = ['heightCm', 'weightKg', 'serumCreatinine', 'cancerTypeSelect', 'regimenSelect'];
-const CHARGE_FIELD_IDS = ['procedureType', 'consumablesCharge', 'wardCharge', 'consultationCharge', 'numberOfDays', 'treatmentCycles', 'cycleInterval'];
+const CHARGE_FIELD_IDS = [
+    'procedureType', 'consumablesCharge', 'wardCharge', 'consultationCharge', 'numberOfDays',
+    'cycle1OnlyToggle',
+    'procedureTypeC2', 'consumablesChargeC2', 'wardChargeC2', 'consultationChargeC2', 'numberOfDaysC2',
+    'treatmentCycles', 'cycleInterval'
+];
 
 function getFieldValues(ids) {
     return ids.reduce((values, id) => {
-        values[id] = document.getElementById(id)?.value || '';
+        const el = document.getElementById(id);
+        if (!el) {
+            values[id] = '';
+        } else if (el.type === 'checkbox') {
+            values[id] = !!el.checked;
+        } else {
+            values[id] = el.value || '';
+        }
         return values;
     }, {});
 }
@@ -3586,8 +4053,28 @@ function getFieldValues(ids) {
 function setFieldValues(values) {
     Object.entries(values || {}).forEach(([id, value]) => {
         const el = document.getElementById(id);
-        if (el) el.value = value ?? '';
+        if (!el) return;
+        if (el.type === 'checkbox') {
+            el.checked = value === true || value === 'true' || value === '1';
+        } else {
+            el.value = value ?? '';
+        }
     });
+}
+
+function normalizeEstimateDrugForStorage(drug) {
+    const source = drug || {};
+    const { cycleRule, cycles, startCycle, endCycle, ...rest } = source;
+    return {
+        ...rest,
+        mrp: Number(source.mrp) || 0,
+        qty: Math.max(1, parseInt(source.qty) || 1),
+        contentMg: Number(source.contentMg) || 0,
+    };
+}
+
+function normalizeEstimateDrugFromStorage(drug) {
+    return normalizeEstimateDrugForStorage(drug);
 }
 
 function getSavedEstimates() {
@@ -3648,15 +4135,12 @@ function collectEstimateState() {
         saveName: document.getElementById('savedEstimateName')?.value.trim() || '',
         branch: currentBranch,
         currentDrugType,
+        currentDrugTypeCycle2,
         patient: getFieldValues(PATIENT_FIELD_IDS),
         dose: getFieldValues(DOSE_FIELD_IDS),
         charges: getFieldValues(CHARGE_FIELD_IDS),
-        drugs: addedDrugs.map(d => ({
-            ...d,
-            mrp: Number(d.mrp) || 0,
-            qty: Math.max(1, parseInt(d.qty) || 1),
-            contentMg: Number(d.contentMg) || 0,
-        })),
+        drugs: addedDrugs.map(normalizeEstimateDrugForStorage),
+        drugsCycle2: addedDrugsCycle2.map(normalizeEstimateDrugForStorage),
     };
 }
 
@@ -3700,18 +4184,20 @@ function applySavedEstimate(estimate) {
         ? estimate.currentDrugType
         : 'chemotherapy';
     switchDrugType(type);
+    const typeCycle2 = estimate.currentDrugTypeCycle2 && ['chemotherapy', 'immunotherapy', 'targeted', 'hormonal', 'supportive'].includes(estimate.currentDrugTypeCycle2)
+        ? estimate.currentDrugTypeCycle2
+        : 'chemotherapy';
+    switchCycle2DrugType(typeCycle2);
+    toggleCycle1OnlyMode();
 
-    addedDrugs = Array.isArray(estimate.drugs) ? estimate.drugs.map(d => ({
-        ...d,
-        mrp: Number(d.mrp) || 0,
-        qty: Math.max(1, parseInt(d.qty) || 1),
-        contentMg: Number(d.contentMg) || 0,
-    })) : [];
+    addedDrugs = Array.isArray(estimate.drugs) ? estimate.drugs.map(normalizeEstimateDrugFromStorage) : [];
+    addedDrugsCycle2 = Array.isArray(estimate.drugsCycle2) ? estimate.drugsCycle2.map(normalizeEstimateDrugFromStorage) : [];
     window._calcResults = null;
     document.getElementById('doseResults').innerHTML = '';
     document.getElementById('savedEstimateName').value = estimate.saveName || '';
 
     renderDrugTable();
+    renderCycle2DrugTable();
     updateSummary();
     refreshSavedEstimateList(estimate.id);
 }
@@ -3750,18 +4236,29 @@ const CYCLE_INTERVAL_LABELS = {
     q6w: 'every 6 weeks',
 };
 
-function getCostBreakdown() {
-    const drugTotal = addedDrugs.reduce((sum, d) => sum + getDrugLineTotal(d), 0);
-    const days = Math.max(1, parseInt(document.getElementById('numberOfDays')?.value) || 1);
-    const procedurePerDay = parseFloat(document.getElementById('procedureType').value) || 0;
-    const consultationPerDay = parseFloat(document.getElementById('consultationCharge')?.value) || 0;
-    const consumablesPerDay = parseFloat(document.getElementById('consumablesCharge')?.value) || 0;
-    const wardPerDay = parseFloat(document.getElementById('wardCharge')?.value) || 0;
+function getHospitalCostFromBreakdown(costs) {
+    return costs.consumables + costs.consultation + costs.wardCharges + costs.procedure;
+}
+
+function getDrugListTotal(drugs) {
+    return (Array.isArray(drugs) ? drugs : []).reduce((sum, d) => sum + getDrugLineTotal(d), 0);
+}
+
+function getCostBreakdown(suffix = '', drugs = addedDrugs) {
+    const fieldId = base => `${base}${suffix}`;
+    const procedureEl = document.getElementById(fieldId('procedureType'));
+    const days = Math.max(1, parseInt(document.getElementById(fieldId('numberOfDays'))?.value) || 1);
+    const drugTotal = getDrugListTotal(drugs);
+    const procedurePerDay = parseFloat(procedureEl?.value) || 0;
+    const consultationPerDay = parseFloat(document.getElementById(fieldId('consultationCharge'))?.value) || 0;
+    const consumablesPerDay = parseFloat(document.getElementById(fieldId('consumablesCharge'))?.value) || 0;
+    const wardPerDay = parseFloat(document.getElementById(fieldId('wardCharge'))?.value) || 0;
     const procedure = procedurePerDay * days;
     const consultation = consultationPerDay * days;
     const consumables = consumablesPerDay * days;
     const wardCharges = wardPerDay * days;
     const hospitalCharges = consultation + wardCharges + procedure;
+    const hospitalTotal = consumables + hospitalCharges;
     const total = drugTotal + consumables + hospitalCharges;
     const dayLabel = days > 1 ? ` (×${days} days)` : '';
 
@@ -3773,12 +4270,25 @@ function getCostBreakdown() {
         consumables,
         wardCharges,
         hospitalCharges,
+        hospitalTotal,
         total,
         dayLabel,
+        procedureLabel: procedureEl?.selectedOptions?.[0]?.text || '--',
     };
 }
 
-function getTreatmentEstimate(perCycleTotal) {
+function getCostPhases() {
+    const split = isCycle1OnlyMode();
+    const cycle1 = getCostBreakdown('', addedDrugs);
+    cycle1.phaseLabel = split ? 'Cycle 1' : 'Per Cycle';
+
+    const cycle2 = split ? getCostBreakdown('C2', addedDrugsCycle2) : null;
+    if (cycle2) cycle2.phaseLabel = 'Cycle 2 onwards';
+
+    return { split, cycle1, cycle2 };
+}
+
+function getTreatmentEstimate(phases) {
     const rawCycles = document.getElementById('treatmentCycles')?.value.trim() || '';
     const cycles = Math.floor(Number(rawCycles));
     const active = rawCycles !== '' && Number.isFinite(cycles) && cycles > 0;
@@ -3788,41 +4298,129 @@ function getTreatmentEstimate(perCycleTotal) {
     const cycleText = active
         ? `${cycles} ${cycleWord}${intervalLabel ? `, ${intervalLabel}` : ''}`
         : '';
+    const cycle2Count = phases.split && active ? Math.max(0, cycles - 1) : 0;
+    const total = active
+        ? (phases.split
+            ? phases.cycle1.total + (cycle2Count * phases.cycle2.total)
+            : phases.cycle1.total * cycles)
+        : 0;
 
     return {
         active,
         cycles: active ? cycles : 0,
         intervalLabel,
         cycleText,
-        total: active ? perCycleTotal * cycles : 0,
+        split: phases.split,
+        cycle2Count,
+        total,
     };
 }
 
-function updateSummary() {
-    const costs = getCostBreakdown();
-    const treatment = getTreatmentEstimate(costs.total);
+function getSplitPlanDetailsHtml(phases, treatment) {
+    if (!phases.split || !phases.cycle2) return '';
+    const c1 = phases.cycle1;
+    const c2 = phases.cycle2;
+    const totalLine = treatment.active
+        ? `<div style="padding-top:6px;"><b>Total treatment estimate:</b> Cycle 1 Rs. ${formatNum(c1.total)} + Cycle 2 onwards Rs. ${formatNum(c2.total)} × ${treatment.cycle2Count} = Rs. ${formatNum(treatment.total)}</div>`
+        : `<div style="padding-top:6px; color:#64748b;">Enter number of cycles to calculate the total treatment estimate.</div>`;
 
-    document.getElementById('labelConsumables').textContent = `Consumables${costs.dayLabel}`;
-    document.getElementById('labelConsultation').textContent = `Consultation Charges${costs.dayLabel}`;
-    document.getElementById('labelWard').textContent = `Hospital Services${costs.dayLabel}`;
-    document.getElementById('labelProcedure').textContent = `Procedure Charges${costs.dayLabel}`;
+    return `
+        <div style="padding:6px 0; border-top:1px solid #e5edf5;">
+            <b>Cycle 1 total:</b> Rs. ${formatNum(c1.total)}
+            <br><span style="color:#64748b;">Drugs Rs. ${formatNum(c1.drugTotal)}; hospital charges Rs. ${formatNum(c1.hospitalTotal)}</span>
+        </div>
+        <div style="padding:6px 0; border-top:1px solid #e5edf5;">
+            <b>Cycle 2 onwards per-cycle total:</b> Rs. ${formatNum(c2.total)}
+            <br><span style="color:#64748b;">Drugs Rs. ${formatNum(c2.drugTotal)}; hospital charges Rs. ${formatNum(c2.hospitalTotal)}</span>
+            ${totalLine}
+        </div>
+    `;
+}
+
+function updateSummary() {
+    const phases = getCostPhases();
+    const costs = phases.cycle1;
+    const treatment = getTreatmentEstimate(phases);
+
+    document.getElementById('labelDrugs').textContent = phases.split
+        ? 'Drugs + Supportive Medications (Cycle 1)'
+        : 'Drugs + Supportive Medications';
+    document.getElementById('labelConsumables').textContent = `${phases.split ? 'Cycle 1 ' : ''}Consumables${costs.dayLabel}`;
+    document.getElementById('labelConsultation').textContent = `${phases.split ? 'Cycle 1 ' : ''}Consultation Charges${costs.dayLabel}`;
+    document.getElementById('labelWard').textContent = `${phases.split ? 'Cycle 1 ' : ''}Hospital Services${costs.dayLabel}`;
+    document.getElementById('labelProcedure').textContent = `${phases.split ? 'Cycle 1 ' : ''}Procedure Charges${costs.dayLabel}`;
 
     document.getElementById('summaryDrugs').textContent = `Rs. ${formatNum(costs.drugTotal)}`;
     document.getElementById('summaryConsumables').textContent = `Rs. ${formatNum(costs.consumables)}`;
     document.getElementById('summaryConsultation').textContent = `Rs. ${formatNum(costs.consultation)}`;
     document.getElementById('summaryWard').textContent = `Rs. ${formatNum(costs.wardCharges)}`;
     document.getElementById('summaryProcedure').textContent = `Rs. ${formatNum(costs.procedure)}`;
+    document.getElementById('labelSummaryTotal').textContent = phases.split
+        ? 'CYCLE 1 ESTIMATED COST'
+        : 'TOTAL ESTIMATED COST';
     document.getElementById('summaryTotal').textContent = `Rs. ${formatNum(costs.total)}`;
 
     const treatmentRow = document.getElementById('summaryTreatmentRow');
     treatmentRow.style.display = treatment.active ? 'table-row' : 'none';
+    const treatmentPlanRow = document.getElementById('summaryTreatmentPlanRow');
+    treatmentPlanRow.style.display = phases.split ? 'table-row' : 'none';
     if (treatment.active) {
-        document.getElementById('labelTreatmentTotal').textContent = `Total Treatment Estimate (${treatment.cycleText})`;
+        document.getElementById('labelTreatmentTotal').textContent = phases.split
+            ? `Total Treatment Estimate (${treatment.cycleText})`
+            : `Total Treatment Estimate (${treatment.cycleText})`;
         document.getElementById('summaryTreatmentTotal').textContent = `Rs. ${formatNum(treatment.total)}`;
+    }
+    if (phases.split) {
+        document.getElementById('summaryTreatmentPlanDetails').innerHTML = getSplitPlanDetailsHtml(phases, treatment);
+    } else {
+        document.getElementById('summaryTreatmentPlanDetails').innerHTML = '';
     }
 }
 
 // ==================== PRINT ====================
+function getPrintDayLabel(costs) {
+    return costs.days > 1 ? ` × ${costs.days} days` : '';
+}
+
+function getPrintDrugRows(drugs) {
+    if (!drugs.length) {
+        return '<tr><td colspan="5" style="text-align:center; color:#777;">No drugs added</td></tr>';
+    }
+    return drugs.map(d => `
+        <tr>
+            <td>${escapeHtml(d.brand)}${d.custom ? '<br><span style="font-size:0.72rem; color:#856404;">Approx. entry</span>' : ''}</td>
+            <td>${escapeHtml(d.generic)}</td>
+            <td style="text-align:center">${d.qty}</td>
+            <td style="text-align:right">Rs. ${formatNum(getDrugUnitPrice(d))}</td>
+            <td style="text-align:right">Rs. ${formatNum(getDrugLineTotal(d))}</td>
+        </tr>`).join('');
+}
+
+function getDoctorPhaseHtml(title, drugs, costs) {
+    const printDayLabel = getPrintDayLabel(costs);
+    return `
+        <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Drug Details${title ? ` - ${title}` : ''}</p>
+        <table class="est-table">
+            <tr><th>Brand</th><th>Generic</th><th style="text-align:center">Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Total</th></tr>
+            ${getPrintDrugRows(drugs)}
+            <tr style="font-weight:700; background:#e8f0fe;"><td colspan="4">${title ? `${title} Drug Cost` : 'Total Drug Cost'}</td><td style="text-align:right">Rs. ${formatNum(costs.drugTotal)}</td></tr>
+        </table>
+
+        <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Hospital Charges${title ? ` - ${title}` : ''}</p>
+        <table class="est-table">
+            <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
+            <tr><td>Procedure Charges (${costs.procedureLabel}${printDayLabel})</td><td style="text-align:right">Rs. ${formatNum(costs.procedure)}</td></tr>
+            <tr><td>Consumables${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(costs.consumables)}</td></tr>
+            <tr><td>Consultation Charges${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(costs.consultation)}</td></tr>
+            <tr><td>Hospital Services (medical records, day care charges, admission charges)${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(costs.wardCharges)}</td></tr>
+            <tr style="font-weight:700; background:#e8f0fe;"><td>Total Hospital Charges</td><td style="text-align:right">Rs. ${formatNum(costs.hospitalTotal)}</td></tr>
+        </table>
+
+        <table class="est-table" style="margin-top:14px;">
+            <tr style="font-weight:700; background:white; color:#000000; font-size:0.95rem;"><td>${title ? `${title} Estimated Cost` : 'Per-Cycle Estimated Cost'}</td><td style="text-align:right">Rs. ${formatNum(costs.total)}</td></tr>
+        </table>`;
+}
+
 function generatePrint(mode) {
     const name = document.getElementById('patientName').value || '_______________';
     const age = document.getElementById('patientAge').value || '____';
@@ -3833,23 +4431,12 @@ function generatePrint(mode) {
     const reg = document.getElementById('regimen').value || '_______________';
     const doc = document.getElementById('consultant').value || '_______________';
 
-    const costs = getCostBreakdown();
-    const treatment = getTreatmentEstimate(costs.total);
-    const {
-        drugTotal,
-        procedure,
-        consultation,
-        consumables,
-        wardCharges,
-        total,
-        days,
-    } = costs;
+    const phases = getCostPhases();
+    const costs = phases.cycle1;
+    const treatment = getTreatmentEstimate(phases);
     const today = new Date().toLocaleDateString('en-IN');
-    const printDayLabel = days > 1 ? ` × ${days} days` : '';
+    const printDayLabel = getPrintDayLabel(costs);
 
-    const procedureLabel = document.getElementById('procedureType').selectedOptions[0]?.text || '--';
-
-    // Common header + patient details
     const branchLabel = currentBranch ? BRANCH_CONFIG[currentBranch].name : 'KIMS HOSPITALS, BENGALURU';
     const branchSubLabel = currentBranch ? BRANCH_CONFIG[currentBranch].subtitle : 'Bengaluru';
     const headerHtml = `
@@ -3871,65 +4458,55 @@ function generatePrint(mode) {
     let html = '';
 
     if (mode === 'doctor') {
-        // Doctor print — detailed drug list + hospital charges breakdown
-        const drugRows = addedDrugs.map(d => `
-            <tr>
-                <td>${escapeHtml(d.brand)}${d.custom ? '<br><span style="font-size:0.72rem; color:#856404;">Approx. entry</span>' : ''}</td>
-                <td>${escapeHtml(d.generic)}</td>
-                <td style="text-align:center">${d.qty}</td>
-                <td style="text-align:right">Rs. ${formatNum(getDrugUnitPrice(d))}</td>
-                <td style="text-align:right">Rs. ${formatNum(getDrugLineTotal(d))}</td>
-            </tr>`).join('');
-        const doctorTreatmentRows = treatment.active ? `
+        const treatmentRows = treatment.active
+            ? `<table class="est-table" style="margin-top:14px;">
                 <tr style="font-weight:700; background:#e8f0fe;"><td>Total Treatment Estimate (${treatment.cycleText})</td><td style="text-align:right">Rs. ${formatNum(treatment.total)}</td></tr>
-            ` : '';
+                ${phases.split ? `<tr><td style="font-size:0.76rem; color:#555;">Formula</td><td style="text-align:right; font-size:0.76rem; color:#555;">Cycle 1 + Cycle 2 onwards × ${treatment.cycle2Count}</td></tr>` : ''}
+            </table>`
+            : '';
 
         html = `
         <div>
             ${headerHtml}
-
-            <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Drug Details</p>
-            <table class="est-table">
-                <tr><th>Brand</th><th>Generic</th><th style="text-align:center">Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Total</th></tr>
-                ${drugRows}
-                <tr style="font-weight:700; background:#e8f0fe;"><td colspan="4">Total Drug Cost</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td></tr>
-            </table>
-
-            <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Hospital Charges</p>
-            <table class="est-table">
-                <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
-                <tr><td>Procedure Charges (${procedureLabel}${printDayLabel})</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
-                <tr><td>Consumables${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables)}</td></tr>
-                <tr><td>Consultation Charges${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(consultation)}</td></tr>
-                <tr><td>Hospital Services (medical records, day care charges, admission charges)${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(wardCharges)}</td></tr>
-                <tr style="font-weight:700; background:#e8f0fe;"><td>Total Hospital Charges</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges + procedure)}</td></tr>
-            </table>
-
-            <table class="est-table" style="margin-top:14px;">
-                <tr style="font-weight:700; background:white; color:#000000; font-size:0.95rem;"><td>Per-Cycle Estimated Cost</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
-                ${doctorTreatmentRows}
-            </table>
+            ${phases.split
+                ? `${getDoctorPhaseHtml('Cycle 1', addedDrugs, phases.cycle1)}
+                   ${getDoctorPhaseHtml('Cycle 2 onwards', addedDrugsCycle2, phases.cycle2)}
+                   ${treatmentRows}`
+                : `${getDoctorPhaseHtml('', addedDrugs, costs)}
+                   ${treatmentRows}`}
         </div>`;
     } else {
-        // Patient print — summary view with notes + signatures
-        const patientCostTable = treatment.active ? `
+        const patientCostTable = phases.split ? `
+            <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Treatment Cost Estimate</p>
+            <table class="est-table">
+                <tr><th>Component</th><th style="text-align:right">Cycle 1</th><th style="text-align:right">Cycle 2 onwards (per cycle)</th></tr>
+                <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.drugTotal)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.drugTotal)}</td></tr>
+                <tr><td>Procedure Charges</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.procedure)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.procedure)}</td></tr>
+                <tr><td>Consumables</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.consumables)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.consumables)}</td></tr>
+                <tr><td>Consultation Charges</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.consultation)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.consultation)}</td></tr>
+                <tr><td>Hospital Services</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.wardCharges)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.wardCharges)}</td></tr>
+                <tr style="font-weight:700; background:#e8f0fe;"><td>ESTIMATED COST</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.total)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.total)}</td></tr>
+                ${treatment.active ? `<tr style="font-weight:700; background:#e8f0fe;"><td colspan="2">TOTAL ESTIMATED COST (${treatment.cycleText})</td><td style="text-align:right">Rs. ${formatNum(treatment.total)}</td></tr>` : ''}
+            </table>
+            <p style="font-size:0.76rem; color:#555; margin-top:-8px;">${treatment.active ? `Total estimate = Cycle 1 + Cycle 2 onwards × ${treatment.cycle2Count}.` : 'Enter number of cycles to calculate the total treatment estimate.'}</p>
+        ` : treatment.active ? `
             <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Procedure Cost Estimate</p>
             <table class="est-table">
                 <tr><th>Component</th><th style="text-align:right">Per Cycle</th><th style="text-align:right">Total for ${treatment.cycles} ${treatment.cycles === 1 ? 'Cycle' : 'Cycles'}</th></tr>
-                <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td><td style="text-align:right">Rs. ${formatNum(drugTotal * treatment.cycles)}</td></tr>
-                <tr><td>Procedure Charges${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td><td style="text-align:right">Rs. ${formatNum(procedure * treatment.cycles)}</td></tr>
-                <tr><td>Hospital Charges (Consumables, Hospital Services, Consultation Charges)${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td><td style="text-align:right">Rs. ${formatNum((consumables + consultation + wardCharges) * treatment.cycles)}</td></tr>
-                <tr style="font-weight:700; background:#e8f0fe;"><td>TOTAL ESTIMATED COST</td><td style="text-align:right">Rs. ${formatNum(total)}</td><td style="text-align:right">Rs. ${formatNum(treatment.total)}</td></tr>
+                <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(costs.drugTotal)}</td><td style="text-align:right">Rs. ${formatNum(costs.drugTotal * treatment.cycles)}</td></tr>
+                <tr><td>Procedure Charges${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(costs.procedure)}</td><td style="text-align:right">Rs. ${formatNum(costs.procedure * treatment.cycles)}</td></tr>
+                <tr><td>Hospital Charges (Consumables, Hospital Services, Consultation Charges)${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(costs.consumables + costs.consultation + costs.wardCharges)}</td><td style="text-align:right">Rs. ${formatNum((costs.consumables + costs.consultation + costs.wardCharges) * treatment.cycles)}</td></tr>
+                <tr style="font-weight:700; background:#e8f0fe;"><td>TOTAL ESTIMATED COST</td><td style="text-align:right">Rs. ${formatNum(costs.total)}</td><td style="text-align:right">Rs. ${formatNum(treatment.total)}</td></tr>
             </table>
             <p style="font-size:0.76rem; color:#555; margin-top:-8px;">Total treatment estimate = per-cycle total × ${treatment.cycles} ${treatment.cycles === 1 ? 'cycle' : 'cycles'}${treatment.intervalLabel ? ` (${treatment.intervalLabel})` : ''}.</p>
         ` : `
             <p style="font-weight:600; margin:14px 0 4px; font-size:0.88rem;">Procedure Cost (Per Cycle)</p>
             <table class="est-table">
                 <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
-                <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(drugTotal)}</td></tr>
-                <tr><td>Procedure Charges${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(procedure)}</td></tr>
-                <tr><td>Hospital Charges (Consumables, Hospital Services, Consultation Charges)${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(consumables + consultation + wardCharges)}</td></tr>
-                <tr style="font-weight:700; background:#e8f0fe;"><td>TOTAL</td><td style="text-align:right">Rs. ${formatNum(total)}</td></tr>
+                <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(costs.drugTotal)}</td></tr>
+                <tr><td>Procedure Charges${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(costs.procedure)}</td></tr>
+                <tr><td>Hospital Charges (Consumables, Hospital Services, Consultation Charges)${printDayLabel}</td><td style="text-align:right">Rs. ${formatNum(costs.consumables + costs.consultation + costs.wardCharges)}</td></tr>
+                <tr style="font-weight:700; background:#e8f0fe;"><td>TOTAL</td><td style="text-align:right">Rs. ${formatNum(costs.total)}</td></tr>
             </table>
         `;
 
@@ -3979,7 +4556,6 @@ function generatePrint(mode) {
     const printArea = document.getElementById('printArea');
     printArea.style.display = 'block';
 
-    // Default to B&W (for printer). If user ticks "Keep colours", keep colour output (for PDF).
     const keepColours = document.getElementById('colorPrintToggle')?.checked;
     printArea.classList.toggle('bw-mode', !keepColours);
 
