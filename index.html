@@ -4482,9 +4482,7 @@ function generatePrint(mode) {
                 <tr><th>Component</th><th style="text-align:right">Cycle 1</th><th style="text-align:right">Cycle 2 onwards (per cycle)</th></tr>
                 <tr><td>Drugs + Supportive Medications</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.drugTotal)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.drugTotal)}</td></tr>
                 <tr><td>Procedure Charges</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.procedure)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.procedure)}</td></tr>
-                <tr><td>Consumables</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.consumables)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.consumables)}</td></tr>
-                <tr><td>Consultation Charges</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.consultation)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.consultation)}</td></tr>
-                <tr><td>Hospital Services</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.wardCharges)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.wardCharges)}</td></tr>
+                <tr><td>Hospital Charges (Consumables, Hospital Services, Consultation Charges)</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.consumables + phases.cycle1.consultation + phases.cycle1.wardCharges)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.consumables + phases.cycle2.consultation + phases.cycle2.wardCharges)}</td></tr>
                 <tr style="font-weight:700; background:#e8f0fe;"><td>ESTIMATED COST</td><td style="text-align:right">Rs. ${formatNum(phases.cycle1.total)}</td><td style="text-align:right">Rs. ${formatNum(phases.cycle2.total)}</td></tr>
                 ${treatment.active ? `<tr style="font-weight:700; background:#e8f0fe;"><td colspan="2">TOTAL ESTIMATED COST (${treatment.cycleText})</td><td style="text-align:right">Rs. ${formatNum(treatment.total)}</td></tr>` : ''}
             </table>
