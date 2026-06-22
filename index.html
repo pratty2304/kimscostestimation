@@ -795,6 +795,7 @@ const mahadevapuraDrugDatabase = [
     { brand: "IMFINZI 500MG INJ", generic: "DURVALUMAB", mrp: 171324.00, type: "immunotherapy", contentMg: 500 },
     { brand: "JEMPERLI 500MG INJ", generic: "DOSTARLIMAB", mrp: 390692.00, type: "immunotherapy", contentMg: 500 },
     { brand: "TEVIMBRA 100MG INJ", generic: "TISLELIZUMAB", mrp: 65250.00, type: "immunotherapy", contentMg: 100 },
+    { brand: "IMJUDO 300MG", generic: "TREMELIMUMAB", mrp: 364807.00, type: "immunotherapy", contentMg: 300 },
 
     // Targeted Therapy
     { brand: "KRYXANA 200MG TAB", generic: "RIBOCICLIB", mrp: 1159.76, type: "targeted", contentMg: 200, form: "tablet", unitsPerPack: 21 },
@@ -931,6 +932,7 @@ const electronicCityDrugDatabase = [
     { brand: "IMFINZI 500MG INJ", generic: "DURVALUMAB", mrp: 171324.00, type: "immunotherapy", contentMg: 500 },
     { brand: "JEMPERLI 500MG INJ", generic: "DOSTARLIMAB", mrp: 390692.00, type: "immunotherapy", contentMg: 500 },
     { brand: "TEVIMBRA 100MG", generic: "TISLELIZUMAB", mrp: 65250.00, type: "immunotherapy", contentMg: 100 },
+    { brand: "IMJUDO 300MG", generic: "TREMELIMUMAB", mrp: 364807.00, type: "immunotherapy", contentMg: 300 },
 
     // Targeted Therapy
     { brand: "BEVAZZA 100MG INJ", generic: "BEVACIZUMAB", mrp: 21466.90, type: "targeted", contentMg: 100 },
@@ -1278,6 +1280,14 @@ const regimenDatabase = [
         drugs: [
             { generic: "ATEZOLIZUMAB", dose: 1200, doseType: "flat_mg", note: "1200 mg D1" },
             { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg", note: "15 mg/kg D1" },
+        ]
+    },
+    {
+        name: "Durvalumab + Tremelimumab (STRIDE, HCC)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "TREMELIMUMAB", dose: 300, doseType: "flat_mg", note: "300 mg single dose on C1D1 only (STRIDE)" },
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500 mg C1D1, then 1500 mg Q4W maintenance" },
         ]
     },
     {
@@ -2673,6 +2683,7 @@ const regimenCancerTypes = [
         label: 'Hepatocellular',
         regimens: [
             "Atezolizumab + Bevacizumab (HCC)",
+            "Durvalumab + Tremelimumab (STRIDE, HCC)",
             "mFOLFOX6",
             "Nivolumab + Ipilimumab (CheckMate 9DW, HCC)",
         ],
