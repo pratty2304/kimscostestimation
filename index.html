@@ -962,6 +962,8 @@ const mahadevapuraDrugDatabase = [
 
     // Targeted Therapy
     { brand: "KRYXANA 200MG TAB", generic: "RIBOCICLIB", mrp: 1159.76, type: "targeted", contentMg: 200, form: "tablet", unitsPerPack: 21 },
+    { brand: "RAFILNAR 75MG CAP", generic: "DABRAFENIB", mrp: 1553.25, type: "targeted", contentMg: 75, form: "capsule", unitsPerPack: 28, packType: "pack" },
+    { brand: "MEQSEL 2MG CAP", generic: "TRAMETINIB", mrp: 6263.5666666667, type: "targeted", contentMg: 2, form: "capsule", unitsPerPack: 30, packType: "pack" },
     { brand: "LENVA 4MG CAP", generic: "LENVATINIB", mrp: 260.00, type: "targeted", contentMg: 4, form: "capsule", unitsPerPack: 10 },
     { brand: "LENALID 5MG CAP", generic: "LENALIDOMIDE", mrp: 68.6333333333, type: "targeted", contentMg: 5, form: "capsule", unitsPerPack: 30, packType: "box" },
     { brand: "LENALID 10MG CAP", generic: "LENALIDOMIDE", mrp: 141.10, type: "targeted", contentMg: 10, form: "capsule", unitsPerPack: 30, packType: "bottle" },
@@ -1115,6 +1117,8 @@ const electronicCityDrugDatabase = [
     { brand: "CABDUAL 60MG TAB", generic: "CABOZANTINIB", mrp: 499.50, type: "targeted", contentMg: 60, form: "tablet", unitsPerPack: 30 },
     { brand: "REGONAT 40MG TAB", generic: "REGORAFENIB", mrp: 353.57, type: "targeted", contentMg: 40, form: "tablet", unitsPerPack: 28 },
     { brand: "TUCANAT 150MG TAB", generic: "TUCATINIB", mrp: 703.1166666667, type: "targeted", contentMg: 150, form: "tablet", unitsPerPack: 60, packType: "bottle" },
+    { brand: "RAFILNAR 75MG CAP", generic: "DABRAFENIB", mrp: 1553.25, type: "targeted", contentMg: 75, form: "capsule", unitsPerPack: 28, packType: "pack" },
+    { brand: "MEQSEL 2MG CAP", generic: "TRAMETINIB", mrp: 6263.5666666667, type: "targeted", contentMg: 2, form: "capsule", unitsPerPack: 30, packType: "pack" },
     { brand: "LENVA 4MG CAP", generic: "LENVATINIB", mrp: 260.00, type: "targeted", contentMg: 4, form: "capsule", unitsPerPack: 10 },
     { brand: "LENALID 5MG CAP", generic: "LENALIDOMIDE", mrp: 68.6333333333, type: "targeted", contentMg: 5, form: "capsule", unitsPerPack: 30, packType: "box" },
     { brand: "LENALID 10MG CAP", generic: "LENALIDOMIDE", mrp: 141.10, type: "targeted", contentMg: 10, form: "capsule", unitsPerPack: 30, packType: "bottle" },
@@ -1493,11 +1497,55 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Dabrafenib + Trametinib (BRAF V600 melanoma)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "DABRAFENIB", dose: 150, doseType: "oral_bid_daily", daysPerCycle: 28, note: "150 mg PO BD continuous; BRAF V600E/V600K" },
+            { generic: "TRAMETINIB", dose: 2, doseType: "oral_daily", daysPerCycle: 28, note: "2 mg PO OD continuous" },
+        ]
+    },
+    {
         name: "Nivolumab + Ipilimumab (CheckMate 214, RCC)",
         cycle: "Q3W",
         drugs: [
             { generic: "NIVOLUMAB", dose: 3, doseType: "mg_per_kg", note: "3 mg/kg D1 Q3W × 4 doses (then nivolumab maintenance)" },
             { generic: "IPILIMUMAB", dose: 1, doseType: "mg_per_kg", note: "1 mg/kg D1 Q3W × 4 doses" },
+        ]
+    },
+    {
+        name: "Nivolumab (Melanoma, Q2W)",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 240, doseType: "flat_mg", note: "240 mg IV Q2W" },
+        ]
+    },
+    {
+        name: "Nivolumab (Melanoma, Q4W)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 480, doseType: "flat_mg", note: "480 mg IV Q4W" },
+        ]
+    },
+    {
+        name: "Nivolumab + Ipilimumab (CheckMate 067, melanoma induction)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 1, doseType: "mg_per_kg", note: "1 mg/kg IV Q3W for up to 4 doses; then nivolumab maintenance" },
+            { generic: "IPILIMUMAB", dose: 3, doseType: "mg_per_kg", note: "3 mg/kg IV Q3W for up to 4 doses" },
+        ]
+    },
+    {
+        name: "Pembrolizumab (Melanoma, Q3W)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "PEMBROLIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg IV Q3W" },
+        ]
+    },
+    {
+        name: "Pembrolizumab (Melanoma, Q6W)",
+        cycle: "Q6W",
+        drugs: [
+            { generic: "PEMBROLIZUMAB", dose: 400, doseType: "flat_mg", note: "400 mg IV Q6W" },
         ]
     },
     {
@@ -2904,6 +2952,18 @@ const regimenCancerTypes = [
         ],
     },
     {
+        value: 'melanoma',
+        label: 'Melanoma',
+        regimens: [
+            "Pembrolizumab (Melanoma, Q3W)",
+            "Pembrolizumab (Melanoma, Q6W)",
+            "Nivolumab (Melanoma, Q2W)",
+            "Nivolumab (Melanoma, Q4W)",
+            "Nivolumab + Ipilimumab (CheckMate 067, melanoma induction)",
+            "Dabrafenib + Trametinib (BRAF V600 melanoma)",
+        ],
+    },
+    {
         value: 'lymphoma',
         label: 'Lymphoma',
         regimens: [
@@ -3564,6 +3624,10 @@ function addCalcDrugsToEstimate() {
                 mrp: v.mrp,
                 type: v.type,
                 contentMg: v.contentMg,
+                form: v.form,
+                unitsPerPack: v.unitsPerPack,
+                packType: v.packType,
+                cycleRule: calc.cycleRule,
                 qty: v.qty
             };
             addedDrugs.push(entry);
@@ -3634,7 +3698,7 @@ function getRegimenIndexByName(name) {
 
 function getRegimenDisplayText(regimen) {
     const nameLC = regimen.name.toLowerCase();
-    const showCycle = !nameLC.includes('weekly') && !nameLC.includes('q2w') && !nameLC.includes('q3w');
+    const showCycle = !nameLC.includes('weekly') && !/\bq\d+w\b/.test(nameLC);
     return showCycle ? `${regimen.name} (${regimen.cycle})` : regimen.name;
 }
 
