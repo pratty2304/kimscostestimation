@@ -1537,6 +1537,13 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Durvalumab single agent (HIMALAYA, HCC)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "DURVALUMAB", dose: 1500, doseType: "flat_mg", note: "1500 mg IV Q4W" },
+        ]
+    },
+    {
         name: "Cabazitaxel (Prostate cancer)",
         cycle: "Q3W",
         drugs: [
@@ -1549,6 +1556,13 @@ const regimenDatabase = [
         drugs: [
             { generic: "CABOZANTINIB", dose: 40, doseType: "oral_daily", daysPerCycle: 28, note: "40 mg PO OD continuous" },
             { generic: "NIVOLUMAB", dose: 240, doseType: "flat_mg", timesPerCycle: 2, note: "240 mg IV Q2W (D1, D15)" },
+        ]
+    },
+    {
+        name: "Cabozantinib single agent (CELESTIAL, HCC)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "CABOZANTINIB", dose: 60, doseType: "oral_daily", daysPerCycle: 28, note: "60 mg PO OD continuous; after prior sorafenib" },
         ]
     },
     {
@@ -2152,6 +2166,20 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "Lenvatinib single agent (REFLECT, HCC)",
+        cycle: "Q4W",
+        drugs: [
+            {
+                generic: "LENVATINIB",
+                dose: 12,
+                doseType: "oral_daily",
+                daysPerCycle: 28,
+                weightBasedDose: { thresholdKg: 60, below: 8, atOrAbove: 12 },
+                note: "8 mg PO OD if <60 kg; 12 mg PO OD if ≥60 kg"
+            },
+        ]
+    },
+    {
         name: "Lipodox (Pegylated Liposomal Doxorubicin)",
         cycle: "Q4W",
         drugs: [
@@ -2290,6 +2318,13 @@ const regimenDatabase = [
         drugs: [
             { generic: "NIVOLUMAB", dose: 1, doseType: "mg_per_kg", note: "1 mg/kg D1 Q3W × 4 doses (then nivolumab maintenance)" },
             { generic: "IPILIMUMAB", dose: 3, doseType: "mg_per_kg", note: "3 mg/kg D1 Q3W × 4 doses" },
+        ]
+    },
+    {
+        name: "Nivolumab single agent (CheckMate 459, HCC)",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 240, doseType: "flat_mg", note: "240 mg IV Q2W" },
         ]
     },
     {
@@ -2531,6 +2566,21 @@ const regimenDatabase = [
             { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg D1 with chemotherapy (then 400 mg Q6W adjuvant)" },
             { generic: "CISPLATIN", dose: 75, doseType: "mg_per_m2", note: "75 mg/m² D1" },
             { generic: "PEMETREXED", dose: 500, doseType: "mg_per_m2", note: "500 mg/m² D1" },
+        ]
+    },
+    {
+        name: "Tislelizumab single agent (RATIONALE-301, HCC)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "TISLELIZUMAB", dose: 200, doseType: "flat_mg", note: "200 mg IV Q3W" },
+        ]
+    },
+    {
+        name: "Toripalimab + Bevacizumab (HEPATORCH, HCC)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "TORIPALIMAB", dose: 240, doseType: "flat_mg", note: "240 mg IV D1 Q3W" },
+            { generic: "BEVACIZUMAB", dose: 15, doseType: "mg_per_kg", note: "15 mg/kg IV D1 Q3W" },
         ]
     },
     {
@@ -2973,9 +3023,14 @@ const regimenCancerTypes = [
         label: 'Hepatocellular',
         regimens: [
             "Atezolizumab + Bevacizumab (HCC)",
+            "Cabozantinib single agent (CELESTIAL, HCC)",
             "Durvalumab + Tremelimumab (STRIDE, HCC)",
-            "mFOLFOX6",
+            "Durvalumab single agent (HIMALAYA, HCC)",
+            "Lenvatinib single agent (REFLECT, HCC)",
             "Nivolumab + Ipilimumab (CheckMate 9DW, HCC)",
+            "Nivolumab single agent (CheckMate 459, HCC)",
+            "Tislelizumab single agent (RATIONALE-301, HCC)",
+            "Toripalimab + Bevacizumab (HEPATORCH, HCC)",
         ],
     },
     {
@@ -3475,51 +3530,58 @@ function calculateRegimen() {
         let doseLabel = '';
         const times = drug.timesPerCycle || 1;
         const cycleRule = getCycleRuleForStorage(drug);
+        const weightDose = drug.weightBasedDose;
+        const effectiveDose = weightDose
+            ? (weightKg < weightDose.thresholdKg ? weightDose.below : weightDose.atOrAbove)
+            : drug.dose;
 
         switch (drug.doseType) {
             case 'mg_per_m2':
-                dosePerAdmin = drug.dose * bsa;
-                doseLabel = `${drug.dose} mg/m² × ${bsa.toFixed(2)} = ${dosePerAdmin.toFixed(1)} mg`;
+                dosePerAdmin = effectiveDose * bsa;
+                doseLabel = `${effectiveDose} mg/m² × ${bsa.toFixed(2)} = ${dosePerAdmin.toFixed(1)} mg`;
                 if (times > 1) doseLabel += ` (×${times}/cycle)`;
                 break;
             case 'auc':
-                dosePerAdmin = calcCarboplatinDose(drug.dose, gfr);
-                doseLabel = `AUC ${drug.dose} × (GFR ${gfr.toFixed(0)} + 25) = ${dosePerAdmin.toFixed(1)} mg`;
+                dosePerAdmin = calcCarboplatinDose(effectiveDose, gfr);
+                doseLabel = `AUC ${effectiveDose} × (GFR ${gfr.toFixed(0)} + 25) = ${dosePerAdmin.toFixed(1)} mg`;
                 if (times > 1) doseLabel += ` (×${times}/cycle)`;
                 break;
             case 'mg_per_kg':
-                dosePerAdmin = drug.dose * weightKg;
-                doseLabel = `${drug.dose} mg/kg × ${weightKg} kg = ${dosePerAdmin.toFixed(1)} mg`;
+                dosePerAdmin = effectiveDose * weightKg;
+                doseLabel = `${effectiveDose} mg/kg × ${weightKg} kg = ${dosePerAdmin.toFixed(1)} mg`;
                 if (times > 1) doseLabel += ` (×${times}/cycle)`;
                 break;
             case 'flat_mg':
-                dosePerAdmin = drug.dose;
-                doseLabel = `${drug.dose} mg (flat dose)`;
+                dosePerAdmin = effectiveDose;
+                doseLabel = `${effectiveDose} mg (flat dose)`;
                 if (times > 1) doseLabel += ` (×${times}/cycle)`;
                 break;
             case 'oral_bd_14d': {
-                const singleDose = Math.round((drug.dose * bsa) / 500) * 500;
+                const singleDose = Math.round((effectiveDose * bsa) / 500) * 500;
                 dosePerAdmin = singleDose * 2 * 14;
-                doseLabel = `${drug.dose} mg/m² BD × 14d = ${singleDose} mg BD (${dosePerAdmin} mg total)`;
+                doseLabel = `${effectiveDose} mg/m² BD × 14d = ${singleDose} mg BD (${dosePerAdmin} mg total)`;
                 break;
             }
             case 'oral_bd_days': {
                 const days = drug.daysPerCycle || times;
-                const singleDose = drug.dose * bsa;
+                const singleDose = effectiveDose * bsa;
                 dosePerAdmin = singleDose * 2 * days;
-                doseLabel = `${drug.dose} mg/m² BD × ${days}d = ${singleDose.toFixed(1)} mg BD (${dosePerAdmin.toFixed(1)} mg total)`;
+                doseLabel = `${effectiveDose} mg/m² BD × ${days}d = ${singleDose.toFixed(1)} mg BD (${dosePerAdmin.toFixed(1)} mg total)`;
                 break;
             }
             case 'oral_daily': {
                 const days = drug.daysPerCycle || times;
-                dosePerAdmin = drug.dose * days;
-                doseLabel = `${drug.dose} mg OD × ${days}d = ${dosePerAdmin} mg total`;
+                dosePerAdmin = effectiveDose * days;
+                const weightLabel = weightDose
+                    ? ` (${weightKg < weightDose.thresholdKg ? '<' : '≥'}${weightDose.thresholdKg} kg dose)`
+                    : '';
+                doseLabel = `${effectiveDose} mg OD × ${days}d = ${dosePerAdmin} mg total${weightLabel}`;
                 break;
             }
             case 'oral_bid_daily': {
                 const days = drug.daysPerCycle || times;
-                dosePerAdmin = drug.dose * 2 * days;
-                doseLabel = `${drug.dose} mg BD × ${days}d = ${dosePerAdmin} mg total`;
+                dosePerAdmin = effectiveDose * 2 * days;
+                doseLabel = `${effectiveDose} mg BD × ${days}d = ${dosePerAdmin} mg total`;
                 break;
             }
         }
@@ -3563,7 +3625,7 @@ function calculateRegimen() {
         let optimalPerAdmin;
         if (drug.doseType === 'oral_daily' || drug.doseType === 'oral_bid_daily') {
             const days = drug.daysPerCycle || times;
-            const dailyDose = drug.doseType === 'oral_bid_daily' ? drug.dose * 2 : drug.dose;
+            const dailyDose = drug.doseType === 'oral_bid_daily' ? effectiveDose * 2 : effectiveDose;
             const matching = brands.filter(b => b.contentMg === dailyDose);
             const pool = matching.length > 0 ? matching : brands;
             const dailyUnits = matching.length > 0
