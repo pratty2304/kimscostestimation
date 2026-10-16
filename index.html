@@ -1041,6 +1041,7 @@ const mahadevapuraDrugDatabase = [
     { brand: "BEVATAS 300MG INJ", generic: "BEVACIZUMAB", mrp: 18000.00, type: "targeted", contentMg: 300 },
     { brand: "BRYXTA 400MG INJ", generic: "BEVACIZUMAB", mrp: 63995.00, type: "targeted", contentMg: 400 },
     { brand: "POLIVY 30MG INJ", generic: "POLATUZUMAB VEDOTIN", mrp: 190000.00, type: "targeted", contentMg: 30 },
+    { brand: "ADCETRIS 50MG INJ", generic: "BRENTUXIMAB VEDOTIN", mrp: 208000.00, type: "targeted", contentMg: 50 },
     { brand: "ENFIERA 100MG INJ", generic: "RITUXIMAB", mrp: 8137.50, type: "targeted", contentMg: 100 },
     { brand: "LUPIXIMAB 100MG INJ", generic: "RITUXIMAB", mrp: 4074.00, type: "targeted", contentMg: 100 },
     { brand: "MABTAS 100MG INJ", generic: "RITUXIMAB", mrp: 7998.99, type: "targeted", contentMg: 100 },
@@ -1183,6 +1184,7 @@ const electronicCityDrugDatabase = [
     { brand: "THALIX 50MG CAP", generic: "THALIDOMIDE", mrp: 33.27, type: "targeted", contentMg: 50, form: "capsule", unitsPerPack: 10, packType: "strip" },
     { brand: "THALIX 100MG CAP", generic: "THALIDOMIDE", mrp: 65.10, type: "targeted", contentMg: 100, form: "capsule", unitsPerPack: 10, packType: "strip" },
     { brand: "POLIVY 30MG INJ", generic: "POLATUZUMAB VEDOTIN", mrp: 190000.00, type: "targeted", contentMg: 30 },
+    { brand: "ADCETRIS 50MG INJ", generic: "BRENTUXIMAB VEDOTIN", mrp: 208000.00, type: "targeted", contentMg: 50 },
     { brand: "ENFIERA 100MG INJ", generic: "RITUXIMAB", mrp: 8137.50, type: "targeted", contentMg: 100 },
     { brand: "LUPIXIMAB 100MG INJ", generic: "RITUXIMAB", mrp: 4074.00, type: "targeted", contentMg: 100 },
     { brand: "MABTAS 100MG INJ", generic: "RITUXIMAB", mrp: 8533.00, type: "targeted", contentMg: 100 },
@@ -1533,6 +1535,68 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "BR (Bendamustine + Rituximab)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "BENDAMUSTINE", dose: 90, doseType: "mg_per_m2", timesPerCycle: 2, note: "90 mg/m² D1, D2" },
+        ]
+    },
+    {
+        name: "BV-AVD (ECHELON-1)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "BRENTUXIMAB VEDOTIN", dose: 1.2, doseType: "mg_per_kg", timesPerCycle: 2, maxDose: 120, note: "1.2 mg/kg D1, D15 (max 120 mg/dose); primary G-CSF prophylaxis recommended" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", timesPerCycle: 2, note: "25 mg/m² D1, D15" },
+            { generic: "VINBLASTINE", dose: 6, doseType: "mg_per_m2", timesPerCycle: 2, note: "6 mg/m² D1, D15" },
+            { generic: "DACARBAZINE", dose: 375, doseType: "mg_per_m2", timesPerCycle: 2, note: "375 mg/m² D1, D15" },
+        ]
+    },
+    {
+        name: "BV-CHP (ECHELON-2, CD30+ PTCL)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "BRENTUXIMAB VEDOTIN", dose: 1.8, doseType: "mg_per_kg", maxDose: 180, note: "1.8 mg/kg D1 (max 180 mg)" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 750, doseType: "mg_per_m2", note: "750 mg/m² D1" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 50, doseType: "mg_per_m2", note: "50 mg/m² D1" },
+            { generic: "PREDNISOLONE", dose: 100, doseType: "flat_mg", timesPerCycle: 5, note: "100 mg PO D1-5" },
+        ]
+    },
+    {
+        name: "CHOEP",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "CYCLOPHOSPHAMIDE", dose: 750, doseType: "mg_per_m2", note: "750 mg/m² D1" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 50, doseType: "mg_per_m2", note: "50 mg/m² D1" },
+            { generic: "VINCRISTINE", dose: 1.4, doseType: "mg_per_m2", note: "1.4 mg/m² D1 (max 2mg)" },
+            { generic: "ETOPOSIDE", dose: 100, doseType: "mg_per_m2", timesPerCycle: 3, note: "100 mg/m² D1-3" },
+            { generic: "PREDNISOLONE", dose: 100, doseType: "flat_mg", timesPerCycle: 5, note: "100 mg PO D1-5" },
+        ]
+    },
+    {
+        name: "CHOP",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "CYCLOPHOSPHAMIDE", dose: 750, doseType: "mg_per_m2", note: "750 mg/m² D1" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 50, doseType: "mg_per_m2", note: "50 mg/m² D1" },
+            { generic: "VINCRISTINE", dose: 1.4, doseType: "mg_per_m2", note: "1.4 mg/m² D1 (max 2mg)" },
+            { generic: "PREDNISOLONE", dose: 100, doseType: "flat_mg", timesPerCycle: 5, note: "100 mg PO D1-5" },
+        ]
+    },
+    {
+        name: "DA-EPOCH-R (dose level 1)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "ETOPOSIDE", dose: 50, doseType: "mg_per_m2", timesPerCycle: 4, note: "50 mg/m²/day CI D1-4" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 10, doseType: "mg_per_m2", timesPerCycle: 4, note: "10 mg/m²/day CI D1-4" },
+            { generic: "VINCRISTINE", dose: 0.4, doseType: "mg_per_m2", timesPerCycle: 4, note: "0.4 mg/m²/day CI D1-4 (no cap)" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 750, doseType: "mg_per_m2", note: "750 mg/m² D5; dose-adjust E/D/C by nadir ANC" },
+            { generic: "PREDNISOLONE", dose: 60, doseType: "mg_per_m2", timesPerCycle: 10, note: "60 mg/m² PO BD D1-5" },
+            { generic: "PEG-GCSF", dose: 6, doseType: "flat_mg", note: "6 mg D6 (G-CSF support mandatory)" },
+        ]
+    },
+    {
         name: "Durvalumab + Tremelimumab (STRIDE, HCC)",
         cycle: "Q4W",
         drugs: [
@@ -1575,6 +1639,26 @@ const regimenDatabase = [
         drugs: [
             { generic: "DABRAFENIB", dose: 150, doseType: "oral_bid_daily", daysPerCycle: 28, note: "150 mg PO BD continuous; BRAF V600E/V600K" },
             { generic: "TRAMETINIB", dose: 2, doseType: "oral_daily", daysPerCycle: 28, note: "2 mg PO OD continuous" },
+        ]
+    },
+    {
+        name: "MATRix (PCNSL)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", timesPerCycle: 2, note: "375 mg/m² D0, D5" },
+            { generic: "METHOTREXATE", dose: 3500, doseType: "mg_per_m2", note: "3.5 g/m² D1 (leucovorin rescue not priced)" },
+            { generic: "CYTARABINE", dose: 2000, doseType: "mg_per_m2", timesPerCycle: 4, note: "2 g/m² q12h D2-3 (4 doses)" },
+            { generic: "THIOTEPA", dose: 30, doseType: "mg_per_m2", note: "30 mg/m² D4" },
+        ]
+    },
+    {
+        name: "Nivo-AVD (SWOG S1826)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "NIVOLUMAB", dose: 240, doseType: "flat_mg", timesPerCycle: 2, note: "240 mg D1, D15" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", timesPerCycle: 2, note: "25 mg/m² D1, D15" },
+            { generic: "VINBLASTINE", dose: 6, doseType: "mg_per_m2", timesPerCycle: 2, note: "6 mg/m² D1, D15" },
+            { generic: "DACARBAZINE", dose: 375, doseType: "mg_per_m2", timesPerCycle: 2, note: "375 mg/m² D1, D15" },
         ]
     },
     {
@@ -1641,6 +1725,98 @@ const regimenDatabase = [
         cycle: "Q3W",
         drugs: [
             { generic: "CAPECITABINE", dose: 1250, doseType: "oral_bd_14d", note: "1250 mg/m² BD D1-14" },
+        ]
+    },
+    {
+        name: "Pola-BR (Polatuzumab + Bendamustine + Rituximab)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "POLATUZUMAB VEDOTIN", dose: 1.8, doseType: "mg_per_kg", note: "1.8 mg/kg D1" },
+            { generic: "BENDAMUSTINE", dose: 90, doseType: "mg_per_m2", timesPerCycle: 2, note: "90 mg/m² D1, D2" },
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+        ]
+    },
+    {
+        name: "R-CVP",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 750, doseType: "mg_per_m2", note: "750 mg/m² D1" },
+            { generic: "VINCRISTINE", dose: 1.4, doseType: "mg_per_m2", note: "1.4 mg/m² D1 (max 2mg)" },
+            { generic: "PREDNISOLONE", dose: 100, doseType: "flat_mg", timesPerCycle: 5, note: "100 mg PO D1-5" },
+        ]
+    },
+    {
+        name: "R-DHAP",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "CISPLATIN", dose: 100, doseType: "mg_per_m2", note: "100 mg/m² CI D1; dexamethasone 40 mg D1-4 (not priced)" },
+            { generic: "CYTARABINE", dose: 2000, doseType: "mg_per_m2", timesPerCycle: 2, note: "2000 mg/m² q12h × 2 doses D2" },
+        ]
+    },
+    {
+        name: "R-GDP",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", timesPerCycle: 2, note: "1000 mg/m² D1, D8" },
+            { generic: "CISPLATIN", dose: 75, doseType: "mg_per_m2", note: "75 mg/m² D1; dexamethasone 40 mg D1-4 (not priced)" },
+        ]
+    },
+    {
+        name: "R-GemOx",
+        cycle: "Q2W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "GEMCITABINE", dose: 1000, doseType: "mg_per_m2", note: "1000 mg/m² D1" },
+            { generic: "OXALIPLATIN", dose: 100, doseType: "mg_per_m2", note: "100 mg/m² D1" },
+        ]
+    },
+    {
+        name: "R-ICE",
+        cycle: "Q2W",
+        needsCreatinine: true,
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "IFOSFAMIDE", dose: 5000, doseType: "mg_per_m2", note: "5000 mg/m² 24h CI D2" },
+            { generic: "MESNA", dose: 5000, doseType: "mg_per_m2", note: "Equal to ifosfamide dose, with ifosfamide D2" },
+            { generic: "CARBOPLATIN", dose: 5, doseType: "auc", maxDose: 800, note: "AUC 5 D2 (max 800 mg)" },
+            { generic: "ETOPOSIDE", dose: 100, doseType: "mg_per_m2", timesPerCycle: 3, note: "100 mg/m² D1-3" },
+        ]
+    },
+    {
+        name: "R-mini-CHOP",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 400, doseType: "mg_per_m2", note: "400 mg/m² D1" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 25, doseType: "mg_per_m2", note: "25 mg/m² D1" },
+            { generic: "VINCRISTINE", dose: 1, doseType: "flat_mg", note: "1 mg flat D1" },
+            { generic: "PREDNISOLONE", dose: 40, doseType: "mg_per_m2", timesPerCycle: 5, note: "40 mg/m² PO D1-5" },
+        ]
+    },
+    {
+        name: "Rituximab maintenance (Q8W)",
+        cycle: "Q8W",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² every 8 weeks for 2 years" },
+        ]
+    },
+    {
+        name: "Rituximab single agent (weekly ×4)",
+        cycle: "Weekly",
+        drugs: [
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", timesPerCycle: 4, note: "375 mg/m² weekly × 4 doses" },
+        ]
+    },
+    {
+        name: "R² (Lenalidomide + Rituximab, AUGMENT)",
+        cycle: "Q4W",
+        drugs: [
+            { generic: "LENALIDOMIDE", dose: 20, doseType: "oral_daily", daysPerCycle: 21, note: "20 mg PO OD D1-21 (10 mg if CrCl 30-59)" },
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", timesPerCycle: 4, cycles: [1], note: "Cycle 1: 375 mg/m² D1, D8, D15, D22" },
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", startCycle: 2, endCycle: 5, note: "Cycles 2-5: 375 mg/m² D1" },
         ]
     },
     {
@@ -2634,6 +2810,17 @@ const regimenDatabase = [
         ]
     },
     {
+        name: "VR-CAP (Mantle cell)",
+        cycle: "Q3W",
+        drugs: [
+            { generic: "BORTEZOMIB", dose: 1.3, doseType: "mg_per_m2", timesPerCycle: 4, note: "1.3 mg/m² D1, D4, D8, D11" },
+            { generic: "RITUXIMAB", dose: 375, doseType: "mg_per_m2", note: "375 mg/m² D1" },
+            { generic: "CYCLOPHOSPHAMIDE", dose: 750, doseType: "mg_per_m2", note: "750 mg/m² D1" },
+            { generic: "DOXORUBICIN (ADRIAMYCIN)", dose: 50, doseType: "mg_per_m2", note: "50 mg/m² D1" },
+            { generic: "PREDNISOLONE", dose: 100, doseType: "mg_per_m2", timesPerCycle: 5, note: "100 mg/m² PO D1-5" },
+        ]
+    },
+    {
         name: "VRd (Bortezomib + Lenalidomide + Dexamethasone)",
         cycle: "Q3W",
         drugs: [
@@ -3078,12 +3265,37 @@ const regimenCancerTypes = [
         ],
     },
     {
-        value: 'lymphoma',
-        label: 'Lymphoma',
+        value: 'hodgkin_lymphoma',
+        label: 'Hodgkin Lymphoma',
         regimens: [
             "ABVD",
-            "Pola-R-CHP (POLARIX)",
+            "Nivo-AVD (SWOG S1826)",
+            "BV-AVD (ECHELON-1)",
+        ],
+    },
+    {
+        value: 'non_hodgkin_lymphoma',
+        label: 'Non-Hodgkin Lymphoma',
+        regimens: [
             "R-CHOP",
+            "Pola-R-CHP (POLARIX)",
+            "R-mini-CHOP",
+            "DA-EPOCH-R (dose level 1)",
+            "R-CVP",
+            "BR (Bendamustine + Rituximab)",
+            "R² (Lenalidomide + Rituximab, AUGMENT)",
+            "Rituximab single agent (weekly ×4)",
+            "Rituximab maintenance (Q8W)",
+            "VR-CAP (Mantle cell)",
+            "R-ICE",
+            "R-DHAP",
+            "R-GDP",
+            "R-GemOx",
+            "Pola-BR (Polatuzumab + Bendamustine + Rituximab)",
+            "CHOP",
+            "CHOEP",
+            "BV-CHP (ECHELON-2, CD30+ PTCL)",
+            "MATRix (PCNSL)",
         ],
     },
     {
