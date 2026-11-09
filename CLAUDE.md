@@ -17,7 +17,8 @@ kims-onco-sciences-logo.png  # KIMS Onco Sciences logo (used in overlay, header,
 - Branch selection overlay appears first; choosing a branch sets `currentBranch` and `currentDrugDatabase`
 - Branch config lives in `BRANCH_CONFIG`, including branch subtitle, drug database, and consultant list
 - Drug databases are branch-specific: `mahadevapuraDrugDatabase` and `electronicCityDrugDatabase`
-- Drug records use fields: `brand`, `generic`, `mrp`, `type`, `contentMg`, and optionally `form` (`vial`/`tablet`/`capsule`/`kit`) and `unitsPerPack`
+- Drug records use fields: `brand`, `generic`, `mrp`, `type`, `contentMg`, and optionally `company`, `form` (`vial`/`tablet`/`capsule`/`kit`/`pack`) and `unitsPerPack`
+- `company` (pharma company) shows in brand dropdowns, dose results, the drug table and the doctor print; older brands that are not in the price list have no company
 - Drug types: `chemotherapy`, `immunotherapy`, `targeted`, `hormonal`, `supportive`
 - Tab buttons filter the generic dropdown by `type`
 - Brand dropdowns sort highest MRP first and auto-select the highest-MRP brand by default; users can manually choose a lower-cost brand later
@@ -48,7 +49,7 @@ kims-onco-sciences-logo.png  # KIMS Onco Sciences logo (used in overlay, header,
 ## Regimens
 Regimens stored in `regimenDatabase` array, **sorted alphabetically**. New regimens must be inserted in alphabetical order.
 
-Current regimen set includes: EXTREME regimens, ABCP, ABVD, AC, AC+Pembrolizumab, AP, cabozantinib+nivolumab, CAPOX, capecitabine with RT, carboplatin/paclitaxel variants, cisplatin/carboplatin with RT, CROSS, docetaxel single agent, EC, FLOT, FLOT+Durvalumab, FOLFIRI variants, FOLFIRINOX variants, FOLFOXIRI, gemcitabine variants, IA, irinotecan variants, multiple myeloma regimens (VRd, VTD, CyBorD, Dara-VTD, Dara-VRd, VRd-lite, Dara-Rd, Dara-VMP, Dara-CyBorD), mFOLFOX6 variants, nab-paclitaxel variants, paclitaxel variants, Pola-R-CHP, pemetrexed/carboplatin variants, R-CHOP, TC, TCH, TCHP, TPF, and TIP variants.
+Current regimen set includes: EXTREME regimens, ABCP, ABVD, AC, AC+Pembrolizumab, AP, cabozantinib+nivolumab, CAPOX, capecitabine with RT, carboplatin/paclitaxel variants, cisplatin/carboplatin with RT, CROSS, docetaxel single agent, EC, FLOT, FLOT+Durvalumab, FOLFIRI variants, FOLFIRINOX variants, FOLFOXIRI, gemcitabine variants, IA, irinotecan variants, multiple myeloma regimens (VRd, VTD, CyBorD, Dara-VTD, Dara-VRd, VRd-lite, Dara-Rd, Dara-VMP, Dara-CyBorD), mFOLFOX6 variants, nab-paclitaxel variants, paclitaxel variants, Pola-R-CHP, pemetrexed/carboplatin variants, R-CHOP, lymphoma regimens (Hodgkin: ABVD, Nivo-AVD, BV-AVD; Non-Hodgkin: R-CHOP, Pola-R-CHP, R-mini-CHOP, DA-EPOCH-R, R-CVP, BR, R², rituximab single/maintenance, VR-CAP, R-ICE, R-DHAP, R-GDP, R-GemOx, Pola-BR, CHOP, CHOEP, BV-CHP, MATRix), TC, TCH, TCHP, TPF, and TIP variants.
 
 ## Consultants
 Consultants are branch-specific via `BRANCH_CONFIG`.
@@ -67,7 +68,7 @@ Electronic City:
 ## Drug Categories
 - **Chemotherapy**: Carboplatin, Cisplatin, Cyclophosphamide, Paclitaxel, Docetaxel, Doxorubicin, Epirubicin, Fluorouracil, Oxaliplatin, Irinotecan, Capecitabine, Nab-Paclitaxel, Pemetrexed, Ifosfamide, Thalidomide
 - **Immunotherapy**: Pembrolizumab, Atezolizumab, Nivolumab, Durvalumab, Tislelizumab
-- **Targeted Therapy**: Bevacizumab, Rituximab, Trastuzumab, Pertuzumab, Cetuximab, Ribociclib, Osimertinib, Carfilzomib, Inotuzumab, T-DM1, Polatuzumab, Bortezomib, Cabozantinib, Regorafenib
+- **Targeted Therapy**: Bevacizumab, Rituximab, Trastuzumab, Pertuzumab, Cetuximab, Ribociclib, Osimertinib, Carfilzomib, Inotuzumab, T-DM1, Polatuzumab, Brentuximab vedotin, Bortezomib, Cabozantinib, Regorafenib
 - **Hormonal Therapy**: Abiraterone, Triptorelin, Degarelix, Fulvestrant, Leuprolide, Letrozole, Progesterone
 - **Supportive Care**: Antiemetics, GCSF/PEG-GCSF, IVIG, Mesna, zoledronic acid, iron preparations, palonosetron/fosaprepitant/aprepitant, romiplostim, plerixafor, rasburicase, and related supportive medicines
 
@@ -77,6 +78,7 @@ Electronic City:
 - **Consultation**: Rs. 1,600 / Rs. 2,000 / Waive Off
 - **Hospital Services** (formerly Ward Charges; covers medical records, day care charges, admission charges): Rs. 3,200 / Private (TBD). DOM id remains `wardCharge` / `labelWard` and JS variable is still `wardCharges` for backward compatibility.
 - **Number of Days**: multiplies procedure, consumables, consultation, and hospital services charges
+- **Planning Charges** (`planningCharge`): Rs. 5,000 / 8,000 / 12,000 / 16,000 / 20,000 / Not applicable. One-time, billed once before treatment starts. Never multiplied by days or cycles and kept out of per-cycle totals; added once to the total treatment estimate
 
 ## Print Sheet
 - Two print modes: `generatePrint('patient')` and `generatePrint('doctor')`
@@ -93,4 +95,5 @@ Electronic City:
 - MRP prices in Indian Rupees with Indian number formatting (e.g., Rs. 1,23,506.00)
 - All amounts use `toLocaleString('en-IN')` for formatting
 - Quantity default: 1 (validation requires qty >= 1 before adding)
+- November 2026 price revision: both branches were updated from `/Users/prathyusha/Desktop/FINAL ONCO ITEM LIST.xlsx`, whose MRPs are per pack (per-unit price = MRP / pack size). Brands not in that list keep their earlier prices
 - Mahadevapura prices were updated from `/Users/prathyusha/Desktop/Chemo drugs MRP.xlsx`; oral pack prices are stored per unit when the app calculates by tablet/capsule, with `unitsPerPack` used for pack display
