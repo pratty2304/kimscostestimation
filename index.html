@@ -169,6 +169,11 @@
                 font-size: 11pt !important;
             }
             .est-sheet table { width: 100% !important; }
+            /* Compact spacing so the patient sheet always fits on one A4 page */
+            .est-sheet .est-table { margin-bottom: 10px !important; }
+            .est-sheet .est-table td, .est-sheet .est-table th { padding: 5px 8px !important; }
+            .est-sheet .est-table td[style*="text-align:right"] { white-space: nowrap; }
+            .est-sheet .signature-block { break-inside: avoid; page-break-inside: avoid; }
             /* B&W mode — applied to #printArea when user prints (not saving colour PDF) */
             .print-area.bw-mode {
                 filter: grayscale(100%) contrast(1.1);
@@ -5800,7 +5805,7 @@ function generatePrint(mode) {
     const branchSubLabel = currentBranch ? BRANCH_CONFIG[currentBranch].subtitle : 'Bengaluru';
     const headerHtml = `
         <div style="text-align:center; margin-bottom:10px;">
-            <img src="kims-renova-logo.jpeg" alt="KIMS Renova Oncology Institute Logo" style="height:120px; margin-bottom:4px; position:relative; left:-18px;">
+            <img src="kims-renova-logo.jpeg" alt="KIMS Renova Oncology Institute Logo" style="height:85px; margin-bottom:2px; position:relative; left:-18px;">
             <div style="font-size:1.05rem; font-weight:700; color:#1a5276; margin-top:4px;">${branchLabel}</div>
             <div style="font-size:0.82rem; color:#555; margin-bottom:2px;">${branchSubLabel}</div>
             <h2 style="color:#1a5276; font-size:0.95rem; margin-top:4px; letter-spacing:1px;">CHEMOTHERAPY COST ESTIMATION SHEET</h2>
@@ -5893,7 +5898,7 @@ function generatePrint(mode) {
 
             ${getPrintAdjustmentNote(phases)}
 
-            <div style="margin-top:24px; font-size:0.8rem; line-height:1.6;">
+            <div style="margin-top:14px; font-size:0.8rem; line-height:1.5;">
                 <p style="font-weight:700; text-decoration:underline; margin-bottom:2px;">NOTE:</p>
                 <ol style="padding-left:18px; margin:0;">
                     <li>This is an <b>approximate estimate</b>; actual cost may vary by <b>+/- 10%</b>.</li>
@@ -5910,11 +5915,11 @@ function generatePrint(mode) {
             </div>
         </div>
 
-        <div style="font-size:0.8rem; margin-top:16px;">
+        <div class="signature-block" style="font-size:0.8rem; margin-top:12px;">
             <p style="font-weight:600;">Patient / Attendant Acknowledgement</p>
             <p style="margin-top:2px;">I understand the above is an estimated cost and actual expenses may vary.</p>
 
-            <div style="display:flex; justify-content:space-between; margin-top:56px;">
+            <div style="display:flex; justify-content:space-between; margin-top:40px;">
                 <div>
                     <p>Name & Signature:</p>
                     <br>
